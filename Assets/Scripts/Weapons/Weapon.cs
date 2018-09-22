@@ -4,15 +4,29 @@ using UnityEngine;
 
 public abstract class Weapon : MonoBehaviour
 {
+	public PlayerSettings playerSettings;
+
 	protected LevelManager levelManager;
+	private BeatManager beatManager;
 
 	public Projectile Projectile;
-	public LayerMask RaycastLayerMask;
 	public LineRenderer LineRenderer;
+
+	float fireTimer;
+	float beatTimer;
+
+	Vector3 lastDirection = Vector3.left;
 
 	private void Start()
 	{
 		levelManager = FindObjectOfType<LevelManager>();
+		beatManager = FindObjectOfType<BeatManager>();
+		beatManager.OnBeat += OnBeat;
+	}
+
+	private void OnBeat()
+	{
+		beatTimer = playerSettings.secondsLeeway;
 	}
 
 	public abstract void Fire(Vector3 direction, float intensity);
@@ -24,25 +38,43 @@ public abstract class Weapon : MonoBehaviour
 
 		Debug.DrawRay(ray.origin, ray.direction * 100);
 
-		if(closestPoint != Vector3.zero)
+	
+
+		if (closestPoint != Vector3.zero)
 		{
 			Debug.DrawLine(closestPoint, Camera.main.transform.position, Color.green);
 			Debug.DrawLine(closestPoint, closestPoint + Vector3.up * 4, Color.yellow);
 			Debug.DrawLine(closestPoint, closestPoint + -Vector3.up * 4, Color.yellow);
 
+			lastDirection = (closestPoint - transform.position + (Vector3.up * 1f)).normalized;
+
 			DrawAim(transform.position + (1 * Vector3.up), closestPoint);
 
 			if (Input.GetButton("Fire"))
 			{
-				Debug.Log("[Weapon] Firing");
+				fireTimer = playerSettings.secondsLeeway;
 			}
 		}
 		else
 		{
 			HideAim();
 		}
-		
+
 		//DrawAim(transform.position, closestPoint);
+	}
+
+	protected void BaseUpdate()
+	{
+		beatTimer -= Time.deltaTime;
+		fireTimer -= Time.deltaTime;
+
+
+		if(beatTimer > 0 && fireTimer > 0)
+		{
+			Fire(lastDirection, 5);
+			beatTimer = 0;
+			fireTimer = 0;
+		}
 	}
 
 	//raymarch to level
