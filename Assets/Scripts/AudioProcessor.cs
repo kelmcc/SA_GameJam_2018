@@ -97,7 +97,7 @@ public class AudioProcessor : MonoBehaviour
 	{
 		initArrays ();
 
-		audioSource = GetComponent<AudioSource> ();
+		audioSource = GetComponent<AudioSource>();
 		samplingRate = audioSource.clip.frequency;
 
 		framePeriod = (float)bufferSize / (float)samplingRate;
@@ -140,6 +140,15 @@ public class AudioProcessor : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
+		if(audioSource == null)
+		{
+			audioSource = GetComponent<AudioSource>();
+		}
+		if(audioSource == null)
+		{
+			return;
+		}
+
 		if (audioSource.isPlaying) {
 			audioSource.GetSpectrumData (spectrum, 0, FFTWindow.BlackmanHarris);
 			computeAverages (spectrum);

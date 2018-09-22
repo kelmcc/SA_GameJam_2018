@@ -14,5 +14,8 @@ public class PlayerSettings : ScriptableObject
 
 	public float gravity = 20;
 
-	public float secondsLeeway = 0.3f;
+	public float secondsLeeway = 0.2f;
+
+	public LayerMask groundRaycastLayer;
+	public LayerMask edgeRaycastLayer;
 }

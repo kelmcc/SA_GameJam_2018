@@ -155,4 +155,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LevelManager: {fileID: 0}
   BeatManager: {fileID: 0}
+  boxCollider: {fileID: 65699648935471920}
   PlayerSettings: {fileID: 11400000, guid: 1330406b78323fa41a5d17125fd2768d, type: 2}
