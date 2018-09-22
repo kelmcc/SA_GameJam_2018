@@ -18,6 +18,9 @@ public class PlayerSettings : ScriptableObject
 
 	public float moveSidewaysNoFallTime = 0.3f;
 
+	public bool groundDash = false;
+	public bool bascicMovement = false;
+
 	public LayerMask groundRaycastLayer;
 	public LayerMask edgeRaycastLayer;
 }
