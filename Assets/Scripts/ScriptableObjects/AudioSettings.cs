@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-[CreateAssetMenu(fileName ="AudioSettings", menuName ="BeatDetection/AudioSettings")]
+[CreateAssetMenu(fileName ="AudioSettings", menuName ="Jam/AudioSettings")]
 public class AudioSettings : ScriptableObject
 {
 	[Serializable]
