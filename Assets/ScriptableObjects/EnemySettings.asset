@@ -13,9 +13,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   walkSpeed: 7
   horizontalBoost: 35
-  horizontalDecrese: 100
+  horizontalDecrease: 50
   verticalBoost: 35
-  verticalDecrese: 100
+  verticalDecrease: 50
   gravity: 5
   secondsLeeway: 0.3
   groundRaycastLayer:
@@ -24,3 +24,4 @@ MonoBehaviour:
   edgeRaycastLayer:
     serializedVersion: 2
     m_Bits: 1024
+  spawnThreshold: 5
