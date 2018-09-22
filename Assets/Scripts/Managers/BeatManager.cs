@@ -155,7 +155,6 @@ public class BeatManager : MonoBehaviour
 
 				lastBeatSample = exactCurrentBeatTime;
 				OnBeat();
-				Debug.Log("Beat!");
 			}
 		}
 		else

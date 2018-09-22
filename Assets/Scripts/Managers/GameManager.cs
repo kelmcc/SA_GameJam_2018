@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
 		player.transform.position = spawnPos;
 		PlayerMovementBehaviour playerMoveBehaviour = player.GetComponent<PlayerMovementBehaviour>();
 		playerMoveBehaviour.LevelManager = LevelManager;
+		playerMoveBehaviour.BeatManager = BeatManager;
 
 
 		GameObject camera = Instantiate(gameSettings.CameraPrefab);
