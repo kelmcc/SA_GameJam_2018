@@ -55,6 +55,9 @@ public class EnemyManager : MonoBehaviour
         EnemyBehaviour enemyBehaviour = enemy.GetComponent<EnemyBehaviour>();
 
         //setup the enemy behaviour
+        enemyBehaviour.LevelManager = LevelManager;
+        enemyBehaviour.BeatManager = beatManager;
+
 
         return enemy;
     }

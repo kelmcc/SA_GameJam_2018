@@ -36,12 +36,12 @@ public class EnemySpawnTransform : MonoBehaviour
             }
         }
 
-        if (enemyCount>10f && IsActivated)
+        if (enemyCount>10 && IsActivated)
         {
             IsActivated = false;
         }
         
-        if (enemyCount<10f && !IsActivated)
+        if (enemyCount<10 && !IsActivated)
         {
             IsActivated = true;
         }
