@@ -7,6 +7,8 @@ public class PlayerMovementBehaviour : MovementBehaviour
 	public LevelManager LevelManager;
 	public BeatManager BeatManager;
 
+	public BoxCollider boxCollider;
+
 	public PlayerSettings PlayerSettings;
 
 	Rigidbody playerRigidbody;
@@ -19,6 +21,10 @@ public class PlayerMovementBehaviour : MovementBehaviour
 
 	float lastHorizontal;
 	float lastVertical;
+
+	float walkVelocity;
+
+	float dontFallTime;
 
 	private void Start()
 	{
@@ -63,31 +69,32 @@ public class PlayerMovementBehaviour : MovementBehaviour
 
 		if(beatTimer > 0)
 		{
-			if (upTapTimer > 0)
+			if (upTapTimer > 0 && OnGround())
 			{
-				Debug.Log("UP TO BEAT");
+				//Debug.Log("UP TO BEAT");
 				velocity.y = PlayerSettings.verticalBoost;
 				upTapTimer = 0;
 			}
 			else if (downTapTimer > 0)
 			{
-				Debug.Log("DOWN TO BEAT");
+				//Debug.Log("DOWN TO BEAT");
 				velocity.y = -PlayerSettings.verticalBoost;
 				downTapTimer = 0;
 			}
 
 			if (leftTapTimer > 0)
 			{
-				Debug.Log("LEFT TO BEAT");
+				//Debug.Log("LEFT TO BEAT");
 				velocity.x = -PlayerSettings.horizontalBoost;
 				leftTapTimer = 0;
+				dontFallTime = PlayerSettings.moveSidewaysNoFallTime;
 			}
 			else if (rightTapTimer > 0)
 			{
 				velocity.x = PlayerSettings.horizontalBoost;
-				Debug.Log("RIGHT TO BEAT");
-
+				//Debug.Log("RIGHT TO BEAT");
 				rightTapTimer = 0;
+				dontFallTime = PlayerSettings.moveSidewaysNoFallTime;
 			}
 		}
 
@@ -95,25 +102,15 @@ public class PlayerMovementBehaviour : MovementBehaviour
 		upTapTimer -= Time.deltaTime;
 		leftTapTimer -= Time.deltaTime;
 		rightTapTimer -= Time.deltaTime;
+	
 
 		lastHorizontal = horizontal;
 		lastVertical = vertical;
 
-		//=== MOVE THE DUDE ===
+		dontFallTime -= Time.deltaTime;
 
-		//basic walk
-		//float horDT = (horizontal * Time.deltaTime * PlayerSettings.walkSpeed) + velocity.x * Time.deltaTime;
-		//Vector3 localHorizontal = transform.forward * horDT;
-
-		//snap to circle
-		//Vector3 position = transform.position;
-		//LevelManager.SnapMovementToRadius(ref position, ref localHorizontal);
-		//Vector3 finalPosition = position;
-		//finalPosition += localHorizontal;			
-
-		//transform.position = new Vector3(finalPosition.x, transform.position.y, finalPosition.z);
-
-	
+		//basic walk. no dt needed. added in fixed update
+		walkVelocity = (horizontal * PlayerSettings.walkSpeed);
 	}
 
 	public void DecreaseVelocity()
@@ -137,13 +134,26 @@ public class PlayerMovementBehaviour : MovementBehaviour
 		}
 	}
 
+	public bool OnGround()
+	{
+		//if (Physics.BoxCast(transform.position, new Vector3(collider.size.x, 0.5f, collider.size.y), 
+		//	Vector3.down, collider.transform.rotation, collider.size.y + 5f, ~PlayerSettings.groundRaycastLayer.value))
+
+		Debug.DrawLine(boxCollider.transform.position, boxCollider.transform.position + Vector3.down * (boxCollider.size.y + 0.2f), Color.green);
+		if(Physics.Raycast(boxCollider.transform.position, Vector3.down, boxCollider.size.y + 0.5f, PlayerSettings.groundRaycastLayer.value))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
 	public void FixedUpdate()
 	{
 		//set rotation
-		//Quaternion rotBefore = transform.rotation;
 		Vector3 goalVec = -(new Vector3(LevelManager.transform.position.x, transform.position.y, LevelManager.transform.position.z) - transform.position).normalized;
-		//Quaternion alighnedRotation = transform.rotation;
-		//transform.rotation = rotBefore;
 		playerRigidbody.MoveRotation(playerRigidbody.rotation * Quaternion.FromToRotation(transform.right, goalVec));
 
 		//snap to circle
@@ -153,13 +163,28 @@ public class PlayerMovementBehaviour : MovementBehaviour
 		Vector3 finalPosition = position;
 		playerRigidbody.MovePosition(new Vector3(finalPosition.x, transform.position.y, finalPosition.z));
 
-		if (velocity.y <= 0) velocity.y -= PlayerSettings.gravity;
-		playerRigidbody.velocity = new Vector3(0, velocity.y, 0) + localHorizontal;	
+		if (velocity.y <= 0 && !OnGround() && dontFallTime <= 0)
+		{
+			velocity.y -= PlayerSettings.gravity;
+		}
+		playerRigidbody.velocity = new Vector3(0, velocity.y, 0) + localHorizontal;
+
+		playerRigidbody.velocity += (transform.forward * walkVelocity);
+	}
+
+
+	//stop the dude from falling off edges
+	private void OnTriggerEnter(Collider other)
+	{
+		int layermask =	PlayerSettings.edgeRaycastLayer.value;
+		if (layermask == (layermask | (1 << other.gameObject.layer)))
+		{
+			velocity.x = 0;
+		}
 	}
 
 	public override void OnBeat()
 	{
-		Debug.Log("PlayerBeat");
 		beatTimer = PlayerSettings.secondsLeeway;
 	}
 }
