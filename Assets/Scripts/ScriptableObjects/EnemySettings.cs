@@ -20,4 +20,5 @@ public class EnemySettings : ScriptableObject
 	public LayerMask edgeRaycastLayer;
 
     public int spawnThreshold = 5;
+    public int maxEnemies = 40;
 }

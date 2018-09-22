@@ -7,8 +7,10 @@ public class EnemyManager : MonoBehaviour
 
     //Spawn the enemies on the scene
     //Keep a min level op un-captured enemies
-
+    [HideInInspector]
     public GameObject EnemyPrefab;
+
+    [HideInInspector]
     public LevelManager LevelManager;
     private BeatManager beatManager;
     public BeatManager BeatManager
@@ -20,14 +22,15 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
-
+    List<EnemyBehaviour> enemies = new List<EnemyBehaviour>();
     //manage the enemy spawning
 
-
+    public EnemySettings EnemySettings;
 
     // Use this for initialization
     void Start()
     {
+
     }
 
     // Update is called once per frame
@@ -39,14 +42,14 @@ public class EnemyManager : MonoBehaviour
     public void OnBeat()
     {
         //every beat interval, spawn new enemies
-        if (LevelManager.GetActiveEnemySpawners().Count > 0)
+        if (enemies.Count < EnemySettings.maxEnemies && LevelManager.GetActiveEnemySpawners().Count > 0)
         {
-            SpawnEnemy();
+            enemies.Add(SpawnEnemy());
         }
     }
 
     [ContextMenu("Spawn Enemy")]
-    GameObject SpawnEnemy()
+    EnemyBehaviour SpawnEnemy()
     {
         Vector3 spawnPos = LevelManager.GetEnemySpawn();
         GameObject enemy = Instantiate(EnemyPrefab);
@@ -59,6 +62,6 @@ public class EnemyManager : MonoBehaviour
         enemyBehaviour.BeatManager = beatManager;
 
 
-        return enemy;
+        return enemyBehaviour;
     }
 }

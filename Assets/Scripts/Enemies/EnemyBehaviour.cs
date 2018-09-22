@@ -89,44 +89,49 @@ public class EnemyBehaviour : MovementBehaviour
 
         if (velocity.y <= 0 && !OnGround()) velocity.y -= EnemySettings.gravity;
         enemyRigidBody.velocity = new Vector3(0, velocity.y, 0) + localHorizontal;
-
-        enemyRigidBody.velocity += (transform.forward * walkVelocity);
     }
 
     //stop the dude from falling off edges
     private void OnTriggerEnter(Collider other)
     {
-        int layermask =	EnemySettings.edgeRaycastLayer.value;
-		if (layermask == (layermask | (1 << other.gameObject.layer)))
-		{
-			velocity.x = 0;
-		}
+        int layermask = EnemySettings.edgeRaycastLayer.value;
+        if (layermask == (layermask | (1 << other.gameObject.layer)))
+        {
+            velocity.x = 0;
+        }
     }
 
+    float previousHorizontal;
     public override void OnBeat()
     {
-        int randomMovement = Random.Range(0, 4);
+        float horizontalMove = Random.Range(0f, 10f);
+        float verticalMove = Random.Range(0f, 10f);
 
-        switch (randomMovement)
+
+        if (OnGround())
         {
-            case 0:
-                if (OnGround())
-                {
-                    velocity.y = EnemySettings.verticalBoost;
-                }
-                break;
-            case 1:
-                if (!OnGround())
-                {
-                    velocity.y = -EnemySettings.verticalBoost;
-                }
-                break;
-            case 2:
+            if (verticalMove > 7f)
+            {
+                velocity.y = EnemySettings.verticalBoost;
+            }
+
+            if (horizontalMove < 5f)
+            {
                 velocity.x = -EnemySettings.horizontalBoost;
-                break;
-            case 3:
+            }
+            else
+            {
                 velocity.x = EnemySettings.horizontalBoost;
-                break;
+            }
+            
+            previousHorizontal = velocity.x;
+        }
+        else
+        {
+            if (previousHorizontal < 0)
+                velocity.x = -EnemySettings.horizontalBoost;
+            else
+                velocity.x = EnemySettings.horizontalBoost;
         }
     }
 }
