@@ -12,3 +12,9 @@ MonoBehaviour:
   m_Name: PlayerSettings
   m_EditorClassIdentifier: 
   walkSpeed: 10
+  horizontalBoost: 35
+  horizontalDecrese: 100
+  verticalBoost: 35
+  verticalDecrese: 100
+  gravity: 5
+  secondsLeeway: 0.3
