@@ -30,9 +30,9 @@ public class GameManager : MonoBehaviour
 
         GameObject EnemyManagerGameObject = Instantiate(gameSettings.EnemyManager);
         EnemyManager = EnemyManagerGameObject.GetComponent<EnemyManager>();
+		EnemyManager.BeatManager = BeatManager;
         EnemyManager.EnemyPrefab = gameSettings.EnemyPrefab;
 		EnemyManager.LevelManager = LevelManager;
-		EnemyManager.BeatManager = BeatManager;
 	}
 
 	void OnBeat ()

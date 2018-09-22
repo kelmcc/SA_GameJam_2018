@@ -26,7 +26,7 @@ public class LevelManager : MonoBehaviour
         {
             index = Random.Range(0, enemyTransforms.Count);
         }
-
+        
         Vector3 position = enemyTransforms[index].transform.position;
 		SnapPositionToRadius(ref position);
 		enemyTransforms[index].transform.position = position;
