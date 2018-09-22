@@ -6,6 +6,7 @@ public class OrbitFollowCamera : MonoBehaviour
 {
 	public float distance = 80f;
 	public float slerpSpeed = 20f;
+	public float verticalOffset = 6f;
 
 	public Transform Target;
 	public LevelManager LevelManager;
@@ -25,10 +26,10 @@ public class OrbitFollowCamera : MonoBehaviour
 
 		Debug.DrawLine(levelManagerPos, levelManagerPos + offsetFromLvlManager, Color.cyan);
 
-		Vector3 goalPos = levelManagerPos + offsetFromLvlManager;
+		Vector3 goalPos = levelManagerPos + offsetFromLvlManager + Vector3.up * verticalOffset;
 
 		transform.position = Vector3.Slerp(transform.position, goalPos, Time.deltaTime * slerpSpeed);
-		Vector3 targetLookAt = Vector3.Lerp(transform.forward, Target.position, Time.deltaTime * slerpSpeed);
-		transform.LookAt(targetLookAt);	
+		transform.forward = Vector3.Lerp(transform.forward, (Target.position - transform.position).normalized, Time.deltaTime * slerpSpeed);
+		//transform.LookAt(targetLookAt);	
 	}
 }
