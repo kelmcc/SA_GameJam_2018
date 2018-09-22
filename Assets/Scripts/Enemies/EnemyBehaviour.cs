@@ -12,6 +12,7 @@ public class EnemyBehaviour : MovementBehaviour
     }
 
     public EnemySettings EnemySettings;
+    public EnemyManager EnemyManager;
     public LevelManager LevelManager;
     private BeatManager beatManager;
     public BeatManager BeatManager
@@ -41,7 +42,7 @@ public class EnemyBehaviour : MovementBehaviour
     public void Update()
     {
         DecreaseVelocity();
-        
+        timer += Time.deltaTime;
     }
 
     public void DecreaseVelocity()
@@ -67,8 +68,15 @@ public class EnemyBehaviour : MovementBehaviour
 
     public bool OnGround()
     {
+        if (boxCollider == null)
+            return false;
+
+        float yOffset = 0.5f;
+        if (Type == EnemyType.Double)
+            yOffset = 1f;
+
         Debug.DrawLine(boxCollider.transform.position, boxCollider.transform.position + Vector3.down * (boxCollider.size.y + 0.2f), Color.green);
-        if (Physics.Raycast(boxCollider.transform.position, Vector3.down, boxCollider.size.y + 0.5f, EnemySettings.groundRaycastLayer.value))
+        if (Physics.Raycast(boxCollider.transform.position, Vector3.down, boxCollider.size.y + yOffset, EnemySettings.groundRaycastLayer.value))
         {
             return true;
         }
@@ -80,9 +88,38 @@ public class EnemyBehaviour : MovementBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy") && OnGround() && collision.gameObject.GetComponent<EnemyBehaviour>().OnGround())
         {
             moveMultiplier = -moveMultiplier;
+        }
+    }
+
+    float timer = 0f;
+    Collider currentCollider;
+    private void OnTriggerEnter(Collider collider)
+    {
+        EnemyBehaviour enemy = collider.GetComponent<EnemyBehaviour>();
+        if (timer > 5f && enemy != null && Type == EnemyType.Single)
+        {
+            timer = 0f;
+            currentCollider = collider;
+        }
+    }
+
+    private void OnTriggerStay(Collider collider)
+    {
+        if (collider == currentCollider && timer > 1f)
+        {
+            timer = 0f;
+
+            if (collider.transform.localPosition.y > 0f)
+            {
+                EnemyManager.Merge(this, collider.GetComponent<EnemyBehaviour>());
+            }
+            else
+            {
+                EnemyManager.Snake(this, collider.GetComponent<EnemyBehaviour>());
+            }
         }
     }
 
@@ -117,6 +154,7 @@ public class EnemyBehaviour : MovementBehaviour
                 DoubleBehaviour(verticalMove, horizontalMove);
                 break;
             case EnemyType.Snake:
+                SnakeBehaviour(verticalMove, horizontalMove);
                 break;
         }
     }
@@ -148,6 +186,12 @@ public class EnemyBehaviour : MovementBehaviour
     {
         if (OnGround())
         {
+            VerticalMove(1.1f);
         }
+    }
+
+    public void SnakeBehaviour(float verticalMove, float horizontalMove)
+    {
+        HorizontalMove(moveMultiplier * 1.2f);
     }
 }

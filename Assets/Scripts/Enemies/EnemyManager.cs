@@ -9,6 +9,8 @@ public class EnemyManager : MonoBehaviour
     //Keep a min level op un-captured enemies
     [HideInInspector]
     public GameObject EnemyPrefab;
+    public GameObject TallEnemyPrefab;
+    public GameObject SnakeEnemyPrefab;
 
     [HideInInspector]
     public LevelManager LevelManager;
@@ -44,24 +46,47 @@ public class EnemyManager : MonoBehaviour
         //every beat interval, spawn new enemies
         if (enemies.Count < EnemySettings.maxEnemies)
         {
-            enemies.Add(SpawnEnemy());
+            enemies.Add(SpawnEnemy( LevelManager.GetEnemySpawn(), EnemyPrefab));
         }
     }
 
     [ContextMenu("Spawn Enemy")]
-    EnemyBehaviour SpawnEnemy()
+    EnemyBehaviour SpawnEnemy(Vector3 spawnPos, GameObject prefab)
     {
-        Vector3 spawnPos = LevelManager.GetEnemySpawn();
-        GameObject enemy = Instantiate(EnemyPrefab);
+        GameObject enemy = Instantiate(prefab);
         enemy.transform.SetParent(transform);
         enemy.transform.position = spawnPos;
         EnemyBehaviour enemyBehaviour = enemy.GetComponent<EnemyBehaviour>();
+        enemyBehaviour.EnemyManager = this;
 
         //setup the enemy behaviour
         enemyBehaviour.LevelManager = LevelManager;
         enemyBehaviour.BeatManager = beatManager;
 
-
         return enemyBehaviour;
+    }
+
+    public void Merge(EnemyBehaviour a, EnemyBehaviour b)
+    {
+        enemies.Remove(a);
+        enemies.Remove(b);
+
+        Vector3 pos = a.transform.localPosition;
+        GameObject.Destroy(a.gameObject);
+        GameObject.Destroy(b.gameObject);
+        
+        enemies.Add (SpawnEnemy(pos, TallEnemyPrefab));
+    }
+
+    public void Snake(EnemyBehaviour a, EnemyBehaviour b)
+    {        
+        enemies.Remove(a);
+        enemies.Remove(b);
+
+        Vector3 pos = a.transform.localPosition;
+        GameObject.Destroy(a.gameObject);
+        GameObject.Destroy(b.gameObject);
+        
+        enemies.Add (SpawnEnemy(pos, SnakeEnemyPrefab));
     }
 }

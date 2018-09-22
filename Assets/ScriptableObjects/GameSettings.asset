@@ -19,3 +19,7 @@ MonoBehaviour:
     type: 2}
   EnemyPrefab: {fileID: 1365379431856390, guid: bcf8e98d56995924d8e8fa47a5144468,
     type: 2}
+  TallEnemyPrefab: {fileID: 1365379431856390, guid: 6eaea0aa918a88845bb6de54a972daa4,
+    type: 2}
+  SnakeEnemyPrefab: {fileID: 1203284209219134, guid: b5f8ba8fef99f3a44b4ef9043f9509fa,
+    type: 2}
