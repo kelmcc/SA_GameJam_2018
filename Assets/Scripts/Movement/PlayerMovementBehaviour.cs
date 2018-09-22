@@ -24,6 +24,8 @@ public class PlayerMovementBehaviour : MovementBehaviour
 
 	float walkVelocity;
 
+	float dontFallTime;
+
 	private void Start()
 	{
 		BeatManager.OnBeat += OnBeat;
@@ -69,28 +71,30 @@ public class PlayerMovementBehaviour : MovementBehaviour
 		{
 			if (upTapTimer > 0 && OnGround())
 			{
-				Debug.Log("UP TO BEAT");
+				//Debug.Log("UP TO BEAT");
 				velocity.y = PlayerSettings.verticalBoost;
 				upTapTimer = 0;
 			}
 			else if (downTapTimer > 0)
 			{
-				Debug.Log("DOWN TO BEAT");
+				//Debug.Log("DOWN TO BEAT");
 				velocity.y = -PlayerSettings.verticalBoost;
 				downTapTimer = 0;
 			}
 
 			if (leftTapTimer > 0)
 			{
-				Debug.Log("LEFT TO BEAT");
+				//Debug.Log("LEFT TO BEAT");
 				velocity.x = -PlayerSettings.horizontalBoost;
 				leftTapTimer = 0;
+				dontFallTime = PlayerSettings.moveSidewaysNoFallTime;
 			}
 			else if (rightTapTimer > 0)
 			{
 				velocity.x = PlayerSettings.horizontalBoost;
-				Debug.Log("RIGHT TO BEAT");
+				//Debug.Log("RIGHT TO BEAT");
 				rightTapTimer = 0;
+				dontFallTime = PlayerSettings.moveSidewaysNoFallTime;
 			}
 		}
 
@@ -98,9 +102,12 @@ public class PlayerMovementBehaviour : MovementBehaviour
 		upTapTimer -= Time.deltaTime;
 		leftTapTimer -= Time.deltaTime;
 		rightTapTimer -= Time.deltaTime;
+	
 
 		lastHorizontal = horizontal;
 		lastVertical = vertical;
+
+		dontFallTime -= Time.deltaTime;
 
 		//basic walk. no dt needed. added in fixed update
 		walkVelocity = (horizontal * PlayerSettings.walkSpeed);
@@ -156,11 +163,15 @@ public class PlayerMovementBehaviour : MovementBehaviour
 		Vector3 finalPosition = position;
 		playerRigidbody.MovePosition(new Vector3(finalPosition.x, transform.position.y, finalPosition.z));
 
-		if (velocity.y <= 0 && !OnGround()) velocity.y -= PlayerSettings.gravity;
+		if (velocity.y <= 0 && !OnGround() && dontFallTime <= 0)
+		{
+			velocity.y -= PlayerSettings.gravity;
+		}
 		playerRigidbody.velocity = new Vector3(0, velocity.y, 0) + localHorizontal;
 
 		playerRigidbody.velocity += (transform.forward * walkVelocity);
 	}
+
 
 	//stop the dude from falling off edges
 	private void OnTriggerEnter(Collider other)
