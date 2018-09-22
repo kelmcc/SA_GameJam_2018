@@ -34,6 +34,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4149892244806220}
+  - component: {fileID: 114101658911949118}
   m_Layer: 0
   m_Name: EnemySpawn (4)
   m_TagString: Untagged
@@ -49,6 +50,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4302156658281540}
+  - component: {fileID: 114490098199568286}
   m_Layer: 0
   m_Name: EnemySpawn (3)
   m_TagString: Untagged
@@ -64,6 +66,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4371980024731710}
+  - component: {fileID: 114484554447378200}
   m_Layer: 0
   m_Name: EnemySpawn (5)
   m_TagString: Untagged
@@ -110,6 +113,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4030702185247862}
+  - component: {fileID: 114873293502087982}
   m_Layer: 0
   m_Name: EnemySpawn (6)
   m_TagString: Untagged
@@ -125,6 +129,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4946018391030738}
+  - component: {fileID: 114767898580634114}
   m_Layer: 0
   m_Name: EnemySpawn (1)
   m_TagString: Untagged
@@ -140,6 +145,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4011251866036058}
+  - component: {fileID: 114941422859909492}
   m_Layer: 0
   m_Name: EnemySpawn (2)
   m_TagString: Untagged
@@ -272,6 +278,42 @@ Transform:
   m_Father: {fileID: 4368163908377082}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114101658911949118
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1168033607800804}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c96b3ce571152304fa48ae6cad2af614, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IsActivated: 1
+--- !u!114 &114484554447378200
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1407352152186112}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c96b3ce571152304fa48ae6cad2af614, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IsActivated: 1
+--- !u!114 &114490098199568286
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1243588125227114}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c96b3ce571152304fa48ae6cad2af614, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IsActivated: 1
 --- !u!114 &114766391871148232
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -286,9 +328,45 @@ MonoBehaviour:
   LevelSettings: {fileID: 11400000, guid: a3b3e56f3377b7443a8508be217b1796, type: 2}
   playerTransform: {fileID: 4819475347144888}
   enemyTransforms:
-  - {fileID: 4946018391030738}
-  - {fileID: 4011251866036058}
-  - {fileID: 4302156658281540}
-  - {fileID: 4149892244806220}
-  - {fileID: 4371980024731710}
-  - {fileID: 4030702185247862}
+  - {fileID: 114767898580634114}
+  - {fileID: 114941422859909492}
+  - {fileID: 114490098199568286}
+  - {fileID: 114101658911949118}
+  - {fileID: 114484554447378200}
+  - {fileID: 114873293502087982}
+--- !u!114 &114767898580634114
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1839317357237822}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c96b3ce571152304fa48ae6cad2af614, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IsActivated: 1
+--- !u!114 &114873293502087982
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1828533186164386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c96b3ce571152304fa48ae6cad2af614, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IsActivated: 1
+--- !u!114 &114941422859909492
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1890269485687920}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c96b3ce571152304fa48ae6cad2af614, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IsActivated: 1

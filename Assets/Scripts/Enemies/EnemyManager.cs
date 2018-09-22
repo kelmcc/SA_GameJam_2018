@@ -14,6 +14,7 @@ public class EnemyManager : MonoBehaviour {
 
     //manage the enemy spawning
 
+   
 
 	// Use this for initialization
 	void Start () {
@@ -21,8 +22,10 @@ public class EnemyManager : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
-		
+	void Update ()
+    {
+		//every beat interval, spawn new enemies
+
 	}
 
     [ContextMenu("Spawn Enemy")]

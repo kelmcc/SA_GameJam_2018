@@ -12,7 +12,8 @@ public class EnemyBehaviour : MonoBehaviour {
 
 
 
-    void Update () {
+    void Update ()
+    {
 		
 	}
 }

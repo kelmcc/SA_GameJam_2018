@@ -8,7 +8,7 @@ public class LevelManager : MonoBehaviour
 	public LevelSettings LevelSettings;
 
 	public Transform playerTransform;
-	public Transform[] enemyTransforms;
+	public List<EnemySpawnTransform> enemyTransforms;
 
 	public Vector3 GetPlayerSpawn()
 	{
@@ -21,13 +21,30 @@ public class LevelManager : MonoBehaviour
 
     public Vector3 GetEnemySpawn()
     {
-        int index = Random.Range(0, enemyTransforms.Length);
-        Vector3 position = enemyTransforms[index].position;
+        int index = Random.Range(0, enemyTransforms.Count);
+        while (!enemyTransforms[index].IsActivated)
+        {
+            index = Random.Range(0, enemyTransforms.Count);
+        }
+
+        Vector3 position = enemyTransforms[index].transform.position;
 		SnapPositionToRadius(ref position);
-		enemyTransforms[index].position = position;
-		return enemyTransforms[index].position;
+		enemyTransforms[index].transform.position = position;
+		return enemyTransforms[index].transform.position;
     }
 
+    public List<EnemySpawnTransform> GetActiveEnemySpawners()
+    {
+        List<EnemySpawnTransform> activeSpawners = new List<EnemySpawnTransform>();
+        foreach (EnemySpawnTransform spawner in enemyTransforms)
+        {
+            if (spawner.IsActivated)
+            {
+                activeSpawners.Add (spawner);
+            }
+        }
+        return activeSpawners;
+    }
 
 	//takes a direction and projects it onto the circle
 	public void SnapMovementToRadius(ref Vector3 position, ref Vector3 direction)
