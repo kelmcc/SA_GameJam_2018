@@ -25,7 +25,7 @@ GameObject:
   m_Layer: 0
   m_Name: Camera
   m_TagString: Untagged
-  m_Icon: {fileID: -5397416234189338067, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -72,11 +72,11 @@ Camera:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingPath: -1
-  m_TargetTexture: {fileID: 0}
+  m_TargetTexture: {fileID: 8400000, guid: 2840663762e3ecd45959c7d6efc2085a, type: 2}
   m_TargetDisplay: 0
   m_TargetEye: 3
-  m_HDR: 1
-  m_AllowMSAA: 1
+  m_HDR: 0
+  m_AllowMSAA: 0
   m_AllowDynamicResolution: 0
   m_ForceIntoRT: 0
   m_OcclusionCulling: 1
@@ -102,5 +102,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   distance: 80
   slerpSpeed: 15
+  verticalOffset: 6
   Target: {fileID: 0}
   LevelManager: {fileID: 0}
