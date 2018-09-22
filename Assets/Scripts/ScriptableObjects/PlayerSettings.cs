@@ -8,8 +8,11 @@ public class PlayerSettings : ScriptableObject
 
 	public float horizontalBoost = 50;
 	public float horizontalDecrese = 50;
+
 	public float verticalBoost = 50;
 	public float verticalDecrese = 50;
+
+	public float gravity = 20;
 
 	public float secondsLeeway = 0.3f;
 }

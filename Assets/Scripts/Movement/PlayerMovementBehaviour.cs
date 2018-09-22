@@ -9,6 +9,8 @@ public class PlayerMovementBehaviour : MovementBehaviour
 
 	public PlayerSettings PlayerSettings;
 
+	Rigidbody playerRigidbody;
+
 	float beatTimer;
 	float leftTapTimer;
 	float rightTapTimer;
@@ -21,23 +23,14 @@ public class PlayerMovementBehaviour : MovementBehaviour
 	private void Start()
 	{
 		BeatManager.OnBeat += OnBeat;
+		playerRigidbody = GetComponent<Rigidbody>();
 	}
 
 	Vector2 velocity = new Vector2();
 
 	public void Update()
 	{
-		if(velocity.x > 0)
-		{
-			velocity.x = Mathf.Max(0, velocity.x - (PlayerSettings.horizontalDecrese * Time.deltaTime));
-		}
-		else if (velocity.x < 0)
-		{
-			velocity.x = Mathf.Min(0, velocity.x + (PlayerSettings.horizontalDecrese * Time.deltaTime));
-		}
-
-		//set orentation
-		transform.right = -(LevelManager.transform.position - transform.position).normalized;
+		DecreaseVelocity();
 
 		//get axes
 		float horizontal = Input.GetAxis("Horizontal");
@@ -109,17 +102,60 @@ public class PlayerMovementBehaviour : MovementBehaviour
 		//=== MOVE THE DUDE ===
 
 		//basic walk
-		float horDT = (horizontal * Time.deltaTime * PlayerSettings.walkSpeed) + velocity.x * Time.deltaTime;
-
-		Vector3 localHorizontal = transform.forward * horDT;
+		//float horDT = (horizontal * Time.deltaTime * PlayerSettings.walkSpeed) + velocity.x * Time.deltaTime;
+		//Vector3 localHorizontal = transform.forward * horDT;
 
 		//snap to circle
-		Vector3 position = transform.position;
-		LevelManager.SnapMovementToRadius(ref position, ref localHorizontal);
-		transform.position = position;
-		transform.position += localHorizontal;
+		//Vector3 position = transform.position;
+		//LevelManager.SnapMovementToRadius(ref position, ref localHorizontal);
+		//Vector3 finalPosition = position;
+		//finalPosition += localHorizontal;			
+
+		//transform.position = new Vector3(finalPosition.x, transform.position.y, finalPosition.z);
+
+	
 	}
 
+	public void DecreaseVelocity()
+	{
+		if (velocity.x > 0)
+		{
+			velocity.x = Mathf.Max(0, velocity.x - (PlayerSettings.horizontalDecrese * Time.deltaTime));
+		}
+		else if (velocity.x < 0)
+		{
+			velocity.x = Mathf.Min(0, velocity.x + (PlayerSettings.horizontalDecrese * Time.deltaTime));
+		}
+
+		if (velocity.y > 0)
+		{
+			velocity.y = Mathf.Max(0, velocity.y - (PlayerSettings.verticalDecrese * Time.deltaTime));
+		}
+		else if (velocity.y < 0)
+		{
+			velocity.y = Mathf.Min(0, velocity.y + (PlayerSettings.verticalDecrese * Time.deltaTime));
+		}
+	}
+
+	public void FixedUpdate()
+	{
+		//set rotation
+		//Quaternion rotBefore = transform.rotation;
+		Vector3 goalVec = -(new Vector3(LevelManager.transform.position.x, transform.position.y, LevelManager.transform.position.z) - transform.position).normalized;
+		//Quaternion alighnedRotation = transform.rotation;
+		//transform.rotation = rotBefore;
+		playerRigidbody.MoveRotation(playerRigidbody.rotation * Quaternion.FromToRotation(transform.right, goalVec));
+
+		//snap to circle
+		Vector3 localHorizontal = transform.forward * velocity.x;
+		Vector3 position = transform.position;
+		LevelManager.SnapMovementToRadius(ref position, ref localHorizontal);
+		Vector3 finalPosition = position;
+		playerRigidbody.MovePosition(new Vector3(finalPosition.x, transform.position.y, finalPosition.z));
+
+		if (velocity.y <= 0) velocity.y -= PlayerSettings.gravity;
+		playerRigidbody.velocity = new Vector3(0, velocity.y, 0) + localHorizontal;	
+	}
 
 	public override void OnBeat()
 	{

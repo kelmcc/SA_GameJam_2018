@@ -29,6 +29,9 @@ public class LevelManager : MonoBehaviour
 		Vector3 nieveTargetPoint = position + direction;
 		Vector3 centerPos = new Vector3(transform.position.x, position.y, transform.position.z);
 		Vector3 centerToTarget = nieveTargetPoint - centerPos;
+
+		Debug.DrawLine(centerPos, centerPos + centerToTarget, Color.red);
+
 		Vector3 projectedPoint = centerToTarget.normalized * LevelSettings.movementRadius;
 		//we now have added the magnitude of the initial direction back, but with the modfied direction for the circle
 		Vector3 finalPoint = (projectedPoint - position).normalized * direction.magnitude; 
@@ -37,7 +40,7 @@ public class LevelManager : MonoBehaviour
 	public void SnapPositionToRadius(ref Vector3 position)
 	{
 		Vector3 centerPos = new Vector3(transform.position.x, position.y, transform.position.z);
-		position = (position - centerPos).normalized * LevelSettings.movementRadius;
+		position = centerPos + (position - centerPos).normalized * LevelSettings.movementRadius;
 	}
 	
 	private void OnDrawGizmos()
