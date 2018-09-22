@@ -85,16 +85,32 @@ public class PlayerMovementBehaviour : MovementBehaviour
 			if (leftTapTimer > 0)
 			{
 				//Debug.Log("LEFT TO BEAT");
-				velocity.x = -PlayerSettings.horizontalBoost;
-				leftTapTimer = 0;
-				dontFallTime = PlayerSettings.moveSidewaysNoFallTime;
+				if(OnGround() && !PlayerSettings.groundDash)
+				{
+					rightTapTimer = 0;
+				}
+				else
+				{
+					velocity.x = -PlayerSettings.horizontalBoost;
+					leftTapTimer = 0;
+					dontFallTime = PlayerSettings.moveSidewaysNoFallTime;
+				}
 			}
 			else if (rightTapTimer > 0)
 			{
-				velocity.x = PlayerSettings.horizontalBoost;
-				//Debug.Log("RIGHT TO BEAT");
-				rightTapTimer = 0;
-				dontFallTime = PlayerSettings.moveSidewaysNoFallTime;
+				if (OnGround() && !PlayerSettings.groundDash)
+				{
+					//do nothing
+					rightTapTimer = 0;
+				}
+				else
+				{
+					velocity.x = PlayerSettings.horizontalBoost;
+					//Debug.Log("RIGHT TO BEAT");
+					rightTapTimer = 0;
+					dontFallTime = PlayerSettings.moveSidewaysNoFallTime;
+				}
+
 			}
 		}
 
@@ -169,7 +185,10 @@ public class PlayerMovementBehaviour : MovementBehaviour
 		}
 		playerRigidbody.velocity = new Vector3(0, velocity.y, 0) + localHorizontal;
 
-		playerRigidbody.velocity += (transform.forward * walkVelocity);
+		if(PlayerSettings.bascicMovement)
+		{
+			playerRigidbody.velocity += (transform.forward * walkVelocity);
+		}
 	}
 
 
