@@ -9,10 +9,11 @@ public class PlayerMovementBehaviour : MovementBehaviour
 	public void Update()
 	{
 		float horizontal = Input.GetAxis("Horizontal");
-		
-		transform.rotation = LevelManager.SnapRotationToRadius(transform.rotation);
 		Vector3 localHorizontal = transform.forward * horizontal;
-		LevelManager.SnapPositionToRadius(transform.position);
+
+		//snap to circle
+		Vector3 position = transform.position;
+		LevelManager.SnapMovementToRadius(ref position, ref localHorizontal);
 		transform.position = position;
 		transform.position += localHorizontal;
 	}

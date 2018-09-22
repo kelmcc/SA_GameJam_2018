@@ -19,7 +19,7 @@ public class LevelManager : MonoBehaviour
 	}
 
 
-	/*//takes a direction and projects it onto the circle
+	//takes a direction and projects it onto the circle
 	public void SnapMovementToRadius(ref Vector3 position, ref Vector3 direction)
 	{
 		//snap position if its moved (physics drift, large direction magnitudes)
@@ -32,12 +32,6 @@ public class LevelManager : MonoBehaviour
 		Vector3 projectedPoint = centerToTarget.normalized * LevelSettings.movementRadius;
 		//we now have added the magnitude of the initial direction back, but with the modfied direction for the circle
 		Vector3 finalPoint = (projectedPoint - position).normalized * direction.magnitude; 
-	}
-*/
-	public void SnapRotationToRadius(ref Vector3 position)
-	{
-		Vector3 centerPos = new Vector3(transform.position.x, position.y, transform.position.z);
-		position = (position - centerPos).normalized * LevelSettings.movementRadius;
 	}
 
 	public void SnapPositionToRadius(ref Vector3 position)
