@@ -21,7 +21,7 @@ public class EnemySpawnTransform : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        Vector3 p1 = transform.position + new Vector3(0f, 0.01f, 0f);
+        /*Vector3 p1 = transform.position + new Vector3(0f, 0.01f, 0f);
         RaycastHit[] hits = Physics.SphereCastAll(transform.position, sphereCastRadius, transform.forward, 10f);
         enemyCount = 0;
 
@@ -36,15 +36,15 @@ public class EnemySpawnTransform : MonoBehaviour
             }
         }
 
-        if (enemyCount>EnemySettings.spawnThreshold && IsActivated)
+        if (enemyCount < EnemySettings.spawnThreshold && IsActivated)
         {
             IsActivated = false;
         }
-        
-        if (enemyCount<EnemySettings.spawnThreshold && !IsActivated)
+
+        if (enemyCount > EnemySettings.spawnThreshold && !IsActivated)
         {
             IsActivated = true;
-        }
-        
+        }*/
+
     }
 }

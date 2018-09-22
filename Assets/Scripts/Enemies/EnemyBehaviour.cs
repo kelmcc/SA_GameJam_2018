@@ -4,6 +4,13 @@ using UnityEngine;
 
 public class EnemyBehaviour : MovementBehaviour
 {
+    public enum EnemyType
+    {
+        Single,
+        Double,
+        Snake
+    }
+
     public EnemySettings EnemySettings;
     public LevelManager LevelManager;
     private BeatManager beatManager;
@@ -18,11 +25,13 @@ public class EnemyBehaviour : MovementBehaviour
 
     Vector2 velocity = new Vector2();
 
-    Rigidbody enemyRigidBody;
-
-    float walkVelocity;
-
+    public Rigidbody enemyRigidBody;
     public BoxCollider boxCollider;
+
+    public EnemyType Type;
+    float previousHorizontal;
+    public float typeMultiplier = 1f;
+    public float moveMultiplier = 1f;
 
     void Start()
     {
@@ -32,9 +41,7 @@ public class EnemyBehaviour : MovementBehaviour
     public void Update()
     {
         DecreaseVelocity();
-
-        //basic walk. no dt needed. added in fixed update
-        walkVelocity = (EnemySettings.walkSpeed);
+        
     }
 
     public void DecreaseVelocity()
@@ -60,9 +67,6 @@ public class EnemyBehaviour : MovementBehaviour
 
     public bool OnGround()
     {
-        //if (Physics.BoxCast(transform.position, new Vector3(collider.size.x, 0.5f, collider.size.y), 
-        //	Vector3.down, collider.transform.rotation, collider.size.y + 5f, ~PlayerSettings.groundRaycastLayer.value))
-
         Debug.DrawLine(boxCollider.transform.position, boxCollider.transform.position + Vector3.down * (boxCollider.size.y + 0.2f), Color.green);
         if (Physics.Raycast(boxCollider.transform.position, Vector3.down, boxCollider.size.y + 0.5f, EnemySettings.groundRaycastLayer.value))
         {
@@ -71,6 +75,14 @@ public class EnemyBehaviour : MovementBehaviour
         else
         {
             return false;
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+        {
+            moveMultiplier = -moveMultiplier;
         }
     }
 
@@ -91,47 +103,51 @@ public class EnemyBehaviour : MovementBehaviour
         enemyRigidBody.velocity = new Vector3(0, velocity.y, 0) + localHorizontal;
     }
 
-    //stop the dude from falling off edges
-    private void OnTriggerEnter(Collider other)
-    {
-        int layermask = EnemySettings.edgeRaycastLayer.value;
-        if (layermask == (layermask | (1 << other.gameObject.layer)))
-        {
-            velocity.x = 0;
-        }
-    }
-
-    float previousHorizontal;
     public override void OnBeat()
     {
         float horizontalMove = Random.Range(0f, 10f);
         float verticalMove = Random.Range(0f, 10f);
 
+        switch (Type)
+        {
+            case EnemyType.Single:
+                SingleBehaviour(verticalMove, horizontalMove);
+                break;
+            case EnemyType.Double:
+                DoubleBehaviour(verticalMove, horizontalMove);
+                break;
+            case EnemyType.Snake:
+                break;
+        }
+    }
 
+    public void VerticalMove(float typeMultiplier)
+    {
+        velocity.y = EnemySettings.verticalBoost * typeMultiplier;
+    }
+
+    public void HorizontalMove(float sign)
+    {
+        velocity.x = EnemySettings.horizontalBoost * sign;
+    }
+
+    public void SingleBehaviour(float verticalMove, float horizontalMove)
+    {
         if (OnGround())
         {
             if (verticalMove > 7f)
             {
-                velocity.y = EnemySettings.verticalBoost;
+                VerticalMove(1f);
             }
-
-            if (horizontalMove < 5f)
-            {
-                velocity.x = -EnemySettings.horizontalBoost;
-            }
-            else
-            {
-                velocity.x = EnemySettings.horizontalBoost;
-            }
-            
-            previousHorizontal = velocity.x;
         }
-        else
+
+        HorizontalMove(moveMultiplier);
+    }
+
+    public void DoubleBehaviour(float verticalMove, float horizontalMove)
+    {
+        if (OnGround())
         {
-            if (previousHorizontal < 0)
-                velocity.x = -EnemySettings.horizontalBoost;
-            else
-                velocity.x = EnemySettings.horizontalBoost;
         }
     }
 }

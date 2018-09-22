@@ -155,4 +155,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EnemySettings: {fileID: 11400000, guid: b7fe07582e896aa4aae4b04d96a15763, type: 2}
   LevelManager: {fileID: 0}
+  enemyRigidBody: {fileID: 0}
   boxCollider: {fileID: 65144041266990828}
+  Type: 0
+  typeMultiplier: 1
+  moveMultiplier: 1
