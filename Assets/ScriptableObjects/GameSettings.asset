@@ -15,3 +15,7 @@ MonoBehaviour:
     type: 2}
   CameraPrefab: {fileID: 1655680984591800, guid: e5c14c709321f9e40b41d1bf609489c0,
     type: 2}
+  EnemyManager: {fileID: 1595318900930528, guid: 4b12b11e0921bed4a90b8d01f19c05e3,
+    type: 2}
+  EnemyPrefab: {fileID: 1365379431856390, guid: bcf8e98d56995924d8e8fa47a5144468,
+    type: 2}
