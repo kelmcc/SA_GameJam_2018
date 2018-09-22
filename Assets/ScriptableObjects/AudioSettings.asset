@@ -19,17 +19,3 @@ MonoBehaviour:
       BufferSize: 1024
     Bpm: 119
     StartBeatDelaySeconds: 0
-  - clips:
-    - clip: {fileID: 8300000, guid: 7d63eeae3e051da4098d48448cfcc664, type: 3}
-      IsPrimary: 1
-      GThreshhold: 0.3
-      BufferSize: 1024
-    Bpm: 65
-    StartBeatDelaySeconds: 0
-  - clips:
-    - clip: {fileID: 8300000, guid: 15e08822cb6d56f47b4f6a679743ad5c, type: 3}
-      IsPrimary: 1
-      GThreshhold: 0.3
-      BufferSize: 1024
-    Bpm: 93.5
-    StartBeatDelaySeconds: 0
