@@ -9,4 +9,6 @@ public class GameSettings : ScriptableObject
 
     public GameObject EnemyManager;
     public GameObject EnemyPrefab;
+    public GameObject TallEnemyPrefab;
+    public GameObject SnakeEnemyPrefab;
 }

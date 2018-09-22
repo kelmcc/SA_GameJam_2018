@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Name: EnemySettings
   m_EditorClassIdentifier: 
   walkSpeed: 7
-  horizontalBoost: 35
-  horizontalDecrese: 100
-  verticalBoost: 35
-  verticalDecrese: 100
+  horizontalBoost: 20
+  horizontalDecrease: 60
+  verticalBoost: 40
+  verticalDecrease: 110
   gravity: 5
   secondsLeeway: 0.3
   groundRaycastLayer:
@@ -24,3 +24,4 @@ MonoBehaviour:
   edgeRaycastLayer:
     serializedVersion: 2
     m_Bits: 1024
+  maxEnemies: 20
