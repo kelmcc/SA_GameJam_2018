@@ -162,6 +162,16 @@ public class PlayerMovementBehaviour : MovementBehaviour
 		playerRigidbody.velocity += (transform.forward * walkVelocity);
 	}
 
+	//stop the dude from falling off edges
+	private void OnTriggerEnter(Collider other)
+	{
+		int layermask =	PlayerSettings.edgeRaycastLayer.value;
+		if (layermask == (layermask | (1 << other.gameObject.layer)))
+		{
+			velocity.x = 0;
+		}
+	}
+
 	public override void OnBeat()
 	{
 		beatTimer = PlayerSettings.secondsLeeway;

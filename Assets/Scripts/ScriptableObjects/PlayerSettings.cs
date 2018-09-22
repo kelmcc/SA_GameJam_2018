@@ -17,4 +17,5 @@ public class PlayerSettings : ScriptableObject
 	public float secondsLeeway = 0.2f;
 
 	public LayerMask groundRaycastLayer;
+	public LayerMask edgeRaycastLayer;
 }
