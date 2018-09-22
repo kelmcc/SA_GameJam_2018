@@ -5,7 +5,7 @@ using UnityEngine;
 //voting that these should be speakers
 public class EnemySpawnTransform : MonoBehaviour
 {
-
+    public EnemySettings EnemySettings;
     //turn off if there are enough Dancers around it
     public bool IsActivated = true;
     public int enemyCount = 0;
@@ -36,12 +36,12 @@ public class EnemySpawnTransform : MonoBehaviour
             }
         }
 
-        if (enemyCount>10 && IsActivated)
+        if (enemyCount>EnemySettings.spawnThreshold && IsActivated)
         {
             IsActivated = false;
         }
         
-        if (enemyCount<10 && !IsActivated)
+        if (enemyCount<EnemySettings.spawnThreshold && !IsActivated)
         {
             IsActivated = true;
         }

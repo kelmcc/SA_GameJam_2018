@@ -18,4 +18,6 @@ public class EnemySettings : ScriptableObject
 
 	public LayerMask groundRaycastLayer;
 	public LayerMask edgeRaycastLayer;
+
+    public int spawnThreshold = 5;
 }
