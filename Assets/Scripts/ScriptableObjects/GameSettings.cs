@@ -6,4 +6,7 @@ public class GameSettings : ScriptableObject
 {
 	public GameObject PlayerPrefab;
 	public GameObject CameraPrefab;
+
+    public GameObject EnemyManager;
+    public GameObject EnemyPrefab;
 }
