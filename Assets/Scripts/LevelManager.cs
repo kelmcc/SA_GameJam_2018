@@ -8,6 +8,7 @@ public class LevelManager : MonoBehaviour
 	public LevelSettings LevelSettings;
 
 	public Transform playerTransform;
+	public Transform[] enemyTransforms;
 
 	public Vector3 GetPlayerSpawn()
 	{
@@ -17,6 +18,15 @@ public class LevelManager : MonoBehaviour
 		playerTransform.position = position;
 		return playerTransform.position;
 	}
+
+    public Vector3 GetEnemySpawn()
+    {
+        int index = Random.Range(0, enemyTransforms.Length);
+        Vector3 position = enemyTransforms[index].position;
+		SnapPositionToRadius(ref position);
+		enemyTransforms[index].position = position;
+		return enemyTransforms[index].position;
+    }
 
 
 	//takes a direction and projects it onto the circle

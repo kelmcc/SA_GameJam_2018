@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
 	public BeatManager BeatManager;
 	public UIRoot UIRoot;
 	public LevelManager LevelManager;
+    public EnemyManager EnemyManager;
 
 	void Start ()
 	{
@@ -26,6 +27,12 @@ public class GameManager : MonoBehaviour
 		OrbitFollowCamera orbitFollow = camera.GetComponent<OrbitFollowCamera>();
 		orbitFollow.LevelManager = LevelManager;
 		orbitFollow.Target = player.transform;
+
+        GameObject EnemyManagerGameObject = Instantiate(gameSettings.EnemyManager);
+        EnemyManager = EnemyManagerGameObject.GetComponent<EnemyManager>();
+        EnemyManager.EnemyPrefab = gameSettings.EnemyPrefab;
+		EnemyManager.LevelManager = LevelManager;
+		EnemyManager.BeatManager = BeatManager;
 	}
 
 	void OnBeat ()
