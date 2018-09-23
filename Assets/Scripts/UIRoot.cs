@@ -85,9 +85,8 @@ public class UIRoot : MonoBehaviour
 	}
 
 	private IEnumerator PDoMenuFade(Action action, float seconds)
-	{
-		
-		while (Overlay.alpha < 1)
+	{		
+		while (MenuFade.alpha < 1)
 		{
 			MenuFade.alpha += Time.deltaTime / seconds;
 			yield return null;

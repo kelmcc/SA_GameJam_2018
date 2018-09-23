@@ -51,5 +51,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9a0a1fd68bde664cb58bca810fe4137, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameSettings: {fileID: 11400000, guid: 98ca29c3570f210419df26098fce6ceb, type: 2}
   BeatManager: {fileID: 0}
   UIRoot: {fileID: 0}
+  LevelManager: {fileID: 0}
+  EnemyManager: {fileID: 0}
+  BeatMultiplier: {fileID: 0}
