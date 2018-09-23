@@ -8,7 +8,9 @@ public class BeatMultiplier : MonoBehaviour
     public PlayerSettings PlayerSettings;
 
     private float innerLevelProgress = 0f;
-    public Image[] beatLevelUI;
+    public Image[] beatLevelUI_L;
+    public Image[] beatLevelUI_R;
+
 
     public int CurrentBeatKeeperLevel = 0;
 
@@ -26,10 +28,12 @@ public class BeatMultiplier : MonoBehaviour
 
     private void Start()
     {
-        foreach (Image levelMeter in beatLevelUI)
+        for (int i = 0; i < beatLevelUI_L.Length; i++)
         {
-            levelMeter.fillAmount = 0f;
+            beatLevelUI_L[i].fillAmount = 0f;
+            beatLevelUI_R[i].fillAmount = 0f;
         }
+
         CurrentBeatKeeperLevel = 0;
         SkyboxMat = RenderSettings.skybox;
         UpdateSkybox();
@@ -46,18 +50,21 @@ public class BeatMultiplier : MonoBehaviour
             innerLevelProgress = 0f;
         }
 
-        beatLevelUI[CurrentBeatKeeperLevel].fillAmount = Mathf.Lerp(beatLevelUI[CurrentBeatKeeperLevel].fillAmount, innerLevelProgress / 50f, 0.5f);
+        beatLevelUI_L[CurrentBeatKeeperLevel].fillAmount = Mathf.Lerp(beatLevelUI_L[CurrentBeatKeeperLevel].fillAmount, innerLevelProgress / 50f, 0.5f);
+        beatLevelUI_R[CurrentBeatKeeperLevel].fillAmount = Mathf.Lerp(beatLevelUI_R[CurrentBeatKeeperLevel].fillAmount, innerLevelProgress / 50f, 0.5f);
 
-        if (Mathf.Approximately(beatLevelUI[CurrentBeatKeeperLevel].fillAmount, 1f) && CurrentBeatKeeperLevel < beatLevelUI.Length - 1)
+        if (Mathf.Approximately(beatLevelUI_L[CurrentBeatKeeperLevel].fillAmount, 1f) && CurrentBeatKeeperLevel < beatLevelUI_L.Length - 1)
         {
             CurrentBeatKeeperLevel++;
-            beatLevelUI[CurrentBeatKeeperLevel].fillAmount = 5f;
+            beatLevelUI_L[CurrentBeatKeeperLevel].fillAmount = 5f;
+            beatLevelUI_R[CurrentBeatKeeperLevel].fillAmount = 5f;
+
             innerLevelProgress = 5f;
 
             //update the skybox too
             UpdateSkybox();
         }
-        else if (Mathf.Approximately(beatLevelUI[CurrentBeatKeeperLevel].fillAmount, 0f) && CurrentBeatKeeperLevel > 0)
+        else if (Mathf.Approximately(beatLevelUI_L[CurrentBeatKeeperLevel].fillAmount, 0f) && CurrentBeatKeeperLevel > 0)
         {
             CurrentBeatKeeperLevel--;
             innerLevelProgress = 50f;
@@ -67,15 +74,16 @@ public class BeatMultiplier : MonoBehaviour
         }
     }
 
-	public void AddLevelProgress(float increment)
-	{
-		innerLevelProgress += increment;
-	}
+    public void AddLevelProgress(float increment)
+    {
+        innerLevelProgress += increment;
+    }
 
-	public void RemoveLevelProggress()
-	{
-		innerLevelProgress = 0;
-	}
+    public void RemoveLevelProggress()
+    {
+	CurrentBeatKeeperLevel = 0;
+        innerLevelProgress = 0;
+    }
 
     public void UpdateSkybox()
     {
