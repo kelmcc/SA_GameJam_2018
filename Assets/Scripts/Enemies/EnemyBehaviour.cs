@@ -35,16 +35,11 @@ public class EnemyBehaviour : MovementBehaviour
     public BoxCollider boxCollider;
 
     public EnemyType Type;
-    float previousHorizontal;
-    public float typeMultiplier = 1f;
     public float moveMultiplier = 1f;
-
-    public float defaultMass = 0f;
 
     void Start()
     {
         enemyRigidBody = GetComponent<Rigidbody>();
-        defaultMass = enemyRigidBody.mass;
         previousPosition = Vector3.zero;
     }
 
@@ -53,16 +48,6 @@ public class EnemyBehaviour : MovementBehaviour
     {
         DecreaseVelocity();
         timer += Time.deltaTime;
-
-        if (transform.localPosition.y < 0.5f)
-        {
-            enemyRigidBody.mass = defaultMass;
-        }
-        else
-        {
-            enemyRigidBody.mass = 1f;
-        }
-
     }
 
     public void DecreaseVelocity()
@@ -108,24 +93,19 @@ public class EnemyBehaviour : MovementBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy") && OnGround() && collision.gameObject.GetComponent<EnemyBehaviour>().OnGround())
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
         {
             moveMultiplier = -moveMultiplier;
         }
-    }
 
-    private void OnCollisionStay(Collision collision)
-    {
         // Calculate Angle Between the collision point and the player
-        Vector3 dir = collision.contacts[0].point - transform.position;
+        collisionDir = collision.contacts[0].point - transform.position;
 
         // We then get the opposite (-Vector3) and normalize it
-        dir = -dir.normalized;
-
-        // And finally we add force in the direction of dir and multiply it by force. 
-        // This will push back the player
-        enemyRigidBody.AddForce(dir * 100f);
+        collisionDir = -collisionDir.normalized * 0.1f;
     }
+
+    Vector3 collisionDir;
 
     float timer = 0f;
     Collider currentCollider;
@@ -167,14 +147,17 @@ public class EnemyBehaviour : MovementBehaviour
         Vector3 position = transform.position;
         LevelManager.SnapMovementToRadius(ref position, ref localHorizontal);
         Vector3 finalPosition = position;
-        enemyRigidBody.MovePosition(new Vector3(finalPosition.x, transform.position.y, finalPosition.z));
+        enemyRigidBody.MovePosition(new Vector3(finalPosition.x, transform.position.y, finalPosition.z) + collisionDir);
+
+        // And finally we add force in the direction of dir and multiply it by force. 
+        // This will push back the player
 
         if (velocity.y <= 0 && !OnGround()) velocity.y -= EnemySettings.gravity;
         enemyRigidBody.velocity = new Vector3(0, velocity.y, 0) + localHorizontal;
     }
 
     public override void OnBeat()
-    {        
+    {
         float horizontalMove = Random.Range(0f, 10f);
         float verticalMove = Random.Range(0f, 10f);
 
@@ -204,12 +187,9 @@ public class EnemyBehaviour : MovementBehaviour
 
     public void SingleBehaviour(float verticalMove, float horizontalMove)
     {
-        if (OnGround())
+        if (Mathf.Abs(velocity.y) < 0.1f && verticalMove > 5f)
         {
-            if (verticalMove > 5f)
-            {
-                VerticalMove(1f);
-            }
+            VerticalMove(1f);
         }
 
         HorizontalMove(moveMultiplier);
@@ -217,11 +197,11 @@ public class EnemyBehaviour : MovementBehaviour
 
     public void DoubleBehaviour(float verticalMove, float horizontalMove)
     {
-        if (OnGround())
+        if (Mathf.Abs(velocity.y) < 0.1f)
         {
             VerticalMove(1.1f);
-            HorizontalMove(moveMultiplier * 0.5f);
         }
+        HorizontalMove(moveMultiplier * 0.5f);
     }
 
     public void SnakeBehaviour(float verticalMove, float horizontalMove)
