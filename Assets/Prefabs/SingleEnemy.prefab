@@ -479,3 +479,4 @@ MonoBehaviour:
   Type: 0
   typeMultiplier: 1
   moveMultiplier: 1
+  defaultMass: 0
