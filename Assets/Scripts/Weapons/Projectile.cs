@@ -45,7 +45,12 @@ public class Projectile : MonoBehaviour
 		if (layerMask == (layerMask | (1 << coll.gameObject.layer)))
 		{
 			EnemyBehaviour enemy = coll.gameObject.GetComponent<EnemyBehaviour>();
-			if(enemy != null)
+			if(enemy == null)
+			{
+				enemy = coll.gameObject.transform.parent.GetComponent<EnemyBehaviour>();
+			}
+			
+			if (enemy != null)
 			{
 				enemy.Hit(this);
 			}

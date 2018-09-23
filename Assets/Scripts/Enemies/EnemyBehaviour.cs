@@ -11,7 +11,11 @@ public class EnemyBehaviour : MovementBehaviour
         Snake
     }
 
+	private int TotalLife;
 	public int Life;
+
+	public GameObject DeathCube;
+	public int DeathCubeCount;
 
     public EnemySettings EnemySettings;
     public EnemyManager EnemyManager;
@@ -43,7 +47,9 @@ public class EnemyBehaviour : MovementBehaviour
     {
         enemyRigidBody = GetComponent<Rigidbody>();
         previousPosition = Vector3.zero;
-    }
+		TotalLife = Life;
+
+	}
 
     Vector3 previousPosition;
     public void Update()
@@ -136,13 +142,27 @@ public class EnemyBehaviour : MovementBehaviour
 
 	private IEnumerator TakeHit(Vector3 position)
 	{
-		//Play Hit animation
-		velocity = (transform.position - position).normalized * 100f;
-
 		Life--;
+
+		for (int i = 0; i < DeathCubeCount; i++)
+		{
+			GameObject cubeOb = Instantiate(DeathCube);
+			cubeOb.transform.position = transform.position;
+			yield return new WaitForSeconds(0.05f);
+
+			while(transform.localScale.x > (0))
+			{
+				transform.localScale = new Vector3(transform.localScale.x - Time.deltaTime * 2, transform.localScale.x - Time.deltaTime * 2, transform.localScale.x - Time.deltaTime * 2);
+				if(transform.localScale.x > 1)
+				{
+					transform.localScale = Vector3.one;
+				}
+				yield return null;
+			}
+		}
+
 		if(Life <= 0)
 		{
-			yield return new WaitForSeconds(0.1f);
 			Destroy(gameObject);
 		}
 	}

@@ -214,5 +214,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   OnDestroyParticleSystem: {fileID: 0}
+  HitLayerMask:
+    serializedVersion: 2
+    m_Bits: 8704
   Speed: 0
   LevelManager: {fileID: 0}
+  lifetime: 5
+  startScale: 0.1

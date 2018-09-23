@@ -14,11 +14,11 @@ MonoBehaviour:
   walkSpeed: 15
   horizontalBoost: 35
   horizontalDecrese: 100
-  verticalBoost: 35
+  verticalBoost: 45
   verticalDecrese: 100
   gravity: 5
-  secondsLeeway: 0.3
-  moveSidewaysNoFallTime: 0.3
+  secondsLeeway: 0.4
+  moveSidewaysNoFallTime: 0.4
   groundDash: 1
   bascicMovement: 0
   groundRaycastLayer:

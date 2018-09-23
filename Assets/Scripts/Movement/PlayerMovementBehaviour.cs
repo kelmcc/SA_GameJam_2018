@@ -8,9 +8,13 @@ public class PlayerMovementBehaviour : MovementBehaviour
     public BeatManager BeatManager;
     public BeatMultiplier BeatMultiplier;
 
+
+
     public BoxCollider boxCollider;
 
     public PlayerSettings PlayerSettings;
+
+
 
     Rigidbody playerRigidbody;
 
@@ -213,7 +217,18 @@ public class PlayerMovementBehaviour : MovementBehaviour
         }
     }
 
-    public override void OnBeat()
+	private void OnCollisionEnter(Collision collision)
+	{
+		DeathCube cube = collision.gameObject.GetComponent<DeathCube>();
+		if(cube != null)
+		{
+			BeatMultiplier.AddLevelProgress(0.1f);
+			AudioSource.PlayClipAtPoint(PlayerSettings.GotCubeAudio, Camera.main.transform.position, Random.Range(0.1f, 5f));
+			Destroy(collision.gameObject);
+		}
+	}
+
+	public override void OnBeat()
     {
         if (!beatHit)
         {

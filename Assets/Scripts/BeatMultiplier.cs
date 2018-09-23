@@ -67,6 +67,11 @@ public class BeatMultiplier : MonoBehaviour
         }
     }
 
+	public void AddLevelProgress(float increment)
+	{
+		innerLevelProgress += increment;
+	}
+
     public void UpdateSkybox()
     {
         switch (CurrentBeatKeeperLevel)

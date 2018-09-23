@@ -27,4 +27,8 @@ public class PlayerSettings : ScriptableObject
     public float beatInterval;
     public float beatDecrease;
     public float beatMissedPenalty;
+
+	[Space]
+	public AudioClip GotCubeAudio;
+	public AudioClip FailBeatAudio;
 }
