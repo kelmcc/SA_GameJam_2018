@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.UI.Extensions;
 
 public class UIRoot : MonoBehaviour
@@ -13,6 +14,8 @@ public class UIRoot : MonoBehaviour
 	public Vector2 spectrumDimensions;
 
 	private BeatManager beatManager;
+
+    public Image BeatLevel;
 
 	// Use this for initialization
 	void Start ()
