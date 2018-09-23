@@ -155,11 +155,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0151556a92611b1439b7a0d27d0601c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerSettings: {fileID: 11400000, guid: 1330406b78323fa41a5d17125fd2768d, type: 2}
   Projectile: {fileID: 114511796794714112, guid: 55ff8b0f2efe5f144ace425973f86d69,
     type: 2}
-  RaycastLayerMask:
-    serializedVersion: 2
-    m_Bits: 0
   LineRenderer: {fileID: 120767724967289854}
 --- !u!114 &114110298602237336
 MonoBehaviour:
