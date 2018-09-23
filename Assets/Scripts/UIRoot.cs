@@ -15,7 +15,7 @@ public class UIRoot : MonoBehaviour
 
 	private BeatManager beatManager;
 
-    public Image BeatLevel;
+    public Image[] BeatLevel;
 
 	// Use this for initialization
 	void Start ()

@@ -29,4 +29,4 @@ MonoBehaviour:
     m_Bits: 1024
   beatInterval: 1
   beatDecrease: 0.01
-  beatMissedPenalty: 5
+  beatMissedPenalty: 2
