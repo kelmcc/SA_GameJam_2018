@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 114110298602237336}
   - component: {fileID: 54833368458683238}
   - component: {fileID: 114036902672838406}
+  - component: {fileID: 114957865859248936}
   - component: {fileID: 120767724967289854}
   m_Layer: 0
   m_Name: Player
@@ -172,7 +173,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LevelManager: {fileID: 0}
   BeatManager: {fileID: 0}
+  BeatMultiplier: {fileID: 0}
   boxCollider: {fileID: 65699648935471920}
+  PlayerSettings: {fileID: 11400000, guid: 1330406b78323fa41a5d17125fd2768d, type: 2}
+--- !u!114 &114957865859248936
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1378847592677350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 860737eabb1b8a149a283e848cbf3432, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   PlayerSettings: {fileID: 11400000, guid: 1330406b78323fa41a5d17125fd2768d, type: 2}
 --- !u!120 &120767724967289854
 LineRenderer:

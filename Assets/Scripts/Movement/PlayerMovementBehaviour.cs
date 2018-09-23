@@ -4,206 +4,223 @@ using UnityEngine;
 
 public class PlayerMovementBehaviour : MovementBehaviour
 {
-	public LevelManager LevelManager;
-	public BeatManager BeatManager;
+    public LevelManager LevelManager;
+    public BeatManager BeatManager;
+    public BeatMultiplier BeatMultiplier;
 
-	public BoxCollider boxCollider;
+    public BoxCollider boxCollider;
 
-	public PlayerSettings PlayerSettings;
+    public PlayerSettings PlayerSettings;
 
-	Rigidbody playerRigidbody;
+    Rigidbody playerRigidbody;
 
-	float beatTimer;
-	float leftTapTimer;
-	float rightTapTimer;
-	float upTapTimer;
-	float downTapTimer;
+    float beatTimer;
+    float leftTapTimer;
+    float rightTapTimer;
+    float upTapTimer;
+    float downTapTimer;
 
-	float lastHorizontal;
-	float lastVertical;
+    bool beatHit;
 
-	float walkVelocity;
+    float lastHorizontal;
+    float lastVertical;
 
-	float dontFallTime;
+    float walkVelocity;
 
-	private void Start()
-	{
-		BeatManager.OnBeat += OnBeat;
-		playerRigidbody = GetComponent<Rigidbody>();
-	}
+    float dontFallTime;
 
-	Vector2 velocity = new Vector2();
+    private void Start()
+    {
+        BeatManager.OnBeat += OnBeat;
+        playerRigidbody = GetComponent<Rigidbody>();
+    }
 
-	public void Update()
-	{
-		DecreaseVelocity();
+    Vector2 velocity = new Vector2();
 
-		//get axes
-		float horizontal = Input.GetAxis("Horizontal");
-		float vertical = Input.GetAxis("Vertical");
+    public void Update()
+    {
+        DecreaseVelocity();
 
-		//=== BEAT MATCHING ===
-		if (lastHorizontal == 0 && Mathf.Abs(horizontal) > 0)
-		{
-			if(horizontal > 0)
-			{
-				rightTapTimer = PlayerSettings.secondsLeeway;
-			}
-			else if(horizontal < 0)
-			{
-				leftTapTimer = PlayerSettings.secondsLeeway;
-			}
-		}
+        //get axes
+        float horizontal = Input.GetAxis("Horizontal");
+        float vertical = Input.GetAxis("Vertical");
 
-		if (lastVertical == 0 && Mathf.Abs(vertical) > 0)
-		{
-			if (vertical > 0)
-			{
-				upTapTimer = PlayerSettings.secondsLeeway;
-			}
-			else if (vertical < 0)
-			{
-				downTapTimer = PlayerSettings.secondsLeeway;
-			}
-		}
+        //=== BEAT MATCHING ===
+        if (lastHorizontal == 0 && Mathf.Abs(horizontal) > 0)
+        {
+            if (horizontal > 0)
+            {
+                rightTapTimer = PlayerSettings.secondsLeeway;
+            }
+            else if (horizontal < 0)
+            {
+                leftTapTimer = PlayerSettings.secondsLeeway;
+            }
+        }
 
-		if(beatTimer > 0)
-		{
-			if (upTapTimer > 0 && OnGround())
-			{
-				//Debug.Log("UP TO BEAT");
-				velocity.y = PlayerSettings.verticalBoost;
-				upTapTimer = 0;
-			}
-			else if (downTapTimer > 0)
-			{
-				//Debug.Log("DOWN TO BEAT");
-				velocity.y = -PlayerSettings.verticalBoost;
-				downTapTimer = 0;
-			}
+        if (lastVertical == 0 && Mathf.Abs(vertical) > 0)
+        {
+            if (vertical > 0)
+            {
+                upTapTimer = PlayerSettings.secondsLeeway;
+            }
+            else if (vertical < 0)
+            {
+                downTapTimer = PlayerSettings.secondsLeeway;
+            }
+        }
 
-			if (leftTapTimer > 0)
-			{
-				//Debug.Log("LEFT TO BEAT");
-				if(OnGround() && !PlayerSettings.groundDash)
-				{
-					rightTapTimer = 0;
-				}
-				else
-				{
-					velocity.x = -PlayerSettings.horizontalBoost;
-					leftTapTimer = 0;
-					dontFallTime = PlayerSettings.moveSidewaysNoFallTime;
-				}
-			}
-			else if (rightTapTimer > 0)
-			{
-				if (OnGround() && !PlayerSettings.groundDash)
-				{
-					//do nothing
-					rightTapTimer = 0;
-				}
-				else
-				{
-					velocity.x = PlayerSettings.horizontalBoost;
-					//Debug.Log("RIGHT TO BEAT");
-					rightTapTimer = 0;
-					dontFallTime = PlayerSettings.moveSidewaysNoFallTime;
-				}
+        if (beatTimer > 0)
+        {
+            if (upTapTimer > 0 && OnGround())
+            {
+                //Debug.Log("UP TO BEAT");
+                beatHit = true;
+                BeatMultiplier.Beat(PlayerSettings.beatInterval);
+                velocity.y = PlayerSettings.verticalBoost;
+                upTapTimer = 0;
+            }
+            else if (downTapTimer > 0)
+            {
+                //Debug.Log("DOWN TO BEAT");
+                beatHit = true;
+                BeatMultiplier.Beat(PlayerSettings.beatInterval);
+                velocity.y = -PlayerSettings.verticalBoost;
+                downTapTimer = 0;
+            }
 
-			}
-		}
+            if (leftTapTimer > 0)
+            {
+                //Debug.Log("LEFT TO BEAT");
+                beatHit = true;
+                BeatMultiplier.Beat(PlayerSettings.beatInterval);
+                if (OnGround() && !PlayerSettings.groundDash)
+                {
+                    rightTapTimer = 0;
+                }
+                else
+                {
+                    velocity.x = -PlayerSettings.horizontalBoost;
+                    leftTapTimer = 0;
+                    dontFallTime = PlayerSettings.moveSidewaysNoFallTime;
+                }
+            }
+            else if (rightTapTimer > 0)
+            {
+                beatHit = true;
+                BeatMultiplier.Beat(PlayerSettings.beatInterval);
+                if (OnGround() && !PlayerSettings.groundDash)
+                {
+                    //do nothing
+                    rightTapTimer = 0;
+                }
+                else
+                {
+                    velocity.x = PlayerSettings.horizontalBoost;
+                    //Debug.Log("RIGHT TO BEAT");
+                    rightTapTimer = 0;
+                    dontFallTime = PlayerSettings.moveSidewaysNoFallTime;
+                }
 
-		beatTimer -= Time.deltaTime;
-		upTapTimer -= Time.deltaTime;
-		leftTapTimer -= Time.deltaTime;
-		rightTapTimer -= Time.deltaTime;
-	
+            }
+        }
 
-		lastHorizontal = horizontal;
-		lastVertical = vertical;
-
-		dontFallTime -= Time.deltaTime;
-
-		//basic walk. no dt needed. added in fixed update
-		walkVelocity = (horizontal * PlayerSettings.walkSpeed);
-	}
-
-	public void DecreaseVelocity()
-	{
-		if (velocity.x > 0)
-		{
-			velocity.x = Mathf.Max(0, velocity.x - (PlayerSettings.horizontalDecrese * Time.deltaTime));
-		}
-		else if (velocity.x < 0)
-		{
-			velocity.x = Mathf.Min(0, velocity.x + (PlayerSettings.horizontalDecrese * Time.deltaTime));
-		}
-
-		if (velocity.y > 0)
-		{
-			velocity.y = Mathf.Max(0, velocity.y - (PlayerSettings.verticalDecrese * Time.deltaTime));
-		}
-		else if (velocity.y < 0)
-		{
-			velocity.y = Mathf.Min(0, velocity.y + (PlayerSettings.verticalDecrese * Time.deltaTime));
-		}
-	}
-
-	public bool OnGround()
-	{
-		//if (Physics.BoxCast(transform.position, new Vector3(collider.size.x, 0.5f, collider.size.y), 
-		//	Vector3.down, collider.transform.rotation, collider.size.y + 5f, ~PlayerSettings.groundRaycastLayer.value))
-
-		Debug.DrawLine(boxCollider.transform.position, boxCollider.transform.position + Vector3.down * (boxCollider.size.y + 0.2f), Color.green);
-		if(Physics.Raycast(boxCollider.transform.position, Vector3.down, boxCollider.size.y + 0.5f, PlayerSettings.groundRaycastLayer.value))
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	public void FixedUpdate()
-	{
-		//set rotation
-		Vector3 goalVec = -(new Vector3(LevelManager.transform.position.x, transform.position.y, LevelManager.transform.position.z) - transform.position).normalized;
-		playerRigidbody.MoveRotation(playerRigidbody.rotation * Quaternion.FromToRotation(transform.right, goalVec));
-
-		//snap to circle
-		Vector3 localHorizontal = transform.forward * velocity.x;
-		Vector3 position = transform.position;
-		LevelManager.SnapMovementToRadius(ref position, ref localHorizontal);
-		Vector3 finalPosition = position;
-		playerRigidbody.MovePosition(new Vector3(finalPosition.x, transform.position.y, finalPosition.z));
-
-		if (velocity.y <= 0 && !OnGround() && dontFallTime <= 0)
-		{
-			velocity.y -= PlayerSettings.gravity;
-		}
-		playerRigidbody.velocity = new Vector3(0, velocity.y, 0) + localHorizontal;
-
-		if(PlayerSettings.bascicMovement)
-		{
-			playerRigidbody.velocity += (transform.forward * walkVelocity);
-		}
-	}
+        beatTimer -= Time.deltaTime;
+        upTapTimer -= Time.deltaTime;
+        leftTapTimer -= Time.deltaTime;
+        rightTapTimer -= Time.deltaTime;
 
 
-	//stop the dude from falling off edges
-	private void OnTriggerEnter(Collider other)
-	{
-		int layermask =	PlayerSettings.edgeRaycastLayer.value;
-		if (layermask == (layermask | (1 << other.gameObject.layer)))
-		{
-			velocity.x = 0;
-		}
-	}
+        lastHorizontal = horizontal;
+        lastVertical = vertical;
 
-	public override void OnBeat()
-	{
-		beatTimer = PlayerSettings.secondsLeeway;
-	}
+        dontFallTime -= Time.deltaTime;
+
+        //basic walk. no dt needed. added in fixed update
+        walkVelocity = (horizontal * PlayerSettings.walkSpeed);
+    }
+
+    public void DecreaseVelocity()
+    {
+        if (velocity.x > 0)
+        {
+            velocity.x = Mathf.Max(0, velocity.x - (PlayerSettings.horizontalDecrese * Time.deltaTime));
+        }
+        else if (velocity.x < 0)
+        {
+            velocity.x = Mathf.Min(0, velocity.x + (PlayerSettings.horizontalDecrese * Time.deltaTime));
+        }
+
+        if (velocity.y > 0)
+        {
+            velocity.y = Mathf.Max(0, velocity.y - (PlayerSettings.verticalDecrese * Time.deltaTime));
+        }
+        else if (velocity.y < 0)
+        {
+            velocity.y = Mathf.Min(0, velocity.y + (PlayerSettings.verticalDecrese * Time.deltaTime));
+        }
+    }
+
+    public bool OnGround()
+    {
+        //if (Physics.BoxCast(transform.position, new Vector3(collider.size.x, 0.5f, collider.size.y), 
+        //	Vector3.down, collider.transform.rotation, collider.size.y + 5f, ~PlayerSettings.groundRaycastLayer.value))
+
+        Debug.DrawLine(boxCollider.transform.position, boxCollider.transform.position + Vector3.down * (boxCollider.size.y + 0.2f), Color.green);
+        if (Physics.Raycast(boxCollider.transform.position, Vector3.down, boxCollider.size.y + 0.5f, PlayerSettings.groundRaycastLayer.value))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public void FixedUpdate()
+    {
+        //set rotation
+        Vector3 goalVec = -(new Vector3(LevelManager.transform.position.x, transform.position.y, LevelManager.transform.position.z) - transform.position).normalized;
+        playerRigidbody.MoveRotation(playerRigidbody.rotation * Quaternion.FromToRotation(transform.right, goalVec));
+
+        //snap to circle
+        Vector3 localHorizontal = transform.forward * velocity.x;
+        Vector3 position = transform.position;
+        LevelManager.SnapMovementToRadius(ref position, ref localHorizontal);
+        Vector3 finalPosition = position;
+        playerRigidbody.MovePosition(new Vector3(finalPosition.x, transform.position.y, finalPosition.z));
+
+        if (velocity.y <= 0 && !OnGround() && dontFallTime <= 0)
+        {
+            velocity.y -= PlayerSettings.gravity;
+        }
+        playerRigidbody.velocity = new Vector3(0, velocity.y, 0) + localHorizontal;
+
+        if (PlayerSettings.bascicMovement)
+        {
+            playerRigidbody.velocity += (transform.forward * walkVelocity);
+        }
+    }
+
+
+    //stop the dude from falling off edges
+    private void OnTriggerEnter(Collider other)
+    {
+        int layermask = PlayerSettings.edgeRaycastLayer.value;
+        if (layermask == (layermask | (1 << other.gameObject.layer)))
+        {
+            velocity.x = 0;
+        }
+    }
+
+    public override void OnBeat()
+    {
+        if (!beatHit)
+        {
+            BeatMultiplier.MissedBeat();
+        }
+
+        beatTimer = PlayerSettings.secondsLeeway;
+        beatHit = false;
+    }
 }
