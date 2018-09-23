@@ -24,4 +24,4 @@ MonoBehaviour:
   edgeRaycastLayer:
     serializedVersion: 2
     m_Bits: 1024
-  maxEnemies: 20
+  maxEnemies: 50

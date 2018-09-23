@@ -24,6 +24,11 @@ public class EnemyBehaviour : MovementBehaviour
         }
     }
 
+    public void Unsub()
+    {
+        beatManager.OnBeat -= OnBeat;
+    }
+
     Vector2 velocity = new Vector2();
 
     public Rigidbody enemyRigidBody;
@@ -34,15 +39,30 @@ public class EnemyBehaviour : MovementBehaviour
     public float typeMultiplier = 1f;
     public float moveMultiplier = 1f;
 
+    public float defaultMass = 0f;
+
     void Start()
     {
         enemyRigidBody = GetComponent<Rigidbody>();
+        defaultMass = enemyRigidBody.mass;
+        previousPosition = Vector3.zero;
     }
 
+    Vector3 previousPosition;
     public void Update()
     {
         DecreaseVelocity();
         timer += Time.deltaTime;
+
+        if (transform.localPosition.y < 0.5f)
+        {
+            enemyRigidBody.mass = defaultMass;
+        }
+        else
+        {
+            enemyRigidBody.mass = 1f;
+        }
+
     }
 
     public void DecreaseVelocity()
@@ -94,6 +114,19 @@ public class EnemyBehaviour : MovementBehaviour
         }
     }
 
+    private void OnCollisionStay(Collision collision)
+    {
+        // Calculate Angle Between the collision point and the player
+        Vector3 dir = collision.contacts[0].point - transform.position;
+
+        // We then get the opposite (-Vector3) and normalize it
+        dir = -dir.normalized;
+
+        // And finally we add force in the direction of dir and multiply it by force. 
+        // This will push back the player
+        enemyRigidBody.AddForce(dir * 100f);
+    }
+
     float timer = 0f;
     Collider currentCollider;
     private void OnTriggerEnter(Collider collider)
@@ -141,7 +174,7 @@ public class EnemyBehaviour : MovementBehaviour
     }
 
     public override void OnBeat()
-    {
+    {        
         float horizontalMove = Random.Range(0f, 10f);
         float verticalMove = Random.Range(0f, 10f);
 
@@ -173,7 +206,7 @@ public class EnemyBehaviour : MovementBehaviour
     {
         if (OnGround())
         {
-            if (verticalMove > 7f)
+            if (verticalMove > 5f)
             {
                 VerticalMove(1f);
             }
@@ -187,6 +220,7 @@ public class EnemyBehaviour : MovementBehaviour
         if (OnGround())
         {
             VerticalMove(1.1f);
+            HorizontalMove(moveMultiplier * 0.5f);
         }
     }
 
