@@ -30,6 +30,9 @@ public class BeatBouncer : MonoBehaviour
 
 	private void OnDestroy()
 	{
-		gameManager.BeatManager.OnBeat -= OnBeat;
+		if(gameManager != null && gameManager.BeatManager != null)
+		{
+			gameManager.BeatManager.OnBeat -= OnBeat;
+		}	
 	}
 }

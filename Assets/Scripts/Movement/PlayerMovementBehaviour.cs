@@ -7,12 +7,16 @@ public class PlayerMovementBehaviour : MovementBehaviour
     public LevelManager LevelManager;
     public BeatManager BeatManager;
     public BeatMultiplier BeatMultiplier;
+	public UIRoot UIRoot;
 
 
 
     public BoxCollider boxCollider;
 
     public PlayerSettings PlayerSettings;
+
+	public GameObject wing1;
+	public GameObject wing2;
 
     Rigidbody playerRigidbody;
 
@@ -41,7 +45,19 @@ public class PlayerMovementBehaviour : MovementBehaviour
 
     public void Update()
     {
-        DecreaseVelocity();
+
+		if (BeatMultiplier.CurrentBeatKeeperLevel > 0)
+		{
+			wing1.SetActive(true);
+			wing2.SetActive(true);
+		}
+		else
+		{
+			wing1.SetActive(false);
+			wing2.SetActive(false);
+		}
+
+		DecreaseVelocity();
 
         //get axes
         float horizontal = Input.GetAxis("Horizontal");
@@ -167,6 +183,12 @@ public class PlayerMovementBehaviour : MovementBehaviour
     {
         //if (Physics.BoxCast(transform.position, new Vector3(collider.size.x, 0.5f, collider.size.y), 
         //	Vector3.down, collider.transform.rotation, collider.size.y + 5f, ~PlayerSettings.groundRaycastLayer.value))
+		if(BeatMultiplier.CurrentBeatKeeperLevel > 0)
+		{
+			//fly
+			return true;
+		}
+
 
         Debug.DrawLine(boxCollider.transform.position + (boxCollider.transform.forward * 1f), boxCollider.transform.position + Vector3.down * (boxCollider.size.y + 0.2f) + (boxCollider.transform.forward * 1f), Color.green);
 		Debug.DrawLine(boxCollider.transform.position + (-boxCollider.transform.forward * 1f), boxCollider.transform.position + Vector3.down * (boxCollider.size.y + 0.2f) + (boxCollider.transform.forward * 1f), Color.green);
@@ -222,7 +244,7 @@ public class PlayerMovementBehaviour : MovementBehaviour
 		DeathCube cube = collision.gameObject.GetComponent<DeathCube>();
 		if (cube != null)
 		{
-			BeatMultiplier.AddLevelProgress(0.1f);
+			BeatMultiplier.AddLevelProgress(0.5f);
 			AudioSource.PlayClipAtPoint(PlayerSettings.GotCubeAudio, Camera.main.transform.position, Random.Range(0.1f, 5f));
 			Destroy(collision.gameObject);
 		}
@@ -237,6 +259,7 @@ public class PlayerMovementBehaviour : MovementBehaviour
 			{
 				BeatMultiplier.RemoveLevelProggress();
 				BeatManager.MuteFor(1);
+				UIRoot.ShowOverlayFor(1.5f);
 			}
 		}
 	}

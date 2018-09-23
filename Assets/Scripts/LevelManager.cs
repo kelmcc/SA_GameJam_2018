@@ -6,9 +6,14 @@ using UnityEngine;
 public class LevelManager : MonoBehaviour
 {
 	public LevelSettings LevelSettings;
-
+	private BeatMultiplier BeatMultiplier;
 	public Transform playerTransform;
-	public List<EnemySpawnTransform> enemyTransforms;
+
+	public List<EnemySpawnTransform> stage1EnemyTransforms = new List<EnemySpawnTransform>();
+	public List<EnemySpawnTransform> stage2EnemyTransforms = new List<EnemySpawnTransform>();
+	public List<EnemySpawnTransform> stage3EnemyTransforms = new List<EnemySpawnTransform>();
+
+	private List<List<EnemySpawnTransform>> enemyTransforms;
 
 	public float Radius
 	{
@@ -16,6 +21,16 @@ public class LevelManager : MonoBehaviour
 		{
 			return LevelSettings.movementRadius;
 		}
+	}
+
+	private void Start()
+	{
+		enemyTransforms = new List<List<EnemySpawnTransform>>();
+		enemyTransforms.Add(stage1EnemyTransforms);
+		enemyTransforms.Add(stage2EnemyTransforms);
+		enemyTransforms.Add(stage3EnemyTransforms);
+
+		BeatMultiplier = FindObjectOfType<BeatMultiplier>();
 	}
 
 	public Vector3 GetPlayerSpawn()
@@ -27,24 +42,32 @@ public class LevelManager : MonoBehaviour
 		return playerTransform.position;
 	}
 
-    public Vector3 GetEnemySpawn()
+    public bool GetEnemySpawn(int stage, out Vector3 pos)
     {
-        int index = Random.Range(0, enemyTransforms.Count);
-        while (!enemyTransforms[index].IsActivated)
+        int index = Random.Range(0, enemyTransforms[stage].Count);
+
+		if(enemyTransforms[stage].Count == 0)
+		{
+			pos = Vector3.zero;
+			return false;
+		}
+
+        while (!enemyTransforms[stage][index].IsActivated)
         {
             index = Random.Range(0, enemyTransforms.Count);
         }
         
-        Vector3 position = enemyTransforms[index].transform.position;
+        Vector3 position = enemyTransforms[stage][index].transform.position;
 		SnapPositionToRadius(ref position);
-		enemyTransforms[index].transform.position = position;
-		return enemyTransforms[index].transform.position;
+		enemyTransforms[stage][index].transform.position = position;
+		pos = enemyTransforms[stage][index].transform.position;
+		return true;
     }
 
     public List<EnemySpawnTransform> GetActiveEnemySpawners()
     {
         List<EnemySpawnTransform> activeSpawners = new List<EnemySpawnTransform>();
-        foreach (EnemySpawnTransform spawner in enemyTransforms)
+		foreach (EnemySpawnTransform spawner in enemyTransforms[BeatMultiplier.CurrentBeatKeeperLevel])
         {
             if (spawner.IsActivated)
             {

@@ -14,6 +14,8 @@ public class EnemyBehaviour : MovementBehaviour
 	private int TotalLife;
 	public int Life;
 
+	public int ActiveStage;
+
 	public GameObject DeathCube;
 	public int DeathCubeCount;
 
@@ -39,8 +41,9 @@ public class EnemyBehaviour : MovementBehaviour
 
     public Rigidbody enemyRigidBody;
     public BoxCollider boxCollider;
+	private BeatMultiplier beatMultiplier;
 
-    public EnemyType Type;
+	public EnemyType Type;
     public float moveMultiplier = 1f;
 
     void Start()
@@ -48,12 +51,18 @@ public class EnemyBehaviour : MovementBehaviour
         enemyRigidBody = GetComponent<Rigidbody>();
         previousPosition = Vector3.zero;
 		TotalLife = Life;
+		beatMultiplier = FindObjectOfType<BeatMultiplier>();
 
 	}
 
     Vector3 previousPosition;
     public void Update()
     {
+		if(beatMultiplier.CurrentBeatKeeperLevel != ActiveStage)
+		{
+			Destroy(gameObject);
+		}
+
         DecreaseVelocity();
         timer += Time.deltaTime;
     }
@@ -277,4 +286,9 @@ public class EnemyBehaviour : MovementBehaviour
     {
         HorizontalMove(moveMultiplier * 1.2f);
     }
+
+	private void OnDestroy()
+	{
+		EnemyManager.RemoveEnemy(this);
+	}
 }

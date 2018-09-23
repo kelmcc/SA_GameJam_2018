@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -23,6 +24,7 @@ public class GameManager : MonoBehaviour
 		PlayerMovementBehaviour playerMoveBehaviour = player.GetComponent<PlayerMovementBehaviour>();
 		playerMoveBehaviour.LevelManager = LevelManager;
 		playerMoveBehaviour.BeatManager = BeatManager;
+		playerMoveBehaviour.UIRoot = UIRoot;
 
         BeatMultiplier = player.GetComponent<BeatMultiplier>();
         playerMoveBehaviour.BeatMultiplier = BeatMultiplier;
@@ -41,6 +43,17 @@ public class GameManager : MonoBehaviour
         EnemyManager.SnakeEnemyPrefab = gameSettings.SnakeEnemyPrefab;
 		EnemyManager.LevelManager = LevelManager;
         EnemyManager.BeatMultiplier = BeatMultiplier;
+	}
+
+	private void Update()
+	{
+		if(BeatMultiplier.CurrentBeatKeeperLevel > 0)
+		{
+			UIRoot.DoMenuFade(() =>
+			{
+				SceneManager.LoadScene(0);
+			});
+		}
 	}
 
 	void OnBeat ()

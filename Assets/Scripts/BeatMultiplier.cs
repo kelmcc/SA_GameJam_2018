@@ -74,7 +74,6 @@ public class BeatMultiplier : MonoBehaviour
 
 	public void RemoveLevelProggress()
 	{
-		CurrentBeatKeeperLevel = 0;
 		innerLevelProgress = 0;
 	}
 
@@ -100,11 +99,11 @@ public class BeatMultiplier : MonoBehaviour
     // Update is called once per frame
     public void Beat(float beatInterval)
     {
-        innerLevelProgress += beatInterval;
+        //innerLevelProgress += beatInterval;
     }
 
     public void MissedBeat()
     {
-        innerLevelProgress -= PlayerSettings.beatMissedPenalty;
+        //innerLevelProgress -= PlayerSettings.beatMissedPenalty;
     }
 }

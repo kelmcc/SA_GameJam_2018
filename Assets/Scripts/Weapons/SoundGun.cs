@@ -16,7 +16,7 @@ public class SoundGun : Weapon
 		for (int i = 0; i < intensity; i++)
 		{
 			GameObject projectileObject = Instantiate(Projectile.gameObject);
-			projectileObject.transform.position = gameObject.transform.position + (direction * 5f) + (Vector3.up * 2f);
+			projectileObject.transform.position = gameObject.transform.position + (direction * 2f) + (Vector3.up * 2f);
 			projectileObject.transform.forward = direction;
 			Projectile proj = projectileObject.GetComponent<Projectile>();
 			proj.LevelManager = levelManager;

@@ -48,25 +48,35 @@ public class EnemyManager : MonoBehaviour
         //every beat interval, spawn new enemies
         if (enemies.Count < EnemySettings.maxEnemies)
         {
-            enemies.Add(SpawnEnemy(LevelManager.GetEnemySpawn(), EnemyPrefab));
+			Vector3 spawnPos;
+			if(LevelManager.GetEnemySpawn(BeatMultiplier.CurrentBeatKeeperLevel, out spawnPos))
+			{
+				enemies.Add(SpawnEnemy(spawnPos, EnemyPrefab, BeatMultiplier.CurrentBeatKeeperLevel));
+			}      
         }
     }
 
     [ContextMenu("Spawn Enemy")]
-    EnemyBehaviour SpawnEnemy(Vector3 spawnPos, GameObject prefab)
+    EnemyBehaviour SpawnEnemy(Vector3 spawnPos, GameObject prefab, int currentStage)
     {
         GameObject enemy = Instantiate(prefab);
         enemy.transform.SetParent(transform);
         enemy.transform.position = spawnPos;
         EnemyBehaviour enemyBehaviour = enemy.GetComponent<EnemyBehaviour>();
         enemyBehaviour.EnemyManager = this;
+		enemyBehaviour.ActiveStage = currentStage;
 
-        //setup the enemy behaviour
-        enemyBehaviour.LevelManager = LevelManager;
+		//setup the enemy behaviour
+		enemyBehaviour.LevelManager = LevelManager;
         enemyBehaviour.BeatManager = beatManager;
 
         return enemyBehaviour;
     }
+
+	public void RemoveEnemy(EnemyBehaviour e)
+	{
+		enemies.Remove(e);
+	}
 
     public void Merge(EnemyBehaviour a, EnemyBehaviour b)
     {
@@ -80,7 +90,7 @@ public class EnemyManager : MonoBehaviour
             GameObject.Destroy(a.gameObject);
             GameObject.Destroy(b.gameObject);
 
-            enemies.Add(SpawnEnemy(pos, TallEnemyPrefab));
+            enemies.Add(SpawnEnemy(pos, TallEnemyPrefab, BeatMultiplier.CurrentBeatKeeperLevel));
         }
     }
 
@@ -95,7 +105,7 @@ public class EnemyManager : MonoBehaviour
             GameObject.Destroy(a.gameObject);
             GameObject.Destroy(b.gameObject);
 
-            enemies.Add(SpawnEnemy(pos, SnakeEnemyPrefab));
+            enemies.Add(SpawnEnemy(pos, SnakeEnemyPrefab, BeatMultiplier.CurrentBeatKeeperLevel));
         }
     }
 }
