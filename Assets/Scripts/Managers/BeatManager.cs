@@ -32,6 +32,11 @@ public class BeatManager : MonoBehaviour
 		PlaySong(AudioSettings.Songs[UnityEngine.Random.Range(0, AudioSettings.Songs.Length)]);
 	}
 
+	public void MuteFor(float seconds)
+	{
+
+	}
+
 	private void PlaySong(AudioSettings.Song song)
 	{
 		AudioProcessor[] oldProcs = gameObject.GetComponents<AudioProcessor>();

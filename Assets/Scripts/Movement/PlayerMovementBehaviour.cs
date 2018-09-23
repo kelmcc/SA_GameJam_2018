@@ -14,8 +14,6 @@ public class PlayerMovementBehaviour : MovementBehaviour
 
     public PlayerSettings PlayerSettings;
 
-
-
     Rigidbody playerRigidbody;
 
     float beatTimer;
@@ -220,11 +218,24 @@ public class PlayerMovementBehaviour : MovementBehaviour
 	private void OnCollisionEnter(Collision collision)
 	{
 		DeathCube cube = collision.gameObject.GetComponent<DeathCube>();
-		if(cube != null)
+		if (cube != null)
 		{
 			BeatMultiplier.AddLevelProgress(0.1f);
 			AudioSource.PlayClipAtPoint(PlayerSettings.GotCubeAudio, Camera.main.transform.position, Random.Range(0.1f, 5f));
 			Destroy(collision.gameObject);
+		}
+		else
+		{
+			EnemyBehaviour enemy = collision.gameObject.GetComponent<EnemyBehaviour>();
+			if(enemy == null)
+			{
+				enemy = collision.gameObject.transform.parent.GetComponent<EnemyBehaviour>();
+			}
+			if(enemy != null)
+			{
+				BeatMultiplier.RemoveLevelProggress();
+				BeatManager.MuteFor(1);
+			}
 		}
 	}
 
