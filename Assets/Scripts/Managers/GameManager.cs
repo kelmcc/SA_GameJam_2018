@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour
 	public LevelManager LevelManager;
     public EnemyManager EnemyManager;
 
+    public BeatMultiplier BeatMultiplier;
+
 	void Start ()
 	{
 		BeatManager.OnBeat += OnBeat;
@@ -22,6 +24,9 @@ public class GameManager : MonoBehaviour
 		playerMoveBehaviour.LevelManager = LevelManager;
 		playerMoveBehaviour.BeatManager = BeatManager;
 
+        BeatMultiplier = player.GetComponent<BeatMultiplier>();
+        playerMoveBehaviour.BeatMultiplier = BeatMultiplier;
+        BeatMultiplier.beatLevelUI = UIRoot.BeatLevel;
 
 		GameObject camera = Instantiate(gameSettings.CameraPrefab);
 		OrbitFollowCamera orbitFollow = camera.GetComponent<OrbitFollowCamera>();
@@ -35,6 +40,7 @@ public class GameManager : MonoBehaviour
         EnemyManager.TallEnemyPrefab = gameSettings.TallEnemyPrefab;
         EnemyManager.SnakeEnemyPrefab = gameSettings.SnakeEnemyPrefab;
 		EnemyManager.LevelManager = LevelManager;
+        EnemyManager.BeatMultiplier = BeatMultiplier;
 	}
 
 	void OnBeat ()

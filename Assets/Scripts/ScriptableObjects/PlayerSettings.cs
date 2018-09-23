@@ -23,4 +23,8 @@ public class PlayerSettings : ScriptableObject
 
 	public LayerMask groundRaycastLayer;
 	public LayerMask edgeRaycastLayer;
+
+    public float beatInterval;
+    public float beatDecrease;
+    public float beatMissedPenalty;
 }
