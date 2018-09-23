@@ -9,20 +9,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5d33e69395020214aa655e50f95cd0fe, type: 3}
-  m_Name: EnemySettings
+  m_Name: FlyingEnemySettings
   m_EditorClassIdentifier: 
-  walkSpeed: 7
-  horizontalBoost: 20
+  walkSpeed: 0
+  horizontalBoost: 60
   horizontalDecrease: 60
-  verticalBoost: 40
-  verticalDecrease: 110
-  gravity: 5
-  secondsLeeway: 0.3
+  verticalBoost: 60
+  verticalDecrease: 60
+  gravity: 0
+  secondsLeeway: 0
   killZoneLayer: KillZone
   groundRaycastLayer:
     serializedVersion: 2
     m_Bits: 8704
   edgeRaycastLayer:
     serializedVersion: 2
-    m_Bits: 1024
-  maxEnemies: 50
+    m_Bits: 0
+  maxEnemies: 2

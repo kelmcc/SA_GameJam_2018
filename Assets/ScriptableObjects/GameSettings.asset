@@ -23,3 +23,6 @@ MonoBehaviour:
     type: 2}
   SnakeEnemyPrefab: {fileID: 1203284209219134, guid: b5f8ba8fef99f3a44b4ef9043f9509fa,
     type: 2}
+  FlyingEnemyPrefab: {fileID: 1820904851114874, guid: 0ee1a50f9029bd243808d08ba3af57e8,
+    type: 2}
+  StartLevel: 1

@@ -11,8 +11,9 @@ public class EnemyManager : MonoBehaviour
     public GameObject EnemyPrefab;
     public GameObject TallEnemyPrefab;
     public GameObject SnakeEnemyPrefab;
+	public GameObject FlyingEnemyPrefab;
 
-    [HideInInspector]
+	[HideInInspector]
     public LevelManager LevelManager;
     private BeatManager beatManager;
     public BeatMultiplier BeatMultiplier;
@@ -26,8 +27,10 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
-    List<EnemyBehaviour> enemies = new List<EnemyBehaviour>();
-    //manage the enemy spawning
+    List<EnemyBase> enemies = new List<EnemyBase>();
+	//manage the enemy spawning
+
+	public List<int> maxEnemiesPerLevel;
 
     public EnemySettings EnemySettings;
 
@@ -43,26 +46,38 @@ public class EnemyManager : MonoBehaviour
 
     }
 
-    public void OnBeat()
+	private void Update()
+	{
+		
+	}
+
+	public void OnBeat()
     {
         //every beat interval, spawn new enemies
-        if (enemies.Count < EnemySettings.maxEnemies)
+        if (enemies.Count < maxEnemiesPerLevel[BeatMultiplier.CurrentBeatKeeperLevel])
         {
 			Vector3 spawnPos;
 			if(LevelManager.GetEnemySpawn(BeatMultiplier.CurrentBeatKeeperLevel, out spawnPos))
 			{
-				enemies.Add(SpawnEnemy(spawnPos, EnemyPrefab, BeatMultiplier.CurrentBeatKeeperLevel));
+				if(BeatMultiplier.CurrentBeatKeeperLevel == 0)
+				{
+					enemies.Add(SpawnEnemy<EnemyBehaviour>(spawnPos, EnemyPrefab, BeatMultiplier.CurrentBeatKeeperLevel));
+				}
+				else
+				{
+					enemies.Add(SpawnEnemy<FlyingEnemyBehaviour>(spawnPos, FlyingEnemyPrefab, BeatMultiplier.CurrentBeatKeeperLevel));
+				}
 			}      
         }
     }
 
     [ContextMenu("Spawn Enemy")]
-    EnemyBehaviour SpawnEnemy(Vector3 spawnPos, GameObject prefab, int currentStage)
+    T SpawnEnemy<T>(Vector3 spawnPos, GameObject prefab, int currentStage) where T : EnemyBase
     {
         GameObject enemy = Instantiate(prefab);
         enemy.transform.SetParent(transform);
         enemy.transform.position = spawnPos;
-        EnemyBehaviour enemyBehaviour = enemy.GetComponent<EnemyBehaviour>();
+        EnemyBase enemyBehaviour = enemy.GetComponent<T>();
         enemyBehaviour.EnemyManager = this;
 		enemyBehaviour.ActiveStage = currentStage;
 
@@ -70,10 +85,10 @@ public class EnemyManager : MonoBehaviour
 		enemyBehaviour.LevelManager = LevelManager;
         enemyBehaviour.BeatManager = beatManager;
 
-        return enemyBehaviour;
+        return (T)enemyBehaviour;
     }
 
-	public void RemoveEnemy(EnemyBehaviour e)
+	public void RemoveEnemy(EnemyBase e)
 	{
 		enemies.Remove(e);
 	}
@@ -90,7 +105,7 @@ public class EnemyManager : MonoBehaviour
             GameObject.Destroy(a.gameObject);
             GameObject.Destroy(b.gameObject);
 
-            enemies.Add(SpawnEnemy(pos, TallEnemyPrefab, BeatMultiplier.CurrentBeatKeeperLevel));
+            enemies.Add(SpawnEnemy<EnemyBehaviour>(pos, TallEnemyPrefab, BeatMultiplier.CurrentBeatKeeperLevel));
         }
     }
 
@@ -105,7 +120,7 @@ public class EnemyManager : MonoBehaviour
             GameObject.Destroy(a.gameObject);
             GameObject.Destroy(b.gameObject);
 
-            enemies.Add(SpawnEnemy(pos, SnakeEnemyPrefab, BeatMultiplier.CurrentBeatKeeperLevel));
+            enemies.Add(SpawnEnemy<EnemyBehaviour>(pos, SnakeEnemyPrefab, BeatMultiplier.CurrentBeatKeeperLevel));
         }
     }
 }

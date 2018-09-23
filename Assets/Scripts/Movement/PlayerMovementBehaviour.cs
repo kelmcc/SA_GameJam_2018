@@ -9,8 +9,6 @@ public class PlayerMovementBehaviour : MovementBehaviour
     public BeatMultiplier BeatMultiplier;
 	public UIRoot UIRoot;
 
-
-
     public BoxCollider boxCollider;
 
     public PlayerSettings PlayerSettings;
@@ -147,7 +145,6 @@ public class PlayerMovementBehaviour : MovementBehaviour
         upTapTimer -= Time.deltaTime;
         leftTapTimer -= Time.deltaTime;
         rightTapTimer -= Time.deltaTime;
-
 
         lastHorizontal = horizontal;
         lastVertical = vertical;

@@ -16,8 +16,7 @@ public class EnemySettings : ScriptableObject
 
 	public float secondsLeeway = 0.2f;
 
+	public string killZoneLayer;
 	public LayerMask groundRaycastLayer;
 	public LayerMask edgeRaycastLayer;
-
-    public int maxEnemies = 40;
 }

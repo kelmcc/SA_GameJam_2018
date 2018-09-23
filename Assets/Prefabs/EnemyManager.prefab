@@ -52,5 +52,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EnemyPrefab: {fileID: 0}
+  TallEnemyPrefab: {fileID: 0}
+  SnakeEnemyPrefab: {fileID: 0}
+  FlyingEnemyPrefab: {fileID: 0}
   LevelManager: {fileID: 0}
+  BeatMultiplier: {fileID: 0}
+  maxEnemiesPerLevel: 320000000f00000000000000
   EnemySettings: {fileID: 11400000, guid: b7fe07582e896aa4aae4b04d96a15763, type: 2}

@@ -43,13 +43,18 @@ public class GameManager : MonoBehaviour
         EnemyManager.EnemyPrefab = gameSettings.EnemyPrefab;
         EnemyManager.TallEnemyPrefab = gameSettings.TallEnemyPrefab;
         EnemyManager.SnakeEnemyPrefab = gameSettings.SnakeEnemyPrefab;
-        EnemyManager.LevelManager = LevelManager;
+		EnemyManager.FlyingEnemyPrefab = gameSettings.FlyingEnemyPrefab;
+
+		EnemyManager.LevelManager = LevelManager;
         EnemyManager.BeatMultiplier = BeatMultiplier;
+
+		BeatMultiplier.CurrentBeatKeeperLevel = gameSettings.StartLevel;
+		BeatMultiplier.AddLevelProgress(10f);
 	}
 
 	private void Update()
 	{
-		if(BeatMultiplier.CurrentBeatKeeperLevel > 0)
+		if(BeatMultiplier.CurrentBeatKeeperLevel > 1)
 		{
 			UIRoot.DoMenuFade(() =>
 			{

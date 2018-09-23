@@ -11,7 +11,6 @@ public class BeatMultiplier : MonoBehaviour
     public Image[] beatLevelUI_L;
     public Image[] beatLevelUI_R;
 
-
     public int CurrentBeatKeeperLevel = 0;
 
     public Material SkyboxMat;
@@ -25,7 +24,6 @@ public class BeatMultiplier : MonoBehaviour
     public Color level3ColorA;
     public Color level3ColorB;
 
-
     private void Start()
     {
         for (int i = 0; i < beatLevelUI_L.Length; i++)
@@ -33,8 +31,6 @@ public class BeatMultiplier : MonoBehaviour
             beatLevelUI_L[i].fillAmount = 0f;
             beatLevelUI_R[i].fillAmount = 0f;
         }
-
-        CurrentBeatKeeperLevel = 0;
         SkyboxMat = RenderSettings.skybox;
         UpdateSkybox();
     }

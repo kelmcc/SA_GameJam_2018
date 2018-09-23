@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyBehaviour : MovementBehaviour
+public class EnemyBehaviour : EnemyBase
 {
     public enum EnemyType
     {
@@ -14,23 +14,10 @@ public class EnemyBehaviour : MovementBehaviour
 	private int TotalLife;
 	public int Life;
 
-	public int ActiveStage;
-
 	public GameObject DeathCube;
 	public int DeathCubeCount;
 
     public EnemySettings EnemySettings;
-    public EnemyManager EnemyManager;
-    public LevelManager LevelManager;
-    private BeatManager beatManager;
-    public BeatManager BeatManager
-    {
-        set
-        {
-            beatManager = value;
-            beatManager.OnBeat += OnBeat;
-        }
-    }
 
     public void Unsub()
     {
@@ -150,6 +137,12 @@ public class EnemyBehaviour : MovementBehaviour
     Collider currentCollider;
     private void OnTriggerEnter(Collider collider)
     {
+		if(collider.gameObject.layer == LayerMask.NameToLayer(EnemySettings.killZoneLayer))
+		{
+			Destroy(gameObject);
+			return;
+		}
+
         EnemyBehaviour enemy = collider.GetComponent<EnemyBehaviour>();
         if (timer > 5f && enemy != null && Type == EnemyType.Single)
         {
@@ -158,11 +151,15 @@ public class EnemyBehaviour : MovementBehaviour
         }
 		else
 		{
-			
+			int layermask = EnemySettings.edgeRaycastLayer.value;
+			if (layermask == (layermask | (1 << collider.gameObject.layer)))
+			{
+				velocity.x = 0;
+			}
 		}
 	}
 
-	public void Hit(Projectile projectile)
+	public override void Hit(Projectile projectile)
 	{
 		if (projectile != null)
 		{
@@ -260,7 +257,18 @@ public class EnemyBehaviour : MovementBehaviour
 
     public void HorizontalMove(float sign)
     {
-        velocity.x = EnemySettings.horizontalBoost * sign;
+		//dont move sideways if we have hit an edge above level 1
+		if(boxCollider != null && Physics.CheckBox(boxCollider.center, boxCollider.size, boxCollider.transform.rotation, EnemySettings.edgeRaycastLayer))
+		{
+			if(beatMultiplier.CurrentBeatKeeperLevel == 0)
+			{
+				velocity.x = EnemySettings.horizontalBoost * sign;
+			}			
+		}   
+		else
+		{
+			velocity.x = EnemySettings.horizontalBoost * sign;
+		}
     }
 
     public void SingleBehaviour(float verticalMove, float horizontalMove)
@@ -289,6 +297,7 @@ public class EnemyBehaviour : MovementBehaviour
 
 	private void OnDestroy()
 	{
+		beatManager.OnBeat -= OnBeat;
 		EnemyManager.RemoveEnemy(this);
 	}
 }
