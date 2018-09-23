@@ -191,12 +191,12 @@ MonoBehaviour:
   beatLevelUI: []
   CurrentBeatKeeperLevel: 0
   SkyboxMat: {fileID: 0}
-  level1ColorA: {r: 0.754717, g: 0.2242791, b: 0.2242791, a: 1}
-  level1ColorB: {r: 0.735849, g: 0.30081367, b: 0.15619439, a: 1}
-  level2ColorA: {r: 0.19379672, g: 0.30177495, b: 0.6320754, a: 1}
-  level2ColorB: {r: 0.12953897, g: 0.6698113, b: 0.5947136, a: 1}
-  level3ColorA: {r: 0.6320754, g: 0.24150053, b: 0.5935516, a: 1}
-  level3ColorB: {r: 0.7830189, g: 0.38781595, b: 0.56449485, a: 1}
+  level1ColorA: {r: 0.8910256, g: 0.16660735, b: 0.9056604, a: 1}
+  level1ColorB: {r: 0.3254902, g: 0.73333335, b: 0.8117648, a: 1}
+  level2ColorA: {r: 1, g: 0.3662069, b: 0.051886797, a: 1}
+  level2ColorB: {r: 0.042452812, g: 0.32971692, b: 1, a: 1}
+  level3ColorA: {r: 0.8745099, g: 0.003921569, b: 0.1137255, a: 1}
+  level3ColorB: {r: 0.88503426, g: 0.9056604, b: 0, a: 1}
 --- !u!120 &120767724967289854
 LineRenderer:
   m_ObjectHideFlags: 1
