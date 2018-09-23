@@ -5,6 +5,7 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
 	public GameObject OnDestroyParticleSystem;
+	public LayerMask HitLayerMask;
 
 	[Space]
 	public float Speed;
@@ -40,7 +41,16 @@ public class Projectile : MonoBehaviour
 
 	private void OnTriggerEnter(Collider coll)
 	{
-		DestroyProjectile();
+		int layerMask = HitLayerMask.value;
+		if (layerMask == (layerMask | (1 << coll.gameObject.layer)))
+		{
+			EnemyBehaviour enemy = coll.gameObject.GetComponent<EnemyBehaviour>();
+			if(enemy != null)
+			{
+				enemy.Hit(this);
+			}
+			DestroyProjectile();
+		}
 	}
 
 	void DestroyProjectile()

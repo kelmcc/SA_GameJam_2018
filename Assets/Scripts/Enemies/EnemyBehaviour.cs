@@ -11,6 +11,8 @@ public class EnemyBehaviour : MovementBehaviour
         Snake
     }
 
+	public int Life;
+
     public EnemySettings EnemySettings;
     public EnemyManager EnemyManager;
     public LevelManager LevelManager;
@@ -105,7 +107,8 @@ public class EnemyBehaviour : MovementBehaviour
         collisionDir = -collisionDir.normalized * 0.1f;
     }
 
-    Vector3 collisionDir;
+
+	Vector3 collisionDir;
 
     float timer = 0f;
     Collider currentCollider;
@@ -117,7 +120,32 @@ public class EnemyBehaviour : MovementBehaviour
             timer = 0f;
             currentCollider = collider;
         }
-    }
+		else
+		{
+			
+		}
+	}
+
+	public void Hit(Projectile projectile)
+	{
+		if (projectile != null)
+		{
+			StartCoroutine(TakeHit(projectile.transform.position));
+		}
+	}
+
+	private IEnumerator TakeHit(Vector3 position)
+	{
+		//Play Hit animation
+		velocity = (transform.position - position).normalized * 100f;
+
+		Life--;
+		if(Life <= 0)
+		{
+			yield return new WaitForSeconds(0.1f);
+			Destroy(gameObject);
+		}
+	}
 
     private void OnTriggerStay(Collider collider)
     {
