@@ -79,17 +79,38 @@ public class EnemyBehaviour : MovementBehaviour
         }
     }
 
-    public bool OnGround()
-    {
-        if (boxCollider == null)
-            return false;
+	public bool OnGround()
+	{
+		if (boxCollider == null)
+			return false;
 
-        float yOffset = 0.5f;
-        if (Type == EnemyType.Double)
-            yOffset = 1f;
+		float yOffset = 0.5f;
+		if (Type == EnemyType.Double)
+			yOffset = 1f;
 
-        Debug.DrawLine(boxCollider.transform.position, boxCollider.transform.position + Vector3.down * (boxCollider.size.y + 0.2f), Color.green);
-        if (Physics.Raycast(boxCollider.transform.position, Vector3.down, boxCollider.size.y + yOffset, EnemySettings.groundRaycastLayer.value))
+		Debug.DrawLine(boxCollider.transform.position, boxCollider.transform.position + Vector3.down * (boxCollider.size.y + 0.2f), Color.green);
+
+		RaycastHit[] hits1 = Physics.RaycastAll(boxCollider.transform.position + (boxCollider.transform.forward * 1f), Vector3.down, boxCollider.size.y + yOffset, EnemySettings.groundRaycastLayer.value);
+		RaycastHit[] hits2 = Physics.RaycastAll(boxCollider.transform.position + (-boxCollider.transform.forward * 1f), Vector3.down, boxCollider.size.y + yOffset, EnemySettings.groundRaycastLayer.value);
+
+		bool hitSomething = false;
+		foreach(RaycastHit hit in hits1)
+		{
+			if(hit.collider.gameObject != gameObject && hit.collider.gameObject.transform.parent != gameObject)
+			{
+				hitSomething = true;
+			}
+		}
+		foreach (RaycastHit hit in hits2)
+		{
+			if (hit.collider.gameObject != gameObject && hit.collider.gameObject.transform.parent != gameObject)
+			{
+				hitSomething = true;
+			}
+		}
+
+
+		if (hitSomething)
         {
             return true;
         }

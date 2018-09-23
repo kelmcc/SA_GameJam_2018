@@ -168,8 +168,10 @@ public class PlayerMovementBehaviour : MovementBehaviour
         //if (Physics.BoxCast(transform.position, new Vector3(collider.size.x, 0.5f, collider.size.y), 
         //	Vector3.down, collider.transform.rotation, collider.size.y + 5f, ~PlayerSettings.groundRaycastLayer.value))
 
-        Debug.DrawLine(boxCollider.transform.position, boxCollider.transform.position + Vector3.down * (boxCollider.size.y + 0.2f), Color.green);
-        if (Physics.Raycast(boxCollider.transform.position, Vector3.down, boxCollider.size.y + 0.5f, PlayerSettings.groundRaycastLayer.value))
+        Debug.DrawLine(boxCollider.transform.position + (boxCollider.transform.forward * 1f), boxCollider.transform.position + Vector3.down * (boxCollider.size.y + 0.2f) + (boxCollider.transform.forward * 1f), Color.green);
+		Debug.DrawLine(boxCollider.transform.position + (-boxCollider.transform.forward * 1f), boxCollider.transform.position + Vector3.down * (boxCollider.size.y + 0.2f) + (boxCollider.transform.forward * 1f), Color.green);
+		if (Physics.Raycast(boxCollider.transform.position + (boxCollider.transform.forward * 1f), Vector3.down, boxCollider.size.y + 0.5f, PlayerSettings.groundRaycastLayer.value) ||
+			Physics.Raycast(boxCollider.transform.position + (-boxCollider.transform.forward * 1f), Vector3.down, boxCollider.size.y + 0.5f, PlayerSettings.groundRaycastLayer.value))
         {
             return true;
         }

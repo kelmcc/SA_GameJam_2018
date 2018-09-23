@@ -20,7 +20,7 @@ MonoBehaviour:
   secondsLeeway: 0.3
   groundRaycastLayer:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 8704
   edgeRaycastLayer:
     serializedVersion: 2
     m_Bits: 1024
