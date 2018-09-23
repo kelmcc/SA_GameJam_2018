@@ -11,7 +11,16 @@ public class BeatBouncer : MonoBehaviour
 	{
 		animator = gameObject.GetComponent<Animator>();
 		gameManager = GameObject.FindObjectOfType<GameManager>();
-		gameManager.BeatManager.OnBeat += OnBeat;
+
+		if (gameManager != null)
+		{
+			gameManager.BeatManager.OnBeat += OnBeat;
+		}
+		else
+		{
+			BeatManager b = GameObject.FindObjectOfType<BeatManager>();
+			b.OnBeat += OnBeat;
+		}
 	}
 	
 	void OnBeat ()
