@@ -72,6 +72,7 @@ public class EnemyManager : MonoBehaviour
         enemies.Remove(b);
 
         Vector3 pos = a.transform.localPosition;
+        
         GameObject.Destroy(a.gameObject);
         GameObject.Destroy(b.gameObject);
         

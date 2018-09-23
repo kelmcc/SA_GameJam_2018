@@ -10,6 +10,14 @@ public class LevelManager : MonoBehaviour
 	public Transform playerTransform;
 	public List<EnemySpawnTransform> enemyTransforms;
 
+	public float Radius
+	{
+		get
+		{
+			return LevelSettings.movementRadius;
+		}
+	}
+
 	public Vector3 GetPlayerSpawn()
 	{
 		//force player spawn position onto circle
