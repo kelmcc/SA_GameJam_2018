@@ -20,6 +20,7 @@ public class BeatManager : MonoBehaviour
 	public class ActiveAudioData
 	{
 		public AudioSource source;
+		public AudioLowPassFilter audioLowPassFilter;
 
 		public bool IsPrimary;
 		public AudioProcessor processor;
@@ -32,9 +33,31 @@ public class BeatManager : MonoBehaviour
 		PlaySong(AudioSettings.Songs[UnityEngine.Random.Range(0, AudioSettings.Songs.Length)]);
 	}
 
+	Coroutine last = null;
 	public void MuteFor(float seconds)
 	{
+		if(last != null)
+		{
+			StopCoroutine(last);
+		}
+		last = StartCoroutine(PMuteFor(seconds));
+	}
 
+	private IEnumerator PMuteFor(float seconds)
+	{
+		ActiveAudioData a = PrimaryAudioData();
+		if (a != null)
+		{
+			a.audioLowPassFilter.cutoffFrequency = 300;
+
+			yield return new WaitForSeconds(seconds);
+
+			while (a.audioLowPassFilter.cutoffFrequency < 22000)
+			{
+				yield return null;
+				a.audioLowPassFilter.cutoffFrequency += Time.deltaTime * 10000;
+			}
+		}
 	}
 
 	private void PlaySong(AudioSettings.Song song)
@@ -52,6 +75,15 @@ public class BeatManager : MonoBehaviour
 			Destroy(src);
 		}
 
+		/*
+		AudioLowPassFilter[] oldFilters = gameObject.GetComponents<AudioLowPassFilter>();
+		foreach (AudioLowPassFilter filter in oldFilters)
+		{
+			filter.enabled = false;
+			Destroy(filter);
+		}
+		*/
+
 		//initialize
 		currentAudioData = new List<ActiveAudioData>();
 		bool primarySet = false;
@@ -63,6 +95,14 @@ public class BeatManager : MonoBehaviour
 
 			data.source = gameObject.AddComponent<AudioSource>();
 			data.source.clip = clip.clip;
+
+			data.audioLowPassFilter =  gameObject.GetComponent<AudioLowPassFilter>();
+			if (data.audioLowPassFilter == null)
+			{
+				data.audioLowPassFilter = gameObject.AddComponent<AudioLowPassFilter>();
+			}
+			
+			data.audioLowPassFilter.cutoffFrequency = 22000;
 
 			if (clip.IsPrimary)
 			{			
@@ -116,8 +156,12 @@ public class BeatManager : MonoBehaviour
 
 	public ActiveAudioData PrimaryAudioData()
 	{
-		foreach(ActiveAudioData  a in currentAudioData)
+		foreach(ActiveAudioData a in currentAudioData)
 		{
+			if(a == null)
+			{
+				continue;
+			}
 			if(a.IsPrimary)
 			{
 				return a;

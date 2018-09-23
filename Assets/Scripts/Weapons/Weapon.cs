@@ -4,10 +4,12 @@ using UnityEngine;
 
 public abstract class Weapon : MonoBehaviour
 {
+	public GameObject Reticule;
 	public PlayerSettings playerSettings;
 
 	protected LevelManager levelManager;
 	private BeatManager beatManager;
+	private Transform reticuleT;
 
 	public Projectile Projectile;
 	public LineRenderer LineRenderer;
@@ -22,6 +24,8 @@ public abstract class Weapon : MonoBehaviour
 		levelManager = FindObjectOfType<LevelManager>();
 		beatManager = FindObjectOfType<BeatManager>();
 		beatManager.OnBeat += OnBeat;
+		reticuleT = Instantiate(Reticule).transform;
+		reticuleT.gameObject.SetActive(false);
 	}
 
 	private void OnBeat()
@@ -38,7 +42,7 @@ public abstract class Weapon : MonoBehaviour
 
 		Debug.DrawRay(ray.origin, ray.direction * 100);
 
-	
+
 
 		if (closestPoint != Vector3.zero)
 		{
@@ -121,6 +125,11 @@ public abstract class Weapon : MonoBehaviour
 
 	private void DrawAim(Vector3 start, Vector3 end)
 	{
+		reticuleT.gameObject.SetActive(true);
+		reticuleT.transform.position = end;
+		reticuleT.transform.forward = -(end - Camera.main.transform.position).normalized;
+
+		/*
 		List<Vector3> points = new List<Vector3>();
 
 		float distance = Vector3.Distance(start, end);
@@ -137,12 +146,13 @@ public abstract class Weapon : MonoBehaviour
 
 		points.Add(end);
 
-		LineRenderer.enabled = true;
+		//LineRenderer.enabled = true;
 
 		LineRenderer.startWidth = 0;
 		LineRenderer.endWidth = 0.25f;
 
 		LineRenderer.SetPositions(points.ToArray());
+		*/
 	}
 
 	private void HideAim()

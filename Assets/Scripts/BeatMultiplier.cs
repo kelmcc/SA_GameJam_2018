@@ -74,6 +74,7 @@ public class BeatMultiplier : MonoBehaviour
 
 	public void RemoveLevelProggress()
 	{
+		CurrentBeatKeeperLevel = 0;
 		innerLevelProgress = 0;
 	}
 
