@@ -53,4 +53,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EnemyPrefab: {fileID: 0}
   LevelManager: {fileID: 0}
-  BeatManager: {fileID: 0}
+  EnemySettings: {fileID: 11400000, guid: b7fe07582e896aa4aae4b04d96a15763, type: 2}

@@ -32,6 +32,8 @@ public class GameManager : MonoBehaviour
         EnemyManager = EnemyManagerGameObject.GetComponent<EnemyManager>();
 		EnemyManager.BeatManager = BeatManager;
         EnemyManager.EnemyPrefab = gameSettings.EnemyPrefab;
+        EnemyManager.TallEnemyPrefab = gameSettings.TallEnemyPrefab;
+        EnemyManager.SnakeEnemyPrefab = gameSettings.SnakeEnemyPrefab;
 		EnemyManager.LevelManager = LevelManager;
 	}
 
