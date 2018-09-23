@@ -15,6 +15,8 @@ public class EnemyManager : MonoBehaviour
     [HideInInspector]
     public LevelManager LevelManager;
     private BeatManager beatManager;
+    public BeatMultiplier BeatMultiplier;
+
     public BeatManager BeatManager
     {
         set
@@ -46,7 +48,7 @@ public class EnemyManager : MonoBehaviour
         //every beat interval, spawn new enemies
         if (enemies.Count < EnemySettings.maxEnemies)
         {
-            enemies.Add(SpawnEnemy( LevelManager.GetEnemySpawn(), EnemyPrefab));
+            enemies.Add(SpawnEnemy(LevelManager.GetEnemySpawn(), EnemyPrefab));
         }
     }
 
@@ -68,26 +70,32 @@ public class EnemyManager : MonoBehaviour
 
     public void Merge(EnemyBehaviour a, EnemyBehaviour b)
     {
-        enemies.Remove(a);
-        enemies.Remove(b);
+        if (BeatMultiplier.CurrentBeatKeeperLevel > 0)
+        {
+            enemies.Remove(a);
+            enemies.Remove(b);
 
-        Vector3 pos = a.transform.localPosition;
-        
-        GameObject.Destroy(a.gameObject);
-        GameObject.Destroy(b.gameObject);
-        
-        enemies.Add (SpawnEnemy(pos, TallEnemyPrefab));
+            Vector3 pos = a.transform.localPosition;
+
+            GameObject.Destroy(a.gameObject);
+            GameObject.Destroy(b.gameObject);
+
+            enemies.Add(SpawnEnemy(pos, TallEnemyPrefab));
+        }
     }
 
     public void Snake(EnemyBehaviour a, EnemyBehaviour b)
-    {        
-        enemies.Remove(a);
-        enemies.Remove(b);
+    {
+        if (BeatMultiplier.CurrentBeatKeeperLevel > 1)
+        {
+            enemies.Remove(a);
+            enemies.Remove(b);
 
-        Vector3 pos = a.transform.localPosition;
-        GameObject.Destroy(a.gameObject);
-        GameObject.Destroy(b.gameObject);
-        
-        enemies.Add (SpawnEnemy(pos, SnakeEnemyPrefab));
+            Vector3 pos = a.transform.localPosition;
+            GameObject.Destroy(a.gameObject);
+            GameObject.Destroy(b.gameObject);
+
+            enemies.Add(SpawnEnemy(pos, SnakeEnemyPrefab));
+        }
     }
 }

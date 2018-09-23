@@ -40,6 +40,7 @@ public class GameManager : MonoBehaviour
         EnemyManager.TallEnemyPrefab = gameSettings.TallEnemyPrefab;
         EnemyManager.SnakeEnemyPrefab = gameSettings.SnakeEnemyPrefab;
 		EnemyManager.LevelManager = LevelManager;
+        EnemyManager.BeatMultiplier = BeatMultiplier;
 	}
 
 	void OnBeat ()
