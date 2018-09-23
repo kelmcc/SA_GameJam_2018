@@ -30,3 +30,5 @@ MonoBehaviour:
   beatInterval: 1
   beatDecrease: 0.01
   beatMissedPenalty: 2
+  GotCubeAudio: {fileID: 8300000, guid: b5236f30768cd2e42993ed5c6e1be694, type: 3}
+  FailBeatAudio: {fileID: 0}

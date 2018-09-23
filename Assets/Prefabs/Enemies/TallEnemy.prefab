@@ -447,7 +447,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Life: 2
   DeathCube: {fileID: 1837756881902010, guid: 386d615e9c03e844cb6c0d8b3655477e, type: 2}
-  DeathCubeCount: 0
+  DeathCubeCount: 4
   EnemySettings: {fileID: 11400000, guid: b7fe07582e896aa4aae4b04d96a15763, type: 2}
   EnemyManager: {fileID: 0}
   LevelManager: {fileID: 0}
