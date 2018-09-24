@@ -9,7 +9,7 @@ public class PlayerMovementBehaviour : MovementBehaviour
     public BeatMultiplier BeatMultiplier;
 	public UIRoot UIRoot;
 
-    public BoxCollider boxCollider;
+    public CapsuleCollider capsuleCollider;
 
     public PlayerSettings PlayerSettings;
 
@@ -145,8 +145,9 @@ public class PlayerMovementBehaviour : MovementBehaviour
         upTapTimer -= Time.deltaTime;
         leftTapTimer -= Time.deltaTime;
         rightTapTimer -= Time.deltaTime;
+		downTapTimer -= Time.deltaTime;
 
-        lastHorizontal = horizontal;
+		lastHorizontal = horizontal;
         lastVertical = vertical;
 
         dontFallTime -= Time.deltaTime;
@@ -187,10 +188,10 @@ public class PlayerMovementBehaviour : MovementBehaviour
 		}
 
 
-        Debug.DrawLine(boxCollider.transform.position + (boxCollider.transform.forward * 1f), boxCollider.transform.position + Vector3.down * (boxCollider.size.y + 0.2f) + (boxCollider.transform.forward * 1f), Color.green);
-		Debug.DrawLine(boxCollider.transform.position + (-boxCollider.transform.forward * 1f), boxCollider.transform.position + Vector3.down * (boxCollider.size.y + 0.2f) + (boxCollider.transform.forward * 1f), Color.green);
-		if (Physics.Raycast(boxCollider.transform.position + (boxCollider.transform.forward * 1f), Vector3.down, boxCollider.size.y + 0.5f, PlayerSettings.groundRaycastLayer.value) ||
-			Physics.Raycast(boxCollider.transform.position + (-boxCollider.transform.forward * 1f), Vector3.down, boxCollider.size.y + 0.5f, PlayerSettings.groundRaycastLayer.value))
+        Debug.DrawLine(capsuleCollider.transform.position + (capsuleCollider.transform.forward * 1f), capsuleCollider.transform.position + Vector3.down * (capsuleCollider.height + 0.2f) + (capsuleCollider.transform.forward * 1f), Color.green);
+		Debug.DrawLine(capsuleCollider.transform.position + (-capsuleCollider.transform.forward * 1f), capsuleCollider.transform.position + Vector3.down * (capsuleCollider.height + 0.2f) + (capsuleCollider.transform.forward * 1f), Color.green);
+		if (Physics.Raycast(capsuleCollider.transform.position + (capsuleCollider.transform.forward * 1f), Vector3.down, capsuleCollider.height + 0.5f, PlayerSettings.groundRaycastLayer.value) ||
+			Physics.Raycast(capsuleCollider.transform.position + (-capsuleCollider.transform.forward * 1f), Vector3.down, capsuleCollider.height + 0.5f, PlayerSettings.groundRaycastLayer.value))
         {
             return true;
         }

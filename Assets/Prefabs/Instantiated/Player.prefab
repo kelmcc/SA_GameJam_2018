@@ -100,7 +100,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4497330808581688}
   - component: {fileID: 33103618834387948}
-  - component: {fileID: 65514695831439842}
+  - component: {fileID: 136326441805115214}
   m_Layer: 11
   m_Name: Cube
   m_TagString: Untagged
@@ -468,18 +468,6 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 112
   m_CollisionDetection: 2
---- !u!65 &65514695831439842
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1519203880245480}
-  m_Material: {fileID: 13400000, guid: 4b6df3cc297752d4bbc90b93396ca363, type: 2}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!95 &95146870285107026
 Animator:
   serializedVersion: 3
@@ -656,7 +644,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerSettings: {fileID: 11400000, guid: 1330406b78323fa41a5d17125fd2768d, type: 2}
-  beatLevelUI: []
+  beatLevelUI_L: []
+  beatLevelUI_R: []
   CurrentBeatKeeperLevel: 0
   SkyboxMat: {fileID: 0}
   level1ColorA: {r: 0.8910256, g: 0.16660735, b: 0.9056604, a: 1}
@@ -702,7 +691,7 @@ MonoBehaviour:
   BeatManager: {fileID: 0}
   BeatMultiplier: {fileID: 0}
   UIRoot: {fileID: 0}
-  boxCollider: {fileID: 65514695831439842}
+  capsuleCollider: {fileID: 136326441805115214}
   PlayerSettings: {fileID: 11400000, guid: 1330406b78323fa41a5d17125fd2768d, type: 2}
   wing1: {fileID: 1959512999449284}
   wing2: {fileID: 1896710995037932}
@@ -825,3 +814,16 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 1
   m_Loop: 0
+--- !u!136 &136326441805115214
+CapsuleCollider:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1519203880245480}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 1
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}

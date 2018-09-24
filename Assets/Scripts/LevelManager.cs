@@ -5,9 +5,12 @@ using UnityEngine;
 //CODE ASSUMES THE LEVEL MANAGER IS AT WORLD ZERO. DONT MOVE IT
 public class LevelManager : MonoBehaviour
 {
+	public float minSpawnDistanceAllowed;
 	public LevelSettings LevelSettings;
 	private BeatMultiplier BeatMultiplier;
 	public Transform playerTransform;
+
+	private PlayerMovementBehaviour player;
 
 	public List<EnemySpawnTransform> stage1EnemyTransforms = new List<EnemySpawnTransform>();
 	public List<EnemySpawnTransform> stage2EnemyTransforms = new List<EnemySpawnTransform>();
@@ -24,7 +27,7 @@ public class LevelManager : MonoBehaviour
 	}
 
 	private void Start()
-	{
+	{	
 		enemyTransforms = new List<List<EnemySpawnTransform>>();
 		enemyTransforms.Add(stage1EnemyTransforms);
 		enemyTransforms.Add(stage2EnemyTransforms);
@@ -44,9 +47,25 @@ public class LevelManager : MonoBehaviour
 
     public bool GetEnemySpawn(int stage, out Vector3 pos)
     {
-        int index = Random.Range(0, enemyTransforms[stage].Count);
+		if(player == null)
+		{
+			player = FindObjectOfType<PlayerMovementBehaviour>();
+		}
 
-		if(enemyTransforms[stage].Count == 0)
+		int index;
+		int count = 0;
+		do
+		{
+			index = Random.Range(0, enemyTransforms[stage].Count);
+			count++;
+			if(count > 2000)
+			{
+				break;
+			}
+		}
+		while (Vector3.Distance(enemyTransforms[stage][index].transform.position, player.transform.position) <= minSpawnDistanceAllowed);
+		
+		if (enemyTransforms[stage].Count == 0)
 		{
 			pos = Vector3.zero;
 			return false;
@@ -54,7 +73,7 @@ public class LevelManager : MonoBehaviour
 
         while (!enemyTransforms[stage][index].IsActivated)
         {
-            index = Random.Range(0, enemyTransforms.Count);
+			index = Random.Range(0, enemyTransforms.Count);    
         }
         
         Vector3 position = enemyTransforms[stage][index].transform.position;
