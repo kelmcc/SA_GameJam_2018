@@ -15,6 +15,7 @@ public class LevelManager : MonoBehaviour
 	public List<EnemySpawnTransform> stage1EnemyTransforms = new List<EnemySpawnTransform>();
 	public List<EnemySpawnTransform> stage2EnemyTransforms = new List<EnemySpawnTransform>();
 	public List<EnemySpawnTransform> stage3EnemyTransforms = new List<EnemySpawnTransform>();
+	public List<EnemySpawnTransform> stage4EnemyTransforms = new List<EnemySpawnTransform>();
 
 	private List<List<EnemySpawnTransform>> enemyTransforms;
 
@@ -32,6 +33,7 @@ public class LevelManager : MonoBehaviour
 		enemyTransforms.Add(stage1EnemyTransforms);
 		enemyTransforms.Add(stage2EnemyTransforms);
 		enemyTransforms.Add(stage3EnemyTransforms);
+		enemyTransforms.Add(stage4EnemyTransforms);
 
 		BeatMultiplier = FindObjectOfType<BeatMultiplier>();
 	}

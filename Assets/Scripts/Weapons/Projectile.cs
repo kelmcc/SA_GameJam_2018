@@ -6,6 +6,9 @@ public class Projectile : MonoBehaviour
 {
 	public GameObject OnDestroyParticleSystem;
 	public LayerMask HitLayerMask;
+	public LayerMask BossHitLayerMask;
+
+	public GameObject bossCube;
 
 	[Space]
 	public float Speed;
@@ -62,6 +65,16 @@ public class Projectile : MonoBehaviour
 				enemy.Hit(this);
 			}
 			DestroyProjectile();
+		}
+
+		layerMask = BossHitLayerMask.value;
+		if (layerMask == (layerMask | (1 << coll.gameObject.layer)))
+		{
+			for(int i = 0; i < 3; i++)
+			{
+				GameObject c = Instantiate(bossCube);
+				c.transform.position = transform.position;
+			}
 		}
 	}
 

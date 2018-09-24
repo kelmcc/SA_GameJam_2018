@@ -12,6 +12,7 @@ public class GameSettings : ScriptableObject
     public GameObject TallEnemyPrefab;
     public GameObject SnakeEnemyPrefab;
 	public GameObject FlyingEnemyPrefab;
+	public GameObject FlyingBossEnemyPrefab;
 
 	public int StartLevel = 0;
 }

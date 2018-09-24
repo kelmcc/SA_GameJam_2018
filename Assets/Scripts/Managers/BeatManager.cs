@@ -33,6 +33,8 @@ public class BeatManager : MonoBehaviour
 		PlaySong(AudioSettings.Songs[UnityEngine.Random.Range(0, AudioSettings.Songs.Length)]);
 	}
 
+	public float Bps;
+
 	Coroutine last = null;
 	public void MuteFor(float seconds)
 	{
@@ -135,6 +137,7 @@ public class BeatManager : MonoBehaviour
 		ActiveAudioData primary = PrimaryAudioData();
 
 		currentBps = song.Bpm / 60f;
+		Bps = currentBps;
 		currentFrequencyInverse = 1f / primary.source.clip.frequency;
 
 		StartCoroutine(PlayAfterDelay(primary, song.StartBeatDelaySeconds));

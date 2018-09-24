@@ -27,6 +27,9 @@ MonoBehaviour:
   edgeRaycastLayer:
     serializedVersion: 2
     m_Bits: 1024
+  bossRaycastLayer:
+    serializedVersion: 2
+    m_Bits: 131072
   beatInterval: 5
   beatDecrease: 0.01
   beatMissedPenalty: 2

@@ -16,7 +16,9 @@ public class PlayerMovementBehaviour : MovementBehaviour
 	public GameObject wing1;
 	public GameObject wing2;
 
-    Rigidbody playerRigidbody;
+	public GameObject halo;
+
+	Rigidbody playerRigidbody;
 
     float beatTimer;
     float leftTapTimer;
@@ -53,6 +55,15 @@ public class PlayerMovementBehaviour : MovementBehaviour
 		{
 			wing1.SetActive(false);
 			wing2.SetActive(false);
+		}
+
+		if(BeatMultiplier.CurrentBeatKeeperLevel > 1)
+		{
+			halo.SetActive(true);
+		}
+		else
+		{
+			halo.SetActive(false);
 		}
 
 		DecreaseVelocity();
@@ -235,14 +246,22 @@ public class PlayerMovementBehaviour : MovementBehaviour
         {
             velocity.x = 0;
         }
-    }
+
+		layermask = PlayerSettings.bossRaycastLayer.value;
+		if (layermask == (layermask | (1 << other.gameObject.layer)))
+		{
+			BeatMultiplier.SubtractLevelProgress(15);
+			BeatManager.MuteFor(1);
+			UIRoot.ShowOverlayFor(1.5f);
+		}
+	}
 
 	private void OnCollisionEnter(Collision collision)
 	{
 		DeathCube cube = collision.gameObject.GetComponent<DeathCube>();
 		if (cube != null)
 		{
-			BeatMultiplier.AddLevelProgress(0.5f);
+			BeatMultiplier.AddLevelProgress(0.3f);
 			AudioSource.PlayClipAtPoint(PlayerSettings.GotCubeAudio, Camera.main.transform.position, Random.Range(0.1f, 5f));
 			Destroy(collision.gameObject);
 		}

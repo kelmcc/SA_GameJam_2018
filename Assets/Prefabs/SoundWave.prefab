@@ -205,6 +205,10 @@ MonoBehaviour:
   HitLayerMask:
     serializedVersion: 2
     m_Bits: 8704
+  BossHitLayerMask:
+    serializedVersion: 2
+    m_Bits: 131072
+  bossCube: {fileID: 1771915282110780, guid: 9fbac714fe469b542a5e1fad912c3567, type: 2}
   Speed: 0
   LevelManager: {fileID: 0}
   lifetime: 5

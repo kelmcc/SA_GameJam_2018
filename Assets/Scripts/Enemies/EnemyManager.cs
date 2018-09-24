@@ -12,6 +12,7 @@ public class EnemyManager : MonoBehaviour
     public GameObject TallEnemyPrefab;
     public GameObject SnakeEnemyPrefab;
 	public GameObject FlyingEnemyPrefab;
+	public GameObject FlyingEnemyBossPrefab;
 
 	[HideInInspector]
     public LevelManager LevelManager;
@@ -63,7 +64,7 @@ public class EnemyManager : MonoBehaviour
 				{
 					enemies.Add(SpawnEnemy<EnemyBehaviour>(spawnPos, EnemyPrefab, BeatMultiplier.CurrentBeatKeeperLevel));
 				}
-				else
+				else if (BeatMultiplier.CurrentBeatKeeperLevel == 1)
 				{
 					if(Random.Range(0f, 3f) > 2)
 					{
@@ -73,6 +74,10 @@ public class EnemyManager : MonoBehaviour
 					{
 						enemies.Add(SpawnEnemy<FlyingEnemyBehaviour>(spawnPos, FlyingEnemyPrefab, BeatMultiplier.CurrentBeatKeeperLevel));
 					}				
+				}
+				else
+				{
+					enemies.Add(SpawnEnemy<FlyingEnemyBehaviour>(spawnPos, FlyingEnemyBossPrefab, BeatMultiplier.CurrentBeatKeeperLevel));
 				}
 			}      
         }
