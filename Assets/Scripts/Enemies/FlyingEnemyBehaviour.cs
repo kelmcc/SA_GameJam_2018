@@ -20,6 +20,9 @@ public class FlyingEnemyBehaviour : EnemyBase
     Vector2 velocity = new Vector2();
 
 	Vector3 lastTargetPosition = Vector3.zero;
+	float lastDistanceToCover = 0f;
+
+	static FlyingEnemyBehaviour active = null;
 
     public Rigidbody enemyRigidBody;
     public BoxCollider boxCollider;
@@ -28,7 +31,6 @@ public class FlyingEnemyBehaviour : EnemyBase
 	Transform player;
 
     public float moveMultiplier = 1f;
-	bool targetFound = false;
 
     void Start()
     {
@@ -38,6 +40,7 @@ public class FlyingEnemyBehaviour : EnemyBase
 		beatMultiplier = FindObjectOfType<BeatMultiplier>();
 
 		player = FindObjectOfType<PlayerMovementBehaviour>().transform;
+		lastTargetPosition = transform.position;
 	}
 
     Vector3 previousPosition;
@@ -48,44 +51,8 @@ public class FlyingEnemyBehaviour : EnemyBase
 			Destroy(gameObject);
 		}
 
-        DecreaseVelocity();
-
-		if(targetFound)
-		{
-			if (lastTargetPosition.x - transform.position.x < 1f)
-			{
-				velocity.x = lastTargetPosition.x - -transform.position.x;
-			}
-			else if (lastTargetPosition.y - transform.position.y < 1f)
-			{
-				velocity.y = lastTargetPosition.y - -transform.position.y;
-			}
-		}	
+		Debug.DrawLine(transform.position, lastTargetPosition);
 	}
-
-    public void DecreaseVelocity()
-    {
-		if(!targetFound)
-		{
-			if (velocity.x > 0)
-			{
-				velocity.x = Mathf.Max(0, velocity.x - (EnemySettings.horizontalDecrease * Time.deltaTime));
-			}
-			else if (velocity.x < 0)
-			{
-				velocity.x = Mathf.Min(0, velocity.x + (EnemySettings.horizontalDecrease * Time.deltaTime));
-			}
-
-			if (velocity.y > 0)
-			{
-				velocity.y = Mathf.Max(0, velocity.y - (EnemySettings.verticalDecrease * Time.deltaTime));
-			}
-			else if (velocity.y < 0)
-			{
-				velocity.y = Mathf.Min(0, velocity.y + (EnemySettings.verticalDecrease * Time.deltaTime));
-			}
-		}       
-    }
 
 	public override void Hit(Projectile projectile)
 	{
@@ -124,53 +91,63 @@ public class FlyingEnemyBehaviour : EnemyBase
 
     void FixedUpdate()
     {
-        //set rotation
-        Vector3 goalVec = -(new Vector3(LevelManager.transform.position.x, transform.position.y, LevelManager.transform.position.z) - transform.position).normalized;
+		enemyRigidBody.velocity = enemyRigidBody.velocity / 2f;
+
+		//set rotation
+		Vector3 goalVec = -(new Vector3(LevelManager.transform.position.x, transform.position.y, LevelManager.transform.position.z) - transform.position).normalized;
         enemyRigidBody.MoveRotation(enemyRigidBody.rotation * Quaternion.FromToRotation(transform.right, goalVec));
 
-        //snap to circle
-        Vector3 localHorizontal = transform.forward * velocity.x;
-        Vector3 position = transform.position;
-        LevelManager.SnapMovementToRadius(ref position, ref localHorizontal);
-        Vector3 finalPosition = position;
-        enemyRigidBody.MovePosition(new Vector3(finalPosition.x, transform.position.y, finalPosition.z));
+		Vector3 position = Vector3.Lerp(transform.position, lastTargetPosition, 0.2f);
+		Vector3 direction = position - transform.position.normalized;
+        LevelManager.SnapMovementToRadius(ref position, ref direction);
 
-        // And finally we add force in the direction of dir and multiply it by force. 
-        // This will push back the player
+        enemyRigidBody.MovePosition(position);
 
-        enemyRigidBody.velocity = new Vector3(0, velocity.y, 0) + localHorizontal;
+		Debug.DrawLine(transform.position, position, Color.red);
     }
 
     public override void OnBeat()
     {
-		lastTargetPosition = player.transform.position;
+		if(active != this && active != null)
+		{
+			return;
+		}
+
 		Vector3 difference = player.transform.position - transform.position;
 		float distance = difference.magnitude;
 		Vector3 direction = difference.normalized;
-		if (distance < 50)
+		if (distance < 30)
 		{
-			targetFound = true;
-			if(Mathf.Abs(difference.x) > 0.5f)
+			if(Mathf.Abs(difference.x) > Mathf.Abs(difference.y))
 			{
-				Vector3 dummyPos = Vector3.zero;
-				Vector3 horizontalDir = new Vector3(direction.x, 0, direction.z);
-				LevelManager.SnapMovementToRadius(ref dummyPos, ref horizontalDir);
-				velocity = horizontalDir * EnemySettings.horizontalBoost;
+				lastTargetPosition = new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z);
+				lastDistanceToCover = Vector3.Distance(transform.position, lastTargetPosition);
 			}
-			else if (Mathf.Abs(difference.y) > 0.5f)
+			else
 			{
-				velocity.y = direction.y * EnemySettings.horizontalBoost;
+				lastTargetPosition = new Vector3(transform.position.x, player.transform.position.y, transform.position.z);
+				lastDistanceToCover = Vector3.Distance(transform.position, lastTargetPosition);
 			}
+			active = this;
 		}
 		else
 		{
-			targetFound = false;
-			velocity = Random.insideUnitSphere.normalized * EnemySettings.horizontalBoost;
+			lastTargetPosition = transform.position + (player.transform.position - transform.position).normalized * Random.Range(0f, 10f);
 		}
+	}
+
+	private void SetTarget(Transform target)
+	{
+
 	}
 
 	private void OnDestroy()
 	{
+		if(active == this)
+		{
+			active = null;
+		}
+
 		beatManager.OnBeat -= OnBeat;
 		EnemyManager.RemoveEnemy(this);
 	}

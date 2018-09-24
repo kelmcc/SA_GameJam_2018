@@ -247,14 +247,14 @@ public class PlayerMovementBehaviour : MovementBehaviour
 		}
 		else
 		{
-			EnemyBehaviour enemy = collision.gameObject.GetComponent<EnemyBehaviour>();
+			EnemyBase enemy = collision.gameObject.GetComponent<EnemyBase>();
 			if(enemy == null)
 			{
-				enemy = collision.gameObject.transform.parent.GetComponent<EnemyBehaviour>();
+				enemy = collision.gameObject.transform.parent.GetComponent<EnemyBase>();
 			}
 			if(enemy != null)
 			{
-				BeatMultiplier.RemoveLevelProggress();
+				BeatMultiplier.SubtractLevelProgress(15);
 				BeatManager.MuteFor(1);
 				UIRoot.ShowOverlayFor(1.5f);
 			}

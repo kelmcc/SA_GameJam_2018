@@ -22,9 +22,14 @@ public class Projectile : MonoBehaviour
 
 	void Update ()
 	{
+		//set rotation
+		Vector3 goalVec = -(new Vector3(LevelManager.transform.position.x, transform.position.y, LevelManager.transform.position.z) - transform.position).normalized;
+		transform.up = goalVec;
+
 		Vector3 movement = transform.forward * Speed;
 		Vector3 position = transform.position;
 		LevelManager.SnapMovementToRadius(ref position, ref movement);
+
 		transform.position = position + movement;
 		lifetime -= Time.deltaTime;
 		if(lifetime <=0)

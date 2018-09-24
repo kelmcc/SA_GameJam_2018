@@ -70,14 +70,19 @@ public class BeatMultiplier : MonoBehaviour
         }
     }
 
-    public void AddLevelProgress(float increment)
-    {
-        innerLevelProgress += increment;
-    }
+	public void AddLevelProgress(float increment)
+	{
+		innerLevelProgress += increment;
+	}
+    
+	public void SubtractLevelProgress(float increment)
+	{
+		innerLevelProgress = Mathf.Max(0, innerLevelProgress - increment);
+	}
 
-    public void RemoveLevelProggress()
+	public void RemoveLevelProggress()
     {
-	CurrentBeatKeeperLevel = 0;
+		CurrentBeatKeeperLevel = 0;
         innerLevelProgress = 0;
     }
 

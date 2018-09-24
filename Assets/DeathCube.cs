@@ -21,14 +21,14 @@ public class DeathCube : MonoBehaviour {
 	{
 		float speed = 0.5f;
 		Vector3 dir = (target.position - transform.position).normalized;
-		if (aliveCount > 80)
-		{
-			rb.MovePosition(transform.position + dir * speed);
-		}
-		else
-		{
-			rb.AddForce(dir * 40);
-		}		
+		//if (aliveCount > 10)
+		//{
+			rb.MovePosition(transform.position + dir * speed * Random.Range(0.5f, 1f));
+		//}
+		//else
+		//{
+			//rb.AddForce(dir * 40);
+		//}		
 	}
 
 	private void OnDestroy()
