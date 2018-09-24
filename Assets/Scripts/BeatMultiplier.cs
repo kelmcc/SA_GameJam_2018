@@ -62,8 +62,9 @@ public class BeatMultiplier : MonoBehaviour
         }
         else if (Mathf.Approximately(beatLevelUI_L[CurrentBeatKeeperLevel].fillAmount, 0f) && CurrentBeatKeeperLevel > 0)
         {
-            CurrentBeatKeeperLevel--;
-            innerLevelProgress = 50f;
+			//you can never drop below your last level
+            //CurrentBeatKeeperLevel--;
+            //innerLevelProgress = 50f;
 
             //update the skybox too
             UpdateSkybox();

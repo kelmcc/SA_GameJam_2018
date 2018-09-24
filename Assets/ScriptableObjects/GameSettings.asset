@@ -25,4 +25,4 @@ MonoBehaviour:
     type: 2}
   FlyingEnemyPrefab: {fileID: 1820904851114874, guid: 0ee1a50f9029bd243808d08ba3af57e8,
     type: 2}
-  StartLevel: 1
+  StartLevel: 0

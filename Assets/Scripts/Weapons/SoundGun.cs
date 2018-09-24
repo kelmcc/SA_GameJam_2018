@@ -5,6 +5,13 @@ using UnityEngine;
 public class SoundGun : Weapon
 {
 	float intensitySpeedMultiplier = 0.25f;
+	private PlayerMovementBehaviour player;
+
+	public void Start()
+	{
+		base.BaseStart();
+		player = GetComponent<PlayerMovementBehaviour>();
+	}
 
 	public override void Fire(Vector3 direction, float intensity)
 	{
@@ -16,7 +23,7 @@ public class SoundGun : Weapon
 		for (int i = 0; i < intensity; i++)
 		{
 			GameObject projectileObject = Instantiate(Projectile.gameObject);
-			projectileObject.transform.position = gameObject.transform.position + (direction * 1f) + (Vector3.up * 2f);
+			projectileObject.transform.position = gameObject.transform.position + (direction * 1f) + (player.OnGround()?(Vector3.up * 2f):Vector3.zero);
 			projectileObject.transform.forward = direction;
 			Projectile proj = projectileObject.GetComponent<Projectile>();
 			proj.LevelManager = levelManager;

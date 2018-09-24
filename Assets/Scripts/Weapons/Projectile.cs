@@ -23,14 +23,14 @@ public class Projectile : MonoBehaviour
 	void Update ()
 	{
 		//set rotation
-		Vector3 goalVec = -(new Vector3(LevelManager.transform.position.x, transform.position.y, LevelManager.transform.position.z) - transform.position).normalized;
-		transform.up = goalVec;
+		Vector3 towardsCenter = -(new Vector3(LevelManager.transform.position.x, transform.position.y, LevelManager.transform.position.z) - transform.position).normalized;
+		transform.rotation = Quaternion.LookRotation(transform.forward, towardsCenter);
 
 		Vector3 movement = transform.forward * Speed;
 		Vector3 position = transform.position;
 		LevelManager.SnapMovementToRadius(ref position, ref movement);
-
-		transform.position = position + movement;
+		//transform.forward = movement.normalized;
+		transform.position = position + transform.forward * Speed;
 		lifetime -= Time.deltaTime;
 		if(lifetime <=0)
 		{
@@ -42,6 +42,8 @@ public class Projectile : MonoBehaviour
 			float scaleIncrease = Time.deltaTime * 6f;
 			transform.localScale = new Vector3(transform.localScale.x + scaleIncrease, transform.localScale.y + scaleIncrease, transform.localScale.z + scaleIncrease);
 		}
+
+		
 	}
 
 	private void OnTriggerEnter(Collider coll)

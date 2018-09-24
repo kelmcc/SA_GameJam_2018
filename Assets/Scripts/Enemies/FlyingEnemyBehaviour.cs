@@ -97,7 +97,7 @@ public class FlyingEnemyBehaviour : EnemyBase
 		Vector3 goalVec = -(new Vector3(LevelManager.transform.position.x, transform.position.y, LevelManager.transform.position.z) - transform.position).normalized;
         enemyRigidBody.MoveRotation(enemyRigidBody.rotation * Quaternion.FromToRotation(transform.right, goalVec));
 
-		Vector3 position = Vector3.Lerp(transform.position, lastTargetPosition, 0.2f);
+		Vector3 position = Vector3.Lerp(transform.position, lastTargetPosition, 0.125f);
 		Vector3 direction = position - transform.position.normalized;
         LevelManager.SnapMovementToRadius(ref position, ref direction);
 
@@ -108,17 +108,20 @@ public class FlyingEnemyBehaviour : EnemyBase
 
     public override void OnBeat()
     {
-		if(active != this && active != null)
-		{
-			return;
-		}
+		
+	
 
 		Vector3 difference = player.transform.position - transform.position;
 		float distance = difference.magnitude;
 		Vector3 direction = difference.normalized;
 		if (distance < 30)
 		{
-			if(Mathf.Abs(difference.x) > Mathf.Abs(difference.y))
+			if(active != this && active != null)
+			{
+				return;
+			}
+
+			if (Mathf.Abs(difference.x) > Mathf.Abs(difference.y))
 			{
 				lastTargetPosition = new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z);
 				lastDistanceToCover = Vector3.Distance(transform.position, lastTargetPosition);
@@ -132,7 +135,7 @@ public class FlyingEnemyBehaviour : EnemyBase
 		}
 		else
 		{
-			lastTargetPosition = transform.position + (player.transform.position - transform.position).normalized * Random.Range(0f, 10f);
+			lastTargetPosition = transform.position + (Random.insideUnitSphere * 10f) + (player.position - transform.position).normalized * 5;
 		}
 	}
 

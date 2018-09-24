@@ -19,7 +19,7 @@ public abstract class Weapon : MonoBehaviour
 
 	Vector3 lastDirection = Vector3.left;
 
-	private void Start()
+	protected void BaseStart()
 	{
 		levelManager = FindObjectOfType<LevelManager>();
 		beatManager = FindObjectOfType<BeatManager>();

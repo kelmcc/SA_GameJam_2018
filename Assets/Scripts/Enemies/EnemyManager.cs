@@ -65,7 +65,14 @@ public class EnemyManager : MonoBehaviour
 				}
 				else
 				{
-					enemies.Add(SpawnEnemy<FlyingEnemyBehaviour>(spawnPos, FlyingEnemyPrefab, BeatMultiplier.CurrentBeatKeeperLevel));
+					if(Random.Range(0f, 3f) > 2)
+					{
+						enemies.Add(SpawnEnemy<EnemyBehaviour>(spawnPos, EnemyPrefab, BeatMultiplier.CurrentBeatKeeperLevel));
+					}
+					else
+					{
+						enemies.Add(SpawnEnemy<FlyingEnemyBehaviour>(spawnPos, FlyingEnemyPrefab, BeatMultiplier.CurrentBeatKeeperLevel));
+					}				
 				}
 			}      
         }
@@ -95,7 +102,7 @@ public class EnemyManager : MonoBehaviour
 
     public void Merge(EnemyBehaviour a, EnemyBehaviour b)
     {
-        if (BeatMultiplier.CurrentBeatKeeperLevel > 0)
+        if (BeatMultiplier.CurrentBeatKeeperLevel > -1)
         {
             enemies.Remove(a);
             enemies.Remove(b);
@@ -111,7 +118,7 @@ public class EnemyManager : MonoBehaviour
 
     public void Snake(EnemyBehaviour a, EnemyBehaviour b)
     {
-        if (BeatMultiplier.CurrentBeatKeeperLevel > 1)
+        if (BeatMultiplier.CurrentBeatKeeperLevel > -1)
         {
             enemies.Remove(a);
             enemies.Remove(b);
