@@ -445,12 +445,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74eb3ecfdc4b7cb4f86cb743d723245b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Life: 2
-  DeathCube: {fileID: 1837756881902010, guid: 386d615e9c03e844cb6c0d8b3655477e, type: 2}
-  DeathCubeCount: 4
-  EnemySettings: {fileID: 11400000, guid: b7fe07582e896aa4aae4b04d96a15763, type: 2}
+  ActiveStage: 0
   EnemyManager: {fileID: 0}
   LevelManager: {fileID: 0}
+  Life: 1
+  DeathCubeMat: {fileID: 2100000, guid: 6498ec7a70015bf408120e1b7be441a0, type: 2}
+  DeathCubeCount: 7
+  EnemySettings: {fileID: 11400000, guid: b7fe07582e896aa4aae4b04d96a15763, type: 2}
   enemyRigidBody: {fileID: 0}
   boxCollider: {fileID: 65144041266990828}
   Type: 1

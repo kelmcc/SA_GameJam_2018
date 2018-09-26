@@ -14,7 +14,7 @@ public class EnemyBehaviour : EnemyBase
 	private int TotalLife;
 	public int Life;
 
-	public GameObject DeathCube;
+	public Material DeathCubeMat;
 	public int DeathCubeCount;
 
     public EnemySettings EnemySettings;
@@ -29,6 +29,7 @@ public class EnemyBehaviour : EnemyBase
     public Rigidbody enemyRigidBody;
     public BoxCollider boxCollider;
 	private BeatMultiplier beatMultiplier;
+	private CubePool cubePool;
 
 	public EnemyType Type;
     public float moveMultiplier = 1f;
@@ -39,6 +40,7 @@ public class EnemyBehaviour : EnemyBase
         previousPosition = Vector3.zero;
 		TotalLife = Life;
 		beatMultiplier = FindObjectOfType<BeatMultiplier>();
+		cubePool = FindObjectOfType<CubePool>();
 
 	}
 
@@ -105,7 +107,6 @@ public class EnemyBehaviour : EnemyBase
 			}
 		}
 
-
 		if (hitSomething)
         {
             return true;
@@ -143,7 +144,14 @@ public class EnemyBehaviour : EnemyBase
 			return;
 		}
 
-        EnemyBehaviour enemy = collider.GetComponent<EnemyBehaviour>();
+		PlayerMovementBehaviour player = collider.GetComponentInParent<PlayerMovementBehaviour>();
+		if (player != null)
+		{
+			//Destroy(gameObject);
+			//return;
+		}
+
+		EnemyBehaviour enemy = collider.GetComponent<EnemyBehaviour>();
         if (timer > 5f && enemy != null && Type == EnemyType.Single)
         {
             timer = 0f;
@@ -159,39 +167,41 @@ public class EnemyBehaviour : EnemyBase
 		}
 	}
 
+	Coroutine hitC = null;
 	public override void Hit(Projectile projectile)
 	{
-		if (projectile != null)
+		if (projectile != null && hitC == null)
 		{
-			StartCoroutine(TakeHit(projectile.transform.position));
+			hitC = StartCoroutine(TakeHit(projectile.transform.position));
 		}
 	}
 
 	private IEnumerator TakeHit(Vector3 position)
 	{
 		Life--;
-
-		for (int i = 0; i < DeathCubeCount; i++)
+		if (Life <= 0)
 		{
-			GameObject cubeOb = Instantiate(DeathCube);
-			cubeOb.transform.position = transform.position;
-			yield return new WaitForSeconds(0.05f);
-
-			while(transform.localScale.x > (0))
+			for (int i = 0; i < DeathCubeCount; i++)
 			{
-				transform.localScale = new Vector3(transform.localScale.x - Time.deltaTime * 2, transform.localScale.x - Time.deltaTime * 2, transform.localScale.x - Time.deltaTime * 2);
-				if(transform.localScale.x > 1)
+				cubePool.GetCube(DeathCubeMat, transform.position);
+				yield return new WaitForSeconds(0.05f);				
+			}
+
+			while (transform.localScale.x > 0)
+			{
+				transform.localScale = new Vector3(transform.localScale.x - Time.deltaTime * 2, transform.localScale.y - Time.deltaTime * 2, transform.localScale.z - Time.deltaTime * 2);
+				if (transform.localScale.x < 0)
 				{
-					transform.localScale = Vector3.one;
+					transform.localScale = Vector3.zero;
+					break;
 				}
 				yield return null;
 			}
-		}
 
-		if(Life <= 0)
-		{
 			Destroy(gameObject);
 		}
+
+		hitC = null;
 	}
 
     private void OnTriggerStay(Collider collider)

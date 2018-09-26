@@ -9,6 +9,8 @@ public class PlayerMovementBehaviour : MovementBehaviour
     public BeatMultiplier BeatMultiplier;
 	public UIRoot UIRoot;
 
+	private CubePool cubePool;
+
     public CapsuleCollider capsuleCollider;
 
     public PlayerSettings PlayerSettings;
@@ -39,7 +41,8 @@ public class PlayerMovementBehaviour : MovementBehaviour
     {
         BeatManager.OnBeat += OnBeat;
         playerRigidbody = GetComponent<Rigidbody>();
-    }
+		cubePool = FindObjectOfType<CubePool>();
+	}
 
     Vector2 velocity = new Vector2();
 
@@ -261,9 +264,9 @@ public class PlayerMovementBehaviour : MovementBehaviour
 		DeathCube cube = collision.gameObject.GetComponent<DeathCube>();
 		if (cube != null)
 		{
-			BeatMultiplier.AddLevelProgress(0.3f);
-			AudioSource.PlayClipAtPoint(PlayerSettings.GotCubeAudio, Camera.main.transform.position, Random.Range(0.1f, 5f));
-			Destroy(collision.gameObject);
+			BeatMultiplier.AddLevelProgress(0.5f);
+			AudioSource.PlayClipAtPoint(PlayerSettings.GotCubeAudio, Camera.main.transform.position, Random.Range(0.1f, 0.5f));
+			cubePool.RecycleCube(cube);
 		}
 		else
 		{

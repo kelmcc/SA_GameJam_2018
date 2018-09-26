@@ -113,7 +113,7 @@ public class Lvl1BossBehaviour : MonoBehaviour {
 				leftLerpPoint = leftIdleTrans.position;
 			}		
 		}
-		else if (beatCount == 5)
+		else if (beatCount == 3)
 		{
 			beatTime = 0;
 			if (currentHand == 0)
@@ -129,7 +129,7 @@ public class Lvl1BossBehaviour : MonoBehaviour {
 		}
 
 		beatCount++;
-		if(beatCount > 7)
+		if(beatCount > 3)
 		{
 			beatCount = 0;
 		}

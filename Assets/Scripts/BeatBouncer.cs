@@ -6,21 +6,17 @@ using UnityEngine;
 public class BeatBouncer : MonoBehaviour
 {
 	private Animator animator;
-	private GameManager gameManager;
+
+	private static BeatManager beatManager;
 	void Start ()
 	{
 		animator = gameObject.GetComponent<Animator>();
-		gameManager = GameObject.FindObjectOfType<GameManager>();
 
-		if (gameManager != null)
+		if(beatManager == null)
 		{
-			gameManager.BeatManager.OnBeat += OnBeat;
+			beatManager = GameObject.FindObjectOfType<BeatManager>();
 		}
-		else
-		{
-			BeatManager b = GameObject.FindObjectOfType<BeatManager>();
-			b.OnBeat += OnBeat;
-		}
+		beatManager.OnBeat += OnBeat;
 	}
 	
 	void OnBeat ()
@@ -30,9 +26,9 @@ public class BeatBouncer : MonoBehaviour
 
 	private void OnDestroy()
 	{
-		if(gameManager != null && gameManager.BeatManager != null)
+		if(beatManager != null)
 		{
-			gameManager.BeatManager.OnBeat -= OnBeat;
+			beatManager.OnBeat -= OnBeat;
 		}	
 	}
 }

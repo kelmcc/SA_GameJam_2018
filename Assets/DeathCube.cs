@@ -2,16 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DeathCube : MonoBehaviour {
-
+public class DeathCube : MonoBehaviour
+{
 	private Transform target;
 	private Rigidbody rb;
 
-	static int aliveCount = 0;
-	// Use this for initialization
+	public Renderer Renderer;
+
+	public void SetMaterial(Material mat)
+	{
+		Renderer.sharedMaterial = mat;
+	}
+
 	void Start ()
 	{
-		aliveCount++;
 		target = FindObjectOfType<PlayerMovementBehaviour>().transform;
 		rb = GetComponent<Rigidbody>();
 	}
@@ -19,20 +23,9 @@ public class DeathCube : MonoBehaviour {
 	// Update is called once per frame
 	void FixedUpdate ()
 	{
-		float speed = 0.5f;
-		Vector3 dir = (target.position - transform.position).normalized;
-		//if (aliveCount > 10)
-		//{
-			rb.MovePosition(transform.position + dir * speed * Random.Range(0.5f, 1f));
-		//}
-		//else
-		//{
-			//rb.AddForce(dir * 40);
-		//}		
-	}
+		float speed = 1f;
+		Vector3 dir = (target.position +(Vector3.up * 1f) - transform.position).normalized;
 
-	private void OnDestroy()
-	{
-		aliveCount--;
+		rb.MovePosition(transform.position + dir * speed * Random.Range(0.5f, 1f));
 	}
 }

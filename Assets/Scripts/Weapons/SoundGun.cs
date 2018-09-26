@@ -7,10 +7,15 @@ public class SoundGun : Weapon
 	float intensitySpeedMultiplier = 0.25f;
 	private PlayerMovementBehaviour player;
 
+	public CubePool cubePool;
+	public BeatMultiplier beatMultiplier;
+
 	public void Start()
 	{
 		base.BaseStart();
 		player = GetComponent<PlayerMovementBehaviour>();
+		cubePool = FindObjectOfType<CubePool>();
+		beatMultiplier = FindObjectOfType<BeatMultiplier>();
 	}
 
 	public override void Fire(Vector3 direction, float intensity)
@@ -23,9 +28,17 @@ public class SoundGun : Weapon
 		for (int i = 0; i < intensity; i++)
 		{
 			GameObject projectileObject = Instantiate(Projectile.gameObject);
-			projectileObject.transform.position = gameObject.transform.position + (direction * 1f) + (player.OnGround()?(Vector3.up * 2f):Vector3.zero);
+
+			Vector3 offset = Vector3.zero;
+			if(beatMultiplier.CurrentBeatKeeperLevel == 0)
+			{
+				offset = Vector3.up * 1f;
+			}
+
+			projectileObject.transform.position = gameObject.transform.position + offset;
 			projectileObject.transform.forward = direction;
 			Projectile proj = projectileObject.GetComponent<Projectile>();
+			proj.cubePool = cubePool;
 			proj.LevelManager = levelManager;
 			proj.Speed = intensity * intensitySpeedMultiplier;
 

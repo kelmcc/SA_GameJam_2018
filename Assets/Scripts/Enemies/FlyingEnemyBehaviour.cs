@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class FlyingEnemyBehaviour : EnemyBase
@@ -7,7 +6,7 @@ public class FlyingEnemyBehaviour : EnemyBase
 	private int TotalLife;
 	public int Life;
 
-	public GameObject DeathCube;
+	public Material DeathCubeMat;
 	public int DeathCubeCount;
 
     public EnemySettings EnemySettings;
@@ -30,11 +29,14 @@ public class FlyingEnemyBehaviour : EnemyBase
 
 	Transform player;
 
+	private CubePool cubePool;
+
     public float moveMultiplier = 1f;
 
     void Start()
     {
-        enemyRigidBody = GetComponent<Rigidbody>();
+		cubePool = FindObjectOfType<CubePool>();
+		enemyRigidBody = GetComponent<Rigidbody>();
         previousPosition = Vector3.zero;
 		TotalLife = Life;
 		beatMultiplier = FindObjectOfType<BeatMultiplier>();
@@ -54,39 +56,40 @@ public class FlyingEnemyBehaviour : EnemyBase
 		Debug.DrawLine(transform.position, lastTargetPosition);
 	}
 
+	Coroutine hitC = null;
 	public override void Hit(Projectile projectile)
 	{
-		if (projectile != null)
+		if (projectile != null && hitC == null)
 		{
-			StartCoroutine(TakeHit(projectile.transform.position));
+			hitC = StartCoroutine(TakeHit(projectile.transform.position));
 		}
 	}
 
 	private IEnumerator TakeHit(Vector3 position)
 	{
 		Life--;
-
-		for (int i = 0; i < DeathCubeCount; i++)
+		if(Life <= 0)
 		{
-			GameObject cubeOb = Instantiate(DeathCube);
-			cubeOb.transform.position = transform.position;
-			yield return new WaitForSeconds(0.05f);
-
-			while(transform.localScale.x > (0))
+			for (int i = 0; i < DeathCubeCount; i++)
 			{
-				transform.localScale = new Vector3(transform.localScale.x - Time.deltaTime * 2, transform.localScale.x - Time.deltaTime * 2, transform.localScale.x - Time.deltaTime * 2);
-				if(transform.localScale.x > 1)
+				cubePool.GetCube(DeathCubeMat, transform.position);
+				yield return new WaitForSeconds(0.05f);				
+			}
+
+			while (transform.localScale.x > 0)
+			{
+				transform.localScale = new Vector3(transform.localScale.x - Time.deltaTime * 2, transform.localScale.y - Time.deltaTime * 2, transform.localScale.z - Time.deltaTime * 2);
+				if (transform.localScale.x < 0)
 				{
-					transform.localScale = Vector3.one;
+					transform.localScale = Vector3.zero;
+					break;
 				}
 				yield return null;
 			}
-		}
 
-		if(Life <= 0)
-		{
 			Destroy(gameObject);
 		}
+		hitC = null;
 	}
 
     void FixedUpdate()

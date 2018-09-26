@@ -157,6 +157,6 @@ public abstract class Weapon : MonoBehaviour
 
 	private void HideAim()
 	{
-		LineRenderer.enabled = false;
+		//LineRenderer.enabled = false;
 	}
 }
