@@ -26,6 +26,7 @@ public abstract class Weapon : MonoBehaviour
 		beatManager.OnBeat += OnBeat;
 		reticuleT = Instantiate(Reticule).transform;
 		reticuleT.gameObject.SetActive(false);
+		//Cursor.visible = false;
 	}
 
 	private void OnBeat()
@@ -52,7 +53,7 @@ public abstract class Weapon : MonoBehaviour
 
 			lastDirection = (closestPoint - transform.position + (Vector3.up * 1f)).normalized;
 
-			DrawAim(transform.position + (1 * Vector3.up), closestPoint);
+			//DrawAim(transform.position + (1 * Vector3.up), closestPoint);
 
 			if (Input.GetButton("Fire"))
 			{

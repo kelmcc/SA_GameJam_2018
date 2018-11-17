@@ -12,3 +12,5 @@ MonoBehaviour:
   m_Name: LevelSettings
   m_EditorClassIdentifier: 
   movementRadius: 50
+  verticalMoveGap: 0
+  horizontalMoveGap: 7.662421
