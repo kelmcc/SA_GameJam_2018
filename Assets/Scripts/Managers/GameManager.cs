@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
 
     public BeatMultiplier BeatMultiplier;
 
-    void Start ()
+    void Start()
     {
         BeatManager.OnBeat += OnBeat;
 
@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
         PlayerMovementBehaviour playerMoveBehaviour = player.GetComponent<PlayerMovementBehaviour>();
         playerMoveBehaviour.LevelManager = LevelManager;
         playerMoveBehaviour.BeatManager = BeatManager;
-		playerMoveBehaviour.UIRoot = UIRoot;
+        playerMoveBehaviour.UIRoot = UIRoot;
 
         BeatMultiplier = player.GetComponent<BeatMultiplier>();
         playerMoveBehaviour.BeatMultiplier = BeatMultiplier;
@@ -43,34 +43,35 @@ public class GameManager : MonoBehaviour
         EnemyManager.EnemyPrefab = gameSettings.EnemyPrefab;
         EnemyManager.TallEnemyPrefab = gameSettings.TallEnemyPrefab;
         EnemyManager.SnakeEnemyPrefab = gameSettings.SnakeEnemyPrefab;
-		EnemyManager.FlyingEnemyPrefab = gameSettings.FlyingEnemyPrefab;
-		EnemyManager.FlyingEnemyBossPrefab= gameSettings.FlyingBossEnemyPrefab;
+        EnemyManager.FlyingEnemyPrefab = gameSettings.FlyingEnemyPrefab;
+        EnemyManager.FlyingEnemyBossPrefab = gameSettings.FlyingBossEnemyPrefab;
 
-		EnemyManager.LevelManager = LevelManager;
+        EnemyManager.LevelManager = LevelManager;
         EnemyManager.BeatMultiplier = BeatMultiplier;
 
-		BeatMultiplier.CurrentBeatKeeperLevel = gameSettings.StartLevel;
-		BeatMultiplier.AddLevelProgress(10f);
-	}
-
-	private void Update()
-	{
-		if(BeatMultiplier.CurrentBeatKeeperLevel > 2)
-		{
-			FinishGame();
-		}
+        BeatMultiplier.CurrentBeatKeeperLevel = gameSettings.StartLevel;
+        BeatMultiplier.AddLevelProgress(10f);
+        
     }
 
-	public void FinishGame()
-	{
-		UIRoot.DoMenuFade(() =>
-		{
-			SceneManager.LoadScene(0);
-		});
-	}
+    private void Update()
+    {
+        if (BeatMultiplier.CurrentBeatKeeperLevel > 2)
+        {
+            FinishGame();
+        }
+    }
+
+    public void FinishGame()
+    {
+        UIRoot.DoMenuFade(() =>
+        {
+            SceneManager.LoadScene(0);
+        });
+    }
 
     void OnBeat(long beatCount)
     {
-        
+
     }
 }
