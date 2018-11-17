@@ -80,7 +80,7 @@ public class Lvl1BossBehaviour : MonoBehaviour {
 		beatTime += Time.deltaTime;
 	}
 
-	public void OnBeat(long beatCount)
+	public void OnBeat(long unusedBeatCount)
 	{
 		if (multiplier == null)
 		{
@@ -91,7 +91,7 @@ public class Lvl1BossBehaviour : MonoBehaviour {
 			return;
 		}
 
-			//attack
+		//attack
 		if (beatCount == 0)
 		{
 			beatTime = 0;

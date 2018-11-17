@@ -76,7 +76,7 @@ public abstract class Weapon : MonoBehaviour
 
 		if(beatTimer > 0 && fireTimer > 0)
 		{
-			Fire(lastDirection, 5);
+			Fire(lastDirection, 3);
 			beatTimer = 0;
 			fireTimer = 0;
 		}
