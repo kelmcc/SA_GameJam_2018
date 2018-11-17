@@ -284,7 +284,7 @@ public class PlayerMovementBehaviour : MovementBehaviour
 		}
 	}
 
-	public override void OnBeat()
+	public override void OnBeat(long beatCount)
     {
         if (!beatHit)
         {

@@ -14,7 +14,9 @@ public class BeatManager : MonoBehaviour
 	private int lastBeatSample;
 	private float currentFrequencyInverse;
 
-	public event Action OnBeat = delegate { };
+	long beatCount = 0;
+
+	public event Action<long> OnBeat = delegate { };
 	public event Action<float[]> OnSpectrumUpdated = delegate { };
 
 	public class ActiveAudioData
@@ -31,6 +33,7 @@ public class BeatManager : MonoBehaviour
 		Debug.Assert(AudioSettings.Songs.Length > 0, "[BeatManager] no songs in audiosettings");
 	
 		PlaySong(AudioSettings.Songs[UnityEngine.Random.Range(0, AudioSettings.Songs.Length)]);
+		
 	}
 
 	public float Bps;
@@ -155,6 +158,7 @@ public class BeatManager : MonoBehaviour
 			data.source.Play();
 		}
 		lastBeatSample = primary.source.timeSamples;
+		beatCount = 0;
 	}
 
 	public ActiveAudioData PrimaryAudioData()
@@ -206,7 +210,9 @@ public class BeatManager : MonoBehaviour
 				int exactCurrentBeatTime = currentSamples - timeOverLastBeat;
 
 				lastBeatSample = exactCurrentBeatTime;
-				OnBeat();
+				beatCount++;
+
+				OnBeat(beatCount);
 			}
 		}
 		else

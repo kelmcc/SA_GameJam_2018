@@ -32,7 +32,7 @@ public class UIRoot : MonoBehaviour
 		MenuFade.alpha = 0;
     }
 
-    void OnBeat()
+    void OnBeat(long beatCount)
     {
         ImageBeatDark.SetActive(ImageBeatLight.activeSelf);
         ImageBeatLight.SetActive(!ImageBeatLight.activeSelf);		

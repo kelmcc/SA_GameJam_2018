@@ -241,7 +241,7 @@ public class EnemyBehaviour : EnemyBase
         enemyRigidBody.velocity = new Vector3(0, velocity.y, 0) + localHorizontal;
     }
 
-    public override void OnBeat()
+    public override void OnBeat(long beatCount)
     {
         float horizontalMove = Random.Range(0f, 10f);
         float verticalMove = Random.Range(0f, 10f);

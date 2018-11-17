@@ -4,5 +4,5 @@ using UnityEngine;
 
 public abstract class MovementBehaviour : MonoBehaviour
 {
-	public abstract void OnBeat();
+	public abstract void OnBeat(long beatCount);
 }

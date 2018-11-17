@@ -52,7 +52,7 @@ public class EnemyManager : MonoBehaviour
 		
 	}
 
-	public void OnBeat()
+	public void OnBeat(long beatCount)
     {
         //every beat interval, spawn new enemies
         if (enemies.Count < maxEnemiesPerLevel[BeatMultiplier.CurrentBeatKeeperLevel])

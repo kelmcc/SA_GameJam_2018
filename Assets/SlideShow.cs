@@ -18,7 +18,7 @@ public class SlideShow : MonoBehaviour
 		slides[1].alpha = 0;
 	}
 	
-	void Onbeat ()
+	void Onbeat(long beatCount)
 	{
 		beat++;
 		if(beat % 8 != 0)

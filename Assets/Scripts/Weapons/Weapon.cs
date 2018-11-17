@@ -29,7 +29,7 @@ public abstract class Weapon : MonoBehaviour
 		//Cursor.visible = false;
 	}
 
-	private void OnBeat()
+	private void OnBeat(long beatCount)
 	{
 		beatTimer = playerSettings.secondsLeeway;
 	}

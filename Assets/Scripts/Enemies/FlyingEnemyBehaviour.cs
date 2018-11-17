@@ -109,10 +109,13 @@ public class FlyingEnemyBehaviour : EnemyBase
 		Debug.DrawLine(transform.position, position, Color.red);
     }
 
-    public override void OnBeat()
+    public override void OnBeat(long beatCount)
     {
-		
-	
+		//skip every second beat
+		if(beatCount % 2 == 0)
+		{
+			return;
+		}
 
 		Vector3 difference = player.transform.position - transform.position;
 		float distance = difference.magnitude;

@@ -69,7 +69,7 @@ public class GameManager : MonoBehaviour
 		});
 	}
 
-    void OnBeat ()
+    void OnBeat(long beatCount)
     {
         
     }

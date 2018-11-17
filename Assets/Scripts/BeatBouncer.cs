@@ -19,7 +19,7 @@ public class BeatBouncer : MonoBehaviour
 		beatManager.OnBeat += OnBeat;
 	}
 	
-	void OnBeat ()
+	void OnBeat (long beatCount)
 	{
 		animator.SetTrigger("Bounce");
 	}
