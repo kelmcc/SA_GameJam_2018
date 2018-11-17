@@ -654,7 +654,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   OnDestroyParticleSystem: {fileID: 1726468502925910, guid: 7f67af99d77223548a6360e5dd7b8881,
     type: 2}
-  bossCubeMaterial: {fileID: 2100000, guid: 4fe7e74ba33e6584cbcf2a8fa95936d6, type: 2}
+  bossCubeMaterial: {fileID: 2100000, guid: 48de7af5615b73a418c542bd435600d7, type: 2}
   cubePool: {fileID: 0}
   Speed: 0
   LevelManager: {fileID: 0}

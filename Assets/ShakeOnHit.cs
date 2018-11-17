@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class ShakeOnHit : MonoBehaviour
 {
-	private Animator animator;
+	public Animator animator;
 
-	private void OnCollisionEnter(Collision collision)
+	private void OnTriggerEnter(Collider collider)
 	{
 		animator.SetTrigger("Shake");
 	}

@@ -489,7 +489,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: 2809af3e9f9d0aa46932463e3f3399e5, type: 2}
+  - {fileID: 2100000, guid: 48de7af5615b73a418c542bd435600d7, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -853,7 +853,7 @@ MonoBehaviour:
   EnemyManager: {fileID: 0}
   LevelManager: {fileID: 0}
   Life: 1
-  DeathCubeMat: {fileID: 2100000, guid: 4fe7e74ba33e6584cbcf2a8fa95936d6, type: 2}
+  DeathCubeMat: {fileID: 2100000, guid: 48de7af5615b73a418c542bd435600d7, type: 2}
   DeathCubeCount: 0
   EnemySettings: {fileID: 11400000, guid: b2b3a6926c2caa4488bc9d8b69cbb971, type: 2}
   enemyRigidBody: {fileID: 54644193614719660}
