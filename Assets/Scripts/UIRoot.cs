@@ -81,7 +81,7 @@ public class UIRoot : MonoBehaviour
 			return;
 		}
 		MenuFade.alpha = 0;
-		f = StartCoroutine(PDoMenuFade(action, 7));
+		f = StartCoroutine(PDoMenuFade(action, 3));
 	}
 
 	private IEnumerator PDoMenuFade(Action action, float seconds)

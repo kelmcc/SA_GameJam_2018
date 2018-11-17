@@ -1412,7 +1412,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _animator: {fileID: 95341657375481044}
-  idleTimeout: 30
+  idleTimeout: 10
   warningDuration: 5
   _manager: {fileID: 0}
 --- !u!114 &114828720472930380

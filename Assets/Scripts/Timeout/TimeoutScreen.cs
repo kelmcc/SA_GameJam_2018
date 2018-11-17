@@ -25,19 +25,6 @@ public class TimeoutScreen : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        timer += Time.deltaTime;
-
-        if (Input.anyKeyDown)
-        {
-            timer = 0f;
-            warningTimer = 0f;
-
-            if (!_animator.GetCurrentAnimatorStateInfo(0).IsName("Out") && !_animator.IsInTransition(0))
-            {
-                _animator.SetTrigger("TurnOff");
-            }
-        }
-
         if (timer > idleTimeout)
         {
             if (!_animator.GetCurrentAnimatorStateInfo(0).IsName("In") && !_animator.IsInTransition(0))
@@ -49,10 +36,26 @@ public class TimeoutScreen : MonoBehaviour
 
             if (warningTimer > warningDuration)
             {
-                warningTimer = 0f;
-                timer = 0f;
                 _manager.FinishGame();
             }
         }
+        else
+        {
+            timer += Time.deltaTime;
+        }
+
+        if (Input.anyKey)
+        {
+            timer = 0f;
+            warningTimer = 0f;
+
+            if (!_animator.GetCurrentAnimatorStateInfo(0).IsName("Out") && !_animator.IsInTransition(0))
+            {
+                _animator.SetTrigger("TurnOff");
+                _animator.ResetTrigger("TurnOn");
+            }
+        }
+
+
     }
 }
