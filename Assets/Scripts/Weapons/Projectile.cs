@@ -86,6 +86,7 @@ public class Projectile : MonoBehaviour
 		if (OnDestroyParticleSystem != null)
 		{
 			GameObject.Instantiate(OnDestroyParticleSystem);
+			OnDestroyParticleSystem.transform.position = transform.position;
 		}
 		Destroy(gameObject);
 	}
