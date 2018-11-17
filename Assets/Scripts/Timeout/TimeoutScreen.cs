@@ -9,12 +9,17 @@ public class TimeoutScreen : MonoBehaviour
 
     private float timer;
     public float idleTimeout;
+    private float warningTimer;
+    public float warningDuration;
+
+    [SerializeField]
+    GameManager _manager;
 
     // Use this for initialization
     void Start()
     {
-
         timer = 0f;
+        warningTimer = 0f;
     }
 
     // Update is called once per frame
@@ -25,6 +30,8 @@ public class TimeoutScreen : MonoBehaviour
         if (Input.anyKeyDown)
         {
             timer = 0f;
+            warningTimer = 0f;
+
             if (!_animator.GetCurrentAnimatorStateInfo(0).IsName("Out") && !_animator.IsInTransition(0))
             {
                 _animator.SetTrigger("TurnOff");
@@ -33,10 +40,18 @@ public class TimeoutScreen : MonoBehaviour
 
         if (timer > idleTimeout)
         {
-            timer = 0f;
             if (!_animator.GetCurrentAnimatorStateInfo(0).IsName("In") && !_animator.IsInTransition(0))
             {
                 _animator.SetTrigger("TurnOn");
+            }
+
+            warningTimer += Time.deltaTime;
+
+            if (warningTimer > warningDuration)
+            {
+                warningTimer = 0f;
+                timer = 0f;
+                _manager.FinishGame();
             }
         }
     }
