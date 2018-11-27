@@ -7,6 +7,8 @@ public class Lvl1BossBehaviour : MonoBehaviour {
 	PlayerMovementBehaviour player;
 	BeatMultiplier multiplier;
 
+	public ParticleAnticipation Anticipation;
+
 	public Transform trackBeforeLevel;
 
 	public float vertMoveSpeed = 1f;
@@ -103,6 +105,8 @@ public class Lvl1BossBehaviour : MonoBehaviour {
 
 				rightOldLerpPoint = rightIdleTrans.position;
 				rightLerpPoint = rightIdleTrans.position;
+
+				Anticipation.Show(leftLerpPoint);
 			}
 			else
 			{
@@ -111,6 +115,8 @@ public class Lvl1BossBehaviour : MonoBehaviour {
 
 				leftOldLerpPoint = leftIdleTrans.position;
 				leftLerpPoint = leftIdleTrans.position;
+
+				Anticipation.Show(rightLerpPoint);
 			}		
 		}
 		else if (beatCount == 3)

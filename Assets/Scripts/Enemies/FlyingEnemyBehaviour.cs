@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class FlyingEnemyBehaviour : EnemyBase
@@ -10,18 +11,24 @@ public class FlyingEnemyBehaviour : EnemyBase
 	public int DeathCubeCount;
 
     public EnemySettings EnemySettings;
-  
-    public void Unsub()
+
+	public LinearAnticipation LinearAnticipation;
+	public ParticleAnticipation ParicleAnticipation;
+
+	public void Unsub()
     {
         beatManager.OnBeat -= OnBeat;
     }
 
     Vector2 velocity = new Vector2();
 
-	Vector3 lastTargetPosition = Vector3.zero;
-	float lastDistanceToCover = 0f;
+	Vector3 currentTargetPosition = Vector3.zero;
+	Vector3 nextTargetPosition = Vector3.zero;
+	float currentDistanceToCover = 0f;
+	float nextDistanceToCover = 0f;
 
-	static FlyingEnemyBehaviour active = null;
+	static List<FlyingEnemyBehaviour> active = new List<FlyingEnemyBehaviour>();
+	private static int maxActive = 5;
 
     public Rigidbody enemyRigidBody;
     public BoxCollider boxCollider;
@@ -42,7 +49,8 @@ public class FlyingEnemyBehaviour : EnemyBase
 		beatMultiplier = FindObjectOfType<BeatMultiplier>();
 
 		player = FindObjectOfType<PlayerMovementBehaviour>().transform;
-		lastTargetPosition = transform.position;
+		currentTargetPosition = transform.position;
+		nextTargetPosition = transform.position;
 	}
 
     Vector3 previousPosition;
@@ -53,7 +61,7 @@ public class FlyingEnemyBehaviour : EnemyBase
 			Destroy(gameObject);
 		}
 
-		Debug.DrawLine(transform.position, lastTargetPosition);
+		Debug.DrawLine(transform.position, currentTargetPosition);
 	}
 
 	Coroutine hitC = null;
@@ -100,13 +108,13 @@ public class FlyingEnemyBehaviour : EnemyBase
 		Vector3 goalVec = -(new Vector3(LevelManager.transform.position.x, transform.position.y, LevelManager.transform.position.z) - transform.position).normalized;
         enemyRigidBody.MoveRotation(enemyRigidBody.rotation * Quaternion.FromToRotation(transform.right, goalVec));
 
-		Vector3 position = Vector3.Lerp(transform.position, lastTargetPosition, 0.125f);
+		Vector3 position = Vector3.Lerp(transform.position, currentTargetPosition, 0.125f);
 		Vector3 direction = position - transform.position.normalized;
         LevelManager.SnapMovementToRadius(ref position, ref direction);
 
         enemyRigidBody.MovePosition(position);
 
-		Debug.DrawLine(transform.position, position, Color.red);
+		Debug.DrawLine(transform.position, position, Color.black);
     }
 
     public override void OnBeat(long beatCount)
@@ -114,47 +122,67 @@ public class FlyingEnemyBehaviour : EnemyBase
 		//skip every second beat
 		if(beatCount % 2 == 0)
 		{
-			return;
-		}
-
-		Vector3 difference = player.transform.position - transform.position;
-		float distance = difference.magnitude;
-		Vector3 direction = difference.normalized;
-		if (distance < 30)
-		{
-			if(active != this && active != null)
+			//create move on off beat so we can show anticipation
+			Vector3 difference = player.transform.position - transform.position;
+			float distance = difference.magnitude;
+			Vector3 direction = difference.normalized;
+			if (distance < 30)
 			{
-				return;
-			}
+				if (active.Count >= maxActive && !active.Contains(this))
+				{
+					return;
+				}
 
-			if (Mathf.Abs(difference.x) > Mathf.Abs(difference.y))
-			{
-				lastTargetPosition = new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z);
-				lastDistanceToCover = Vector3.Distance(transform.position, lastTargetPosition);
+				if (Mathf.Abs(difference.x) > Mathf.Abs(difference.y))
+				{
+					nextTargetPosition = new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z);
+					nextDistanceToCover = Vector3.Distance(transform.position, nextTargetPosition);
+				}
+				else
+				{
+					nextTargetPosition = new Vector3(transform.position.x, player.transform.position.y, transform.position.z);
+					nextDistanceToCover = Vector3.Distance(transform.position, nextTargetPosition);
+				}
+
+				if(!active.Contains(this))
+				{
+					active.Add(this);
+				}
 			}
 			else
 			{
-				lastTargetPosition = new Vector3(transform.position.x, player.transform.position.y, transform.position.z);
-				lastDistanceToCover = Vector3.Distance(transform.position, lastTargetPosition);
+				nextTargetPosition = transform.position + (Random.insideUnitSphere * 10f) + (player.position - transform.position).normalized * 5;
+
+				if (active.Contains(this))
+				{
+					active.Remove(this);
+				}
 			}
-			active = this;
+			if(active.Contains(this))
+			{
+				if (LinearAnticipation != null)
+				{
+					LinearAnticipation.Show(transform.position, nextTargetPosition);
+				}		
+				if(ParicleAnticipation != null)
+				{
+					ParicleAnticipation.Show(nextTargetPosition);
+				}
+			}
 		}
 		else
 		{
-			lastTargetPosition = transform.position + (Random.insideUnitSphere * 10f) + (player.position - transform.position).normalized * 5;
+			//On move. Update lerp target
+			currentTargetPosition = nextTargetPosition;
+			currentDistanceToCover = nextDistanceToCover;
 		}
-	}
-
-	private void SetTarget(Transform target)
-	{
-
 	}
 
 	private void OnDestroy()
 	{
-		if(active == this)
+		if(active.Contains(this))
 		{
-			active = null;
+			active.Remove(this);
 		}
 
 		beatManager.OnBeat -= OnBeat;
