@@ -187,6 +187,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _animator: {fileID: 95211287529888276}
   idleTimeout: 30
+  warningDuration: 0
+  _manager: {fileID: 0}
 --- !u!114 &114822519833254478
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -219,7 +221,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Tap the arrow keys to keep the Cubic Rythm '
+  m_Text: 'Tap to keep the Cubic Rythm '
 --- !u!222 &222258341419110714
 CanvasRenderer:
   m_ObjectHideFlags: 1
