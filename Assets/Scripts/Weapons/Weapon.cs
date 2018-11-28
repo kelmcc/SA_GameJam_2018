@@ -7,6 +7,13 @@ public abstract class Weapon : MonoBehaviour
 	public GameObject Reticule;
 	public PlayerSettings playerSettings;
 
+	public bool MouseInput = true;
+
+	public Transform Up;
+	public Transform Down;
+	public Transform Right;
+	public Transform Left;
+
 	protected LevelManager levelManager;
 	private BeatManager beatManager;
 	private Transform reticuleT;
@@ -38,12 +45,92 @@ public abstract class Weapon : MonoBehaviour
 
 	public virtual void UpdateAim()
 	{
-		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+		Vector3 screenPosition = Input.mousePosition;
+		bool fire = false;
+		if (!MouseInput)
+		{
+			float horizontal = Input.GetAxis("ShootHorizontal");
+			float vertical = Input.GetAxis("ShootVertical");
+
+			Vector3 target = transform.position;
+			if (horizontal > 0)
+			{
+				if(vertical > 0)
+				{
+					target = Vector3.Lerp(Right.position, Up.position, 0.5f);
+				}
+				else if(vertical < 0)
+				{
+					target = Vector3.Lerp(Right.position, Down.position, 0.5f);
+				}
+				else
+				{
+					target = Right.position;
+				}
+				fire = true;
+			}
+			else if (horizontal < 0)
+			{
+				if (vertical > 0)
+				{
+					target = Vector3.Lerp(Left.position, Up.position, 0.5f);
+				}
+				else if (vertical < 0)
+				{
+					target = Vector3.Lerp(Left.position, Down.position, 0.5f);
+				}
+				else
+				{
+					target = Left.position;
+				}
+				fire = true;
+			}
+			else if(vertical > 0)
+			{
+				if (horizontal > 0)
+				{
+					target = Vector3.Lerp(Up.position, Right.position, 0.5f);
+				}
+				else if (horizontal < 0)
+				{
+					target = Vector3.Lerp(Up.position, Left.position, 0.5f);
+				}
+				else
+				{
+					target = Up.position;
+				}
+				fire = true;
+			}
+			else if (vertical < 0)
+			{
+				if (horizontal > 0)
+				{
+					target = Vector3.Lerp(Down.position, Right.position, 0.5f);
+				}
+				else if (horizontal < 0)
+				{
+					target = Vector3.Lerp(Down.position, Left.position, 0.5f);
+				}
+				else
+				{
+					target = Down.position;
+				}
+				fire = true;
+			}
+			else
+			{
+				fire = false;
+				fireTimer = 0;
+			}
+			screenPosition = Camera.main.WorldToScreenPoint(target);
+		}
+
+	
+		Ray ray = Camera.main.ScreenPointToRay(screenPosition);
+
 		Vector3 closestPoint = FindClosestPointOnLevel(ray);
 
 		Debug.DrawRay(ray.origin, ray.direction * 100);
-
-
 
 		if (closestPoint != Vector3.zero)
 		{
@@ -55,7 +142,7 @@ public abstract class Weapon : MonoBehaviour
 
 			//DrawAim(transform.position + (1 * Vector3.up), closestPoint);
 
-			if (Input.GetButton("Fire"))
+			if (Input.GetButton("Fire") || fire)
 			{
 				fireTimer = playerSettings.secondsLeeway;
 			}
