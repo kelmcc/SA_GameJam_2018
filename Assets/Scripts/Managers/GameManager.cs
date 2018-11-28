@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
     public LevelManager LevelManager;
     public EnemyManager EnemyManager;
 
-    public BeatMultiplier BeatMultiplier;
+	public BeatMultiplier BeatMultiplier;
 
     void Start()
     {

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerMovementBehaviour : MovementBehaviour
 {
@@ -21,6 +22,8 @@ public class PlayerMovementBehaviour : MovementBehaviour
 	public GameObject halo;
 
 	Rigidbody playerRigidbody;
+
+	public Image ProgressImage;
 
     float beatTimer;
     float leftTapTimer;

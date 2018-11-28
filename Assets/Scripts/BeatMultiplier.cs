@@ -7,7 +7,9 @@ public class BeatMultiplier : MonoBehaviour
 {
     public PlayerSettings PlayerSettings;
 
-    private float innerLevelProgress = 0f;
+	private PlayerMovementBehaviour player;
+
+	private float innerLevelProgress = 0f;
     public Image[] beatLevelUI_L;
     public Image[] beatLevelUI_R;
 
@@ -28,6 +30,7 @@ public class BeatMultiplier : MonoBehaviour
 
     private void Start()
     {
+		player = FindObjectOfType<PlayerMovementBehaviour>();
 		for (int i = 0; i < beatLevelUI_L.Length; i++)
         {
             beatLevelUI_L[i].fillAmount = 0f;
@@ -72,7 +75,12 @@ public class BeatMultiplier : MonoBehaviour
             //update the skybox too
             UpdateSkybox();
         }
-    }
+
+		if (player != null)
+		{
+			player.ProgressImage.fillAmount = innerLevelProgress / 50f;
+		}	
+	}
 
 	public void AddLevelProgress(float increment)
 	{
