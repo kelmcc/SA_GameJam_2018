@@ -35,3 +35,6 @@ MonoBehaviour:
   beatMissedPenalty: 2
   GotCubeAudio: {fileID: 8300000, guid: b5236f30768cd2e42993ed5c6e1be694, type: 3}
   FailBeatAudio: {fileID: 0}
+  MainEnemyGroan:
+  - {fileID: 8300000, guid: 2120c9d4d77c1924eb2978d750120b43, type: 3}
+  - {fileID: 8300000, guid: 210cd1edd7197a24a980e9e266e8fb0e, type: 3}

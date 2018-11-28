@@ -74,6 +74,7 @@ public class Projectile : MonoBehaviour
 		{
 			cubePool.GetCube(bossCubeMaterial, transform.position);
 		}
+
 	}
 
 	private void OnObstacleTrigger(Collider coll)

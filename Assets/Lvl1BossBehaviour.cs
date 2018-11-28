@@ -2,148 +2,163 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Lvl1BossBehaviour : MonoBehaviour {
+public class Lvl1BossBehaviour : MonoBehaviour
+{
 
-	PlayerMovementBehaviour player;
-	BeatMultiplier multiplier;
+    PlayerMovementBehaviour player;
+    BeatMultiplier multiplier;
 
-	public ParticleAnticipation Anticipation;
+    public ParticleAnticipation Anticipation;
 
-	public Transform trackBeforeLevel;
+    public Transform trackBeforeLevel;
 
-	public float vertMoveSpeed = 1f;
+    public float vertMoveSpeed = 1f;
 
-	BeatManager beatManager;
+    BeatManager beatManager;
 
-	public Transform LeftHand;
-	public Transform RightHand;
+    public Transform LeftHand;
+    public Transform RightHand;
 
-	private int beatCount = 0;
+    private int beatCount = 0;
 
-	public Vector3 leftLerpPoint;
-	public Vector3 rightLerpPoint;
+    public Vector3 leftLerpPoint;
+    public Vector3 rightLerpPoint;
 
-	public Vector3 leftOldLerpPoint;
-	public Vector3 rightOldLerpPoint;
+    public Vector3 leftOldLerpPoint;
+    public Vector3 rightOldLerpPoint;
 
-	public Transform leftIdleTrans;
-	public Transform rightIdleTrans;
+    public Transform leftIdleTrans;
+    public Transform rightIdleTrans;
 
-	int currentHand = 0;
+    int currentHand = 0;
 
-	// Use this for initialization
-	void Start ()
-	{
-		beatManager = FindObjectOfType<BeatManager>();
-		beatManager.OnBeat += OnBeat;
-	}
+    public AudioClip[] MainEnemyGroan;
+    public AudioSource VoicePlayer;
+    public AudioClip[] HandSounds;
+    public AudioSource HandPlayer;
 
-	float beatTime = 0;
-	
-	// Update is called once per frame
-	void Update ()
-	{
-		if(player == null)
-		{
-			player = FindObjectOfType<PlayerMovementBehaviour>();	
-		}
-		if (multiplier == null)
-		{
-			multiplier = FindObjectOfType<BeatMultiplier>();
-		}
+    // Use this for initialization
+    void Start()
+    {
+        beatManager = FindObjectOfType<BeatManager>();
+        beatManager.OnBeat += OnBeat;
+    }
 
-		transform.forward = (new Vector3(player.transform.position.x,transform.position.y, player.transform.position.z) - transform.position);
+    float beatTime = 0;
 
-		if (multiplier.CurrentBeatKeeperLevel != 2)
-		{
-			transform.position = new Vector3(transform.position.x, trackBeforeLevel.position.y, transform.position.z);
-			return;
-		}
-		else
-		{
-			transform.position = new Vector3(transform.position.x, player.transform.position.y, transform.position.z);
-		}
+    // Update is called once per frame
+    void Update()
+    {
+        if (player == null)
+        {
+            player = FindObjectOfType<PlayerMovementBehaviour>();
+        }
+        if (multiplier == null)
+        {
+            multiplier = FindObjectOfType<BeatMultiplier>();
+        }
 
-		//else if (currentHand == 0) // swapped around so we move back when not active
-		{
-			//rightLerpPoint = rightIdleTrans.position;
-		}
-		//else
-		{
-			//leftLerpPoint = leftIdleTrans.position;
-		}
+        transform.forward = (new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z) - transform.position);
 
-		RightHand.transform.position = Vector3.Lerp(leftOldLerpPoint, rightLerpPoint, Mathf.Clamp01(beatTime * beatManager.Bps * 2));
-		LeftHand.transform.position = Vector3.Lerp(rightOldLerpPoint, leftLerpPoint, Mathf.Clamp01(beatTime * beatManager.Bps * 2));
+        if (multiplier.CurrentBeatKeeperLevel != 2)
+        {
+            transform.position = new Vector3(transform.position.x, trackBeforeLevel.position.y, transform.position.z);
+            return;
+        }
+        else
+        {
+            transform.position = new Vector3(transform.position.x, player.transform.position.y, transform.position.z);
+        }
 
-		RightHand.transform.forward = (RightHand.transform.position - new Vector3(transform.position.x, RightHand.transform.position.y, transform.position.z)).normalized;
-		LeftHand.transform.forward = (LeftHand.transform.position - new Vector3(transform.position.x, LeftHand.transform.position.y, transform.position.z)).normalized;
+        //else if (currentHand == 0) // swapped around so we move back when not active
+        {
+            //rightLerpPoint = rightIdleTrans.position;
+        }
+        //else
+        {
+            //leftLerpPoint = leftIdleTrans.position;
+        }
 
-		beatTime += Time.deltaTime;
-	}
+        RightHand.transform.position = Vector3.Lerp(leftOldLerpPoint, rightLerpPoint, Mathf.Clamp01(beatTime * beatManager.Bps * 2));
+        LeftHand.transform.position = Vector3.Lerp(rightOldLerpPoint, leftLerpPoint, Mathf.Clamp01(beatTime * beatManager.Bps * 2));
 
-	public void OnBeat(long unusedBeatCount)
-	{
-		if (multiplier == null)
-		{
-			multiplier = FindObjectOfType<BeatMultiplier>();
-		}
-		if (multiplier.CurrentBeatKeeperLevel != 2)
-		{
-			return;
-		}
+        RightHand.transform.forward = (RightHand.transform.position - new Vector3(transform.position.x, RightHand.transform.position.y, transform.position.z)).normalized;
+        LeftHand.transform.forward = (LeftHand.transform.position - new Vector3(transform.position.x, LeftHand.transform.position.y, transform.position.z)).normalized;
 
-		//attack
-		if (beatCount == 0)
-		{
-			beatTime = 0;
-			currentHand = Random.Range(0, 2);
-			if(currentHand == 0)
-			{
-				leftOldLerpPoint = leftIdleTrans.position;
-				leftLerpPoint = player.transform.position;
+        beatTime += Time.deltaTime;
+    }
 
-				rightOldLerpPoint = rightIdleTrans.position;
-				rightLerpPoint = rightIdleTrans.position;
+    public void OnBeat(long unusedBeatCount)
+    {
+        if (multiplier == null)
+        {
+            multiplier = FindObjectOfType<BeatMultiplier>();
+        }
+        if (multiplier.CurrentBeatKeeperLevel != 2)
+        {
+            return;
+        }
 
-				Anticipation.Show(leftLerpPoint);
-			}
-			else
-			{
-				rightOldLerpPoint = rightIdleTrans.position;
-				rightLerpPoint = player.transform.position;
+        //attack
+        if (beatCount == 0)
+        {
+            beatTime = 0;
+            currentHand = Random.Range(0, 2);
+            if (currentHand == 0)
+            {
+                leftOldLerpPoint = leftIdleTrans.position;
+                leftLerpPoint = player.transform.position;
 
-				leftOldLerpPoint = leftIdleTrans.position;
-				leftLerpPoint = leftIdleTrans.position;
+                rightOldLerpPoint = rightIdleTrans.position;
+                rightLerpPoint = rightIdleTrans.position;
 
-				Anticipation.Show(rightLerpPoint);
-			}		
-		}
-		else if (beatCount == 3)
-		{
-			beatTime = 0;
-			if (currentHand == 0)
-			{
-				leftOldLerpPoint = leftLerpPoint;
-				leftLerpPoint = leftIdleTrans.position;
-			}
-			else
-			{
-				rightOldLerpPoint = rightLerpPoint;
-				rightLerpPoint = rightIdleTrans.position;
-			}
-		}
+                Anticipation.Show(leftLerpPoint);
+            }
+            else
+            {
+                rightOldLerpPoint = rightIdleTrans.position;
+                rightLerpPoint = player.transform.position;
 
-		beatCount++;
-		if(beatCount > 3)
-		{
-			beatCount = 0;
-		}
-	}
+                leftOldLerpPoint = leftIdleTrans.position;
+                leftLerpPoint = leftIdleTrans.position;
+
+                Anticipation.Show(rightLerpPoint);
+            }
+            int precentage = Random.Range(0, 10);
+
+            //determine 10%
+            if (precentage <= 2)
+            {
+                VoicePlayer.PlayOneShot(MainEnemyGroan[Random.Range(0, MainEnemyGroan.Length)], 0.7f);
+            }
+            HandPlayer.PlayOneShot(HandSounds[Random.Range(0, HandSounds.Length)], 0.7f);
+
+        }
+        else if (beatCount == 3)
+        {
+            beatTime = 0;
+            if (currentHand == 0)
+            {
+                leftOldLerpPoint = leftLerpPoint;
+                leftLerpPoint = leftIdleTrans.position;
+            }
+            else
+            {
+                rightOldLerpPoint = rightLerpPoint;
+                rightLerpPoint = rightIdleTrans.position;
+            }
+        }
+
+        beatCount++;
+        if (beatCount > 3)
+        {
+            beatCount = 0;
+        }
+    }
 
 
-	private void OnDestroy()
-	{
-		beatManager.OnBeat -= OnBeat;
-	}
+    private void OnDestroy()
+    {
+        beatManager.OnBeat -= OnBeat;
+    }
 }
