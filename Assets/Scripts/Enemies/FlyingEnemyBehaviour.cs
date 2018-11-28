@@ -77,7 +77,8 @@ public class FlyingEnemyBehaviour : EnemyBase
 	{
 		Life--;
 		if(Life <= 0)
-		{
+		{            
+            boxCollider.enabled = false;
 			for (int i = 0; i < DeathCubeCount; i++)
 			{
 				cubePool.GetCube(DeathCubeMat, transform.position);
