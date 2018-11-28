@@ -265,6 +265,7 @@ public class PlayerMovementBehaviour : MovementBehaviour
 		layermask = PlayerSettings.bossRaycastLayer.value;
 		if (layermask == (layermask | (1 << other.gameObject.layer)))
 		{
+            
 			BeatMultiplier.SubtractLevelProgress(15);
 			BeatManager.MuteFor(1);
 			UIRoot.ShowOverlayFor(1.5f);

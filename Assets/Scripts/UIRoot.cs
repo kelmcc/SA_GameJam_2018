@@ -12,9 +12,9 @@ public class UIRoot : MonoBehaviour
     public GameObject ImageBeatDark;
     public UILineRenderer SpectrumLine;
 
-	public CanvasGroup Overlay;
+    public CanvasGroup Overlay;
 
-	public CanvasGroup MenuFade;
+    public CanvasGroup MenuFade;
 
     public Vector2 spectrumDimensions;
 
@@ -23,19 +23,22 @@ public class UIRoot : MonoBehaviour
     public Image[] BeatLevel_L;
     public Image[] BeatLevel_R;
 
+    public AudioSource source;
+    public AudioClip FailBeatAudio;
+
     // Use this for initialization
-    void Start ()
+    void Start()
     {
         GameManager.BeatManager.OnBeat += OnBeat;
         GameManager.BeatManager.OnSpectrumUpdated += SpectrumUpdate;
-		Overlay.alpha = 0;
-		MenuFade.alpha = 0;
+        Overlay.alpha = 0;
+        MenuFade.alpha = 0;
     }
 
     void OnBeat(long beatCount)
     {
         ImageBeatDark.SetActive(ImageBeatLight.activeSelf);
-        ImageBeatLight.SetActive(!ImageBeatLight.activeSelf);		
+        ImageBeatLight.SetActive(!ImageBeatLight.activeSelf);
     }
 
     // Update is called once per frame
@@ -48,51 +51,57 @@ public class UIRoot : MonoBehaviour
         }
         SpectrumLine.Points = points.ToArray();
         SpectrumLine.SetVerticesDirty();
-	}
+    }
 
-	Coroutine c = null;
-	public void ShowOverlayFor(float seconds)
-	{
-		if(c != null)
-		{
-			StopCoroutine(c);
-		}
-		c = StartCoroutine(PShowOverlayFor(seconds));
-	}
+    Coroutine c = null;
+    public void ShowOverlayFor(float seconds)
+    {
+        if (c != null)
+        {
+            StopCoroutine(c);
+        }
+        c = StartCoroutine(PShowOverlayFor(seconds));
+    }
 
-	private IEnumerator PShowOverlayFor(float seconds)
-	{
-		Overlay.alpha = 1;
+    private IEnumerator PShowOverlayFor(float seconds)
+    {
+        if (Overlay.alpha <= 0)
+        {
+            source.Play();
+        }
+        Overlay.alpha = 1;
 
-		yield return new WaitForSeconds(seconds);
+        yield return new WaitForSeconds(seconds);
 
-		while(Overlay.alpha > 0)
-		{
-			Overlay.alpha -= Time.deltaTime;
-			yield return null;
-		}
-	}
+        while (Overlay.alpha > 0)
+        {
+            Overlay.alpha -= Time.deltaTime;
+            yield return null;
+        }
 
-	Coroutine f = null;
-	public void DoMenuFade(Action action)
-	{
-		if (f != null)
-		{
-			return;
-		}
-		MenuFade.alpha = 0;
-		f = StartCoroutine(PDoMenuFade(action, 3));
-	}
+        source.Stop();
+    }
 
-	private IEnumerator PDoMenuFade(Action action, float seconds)
-	{		
-		while (MenuFade.alpha < 1)
-		{
-			MenuFade.alpha += Time.deltaTime / seconds;
-			yield return null;
-		}
+    Coroutine f = null;
+    public void DoMenuFade(Action action)
+    {
+        if (f != null)
+        {
+            return;
+        }
+        MenuFade.alpha = 0;
+        f = StartCoroutine(PDoMenuFade(action, 3));
+    }
 
-		f = null;
-		action();	
+    private IEnumerator PDoMenuFade(Action action, float seconds)
+    {
+        while (MenuFade.alpha < 1)
+        {
+            MenuFade.alpha += Time.deltaTime / seconds;
+            yield return null;
+        }
+
+        f = null;
+        action();
     }
 }
