@@ -71,8 +71,17 @@ public class PlayerMovementBehaviour : MovementBehaviour
 
 		DecreaseVelocity();
 
-        //get axes
-        float horizontal = Input.GetAxis("Horizontal");
+		foreach (KeyCode vKey in System.Enum.GetValues(typeof(KeyCode)))
+		{
+			if (Input.GetKey(vKey))
+			{
+				//your code here
+				Debug.Log("Key pressed: " + vKey);
+			}
+		}
+
+		//get axes
+		float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
 
         //=== BEAT MATCHING ===
