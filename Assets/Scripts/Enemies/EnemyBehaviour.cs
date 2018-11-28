@@ -214,7 +214,7 @@ public class EnemyBehaviour : EnemyBase
         {
             timer = 0f;
 
-            if (collider.transform.localPosition.y > 0f)
+            if (Random.Range(0f, 10f) > 3f)
             {
                 EnemyManager.Merge(this, collider.GetComponent<EnemyBehaviour>());
             }
