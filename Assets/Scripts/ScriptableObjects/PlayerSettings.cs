@@ -32,4 +32,5 @@ public class PlayerSettings : ScriptableObject
 	[Space]
 	public AudioClip GotCubeAudio;
 	public AudioClip FailBeatAudio;
+    public AudioClip[] MainEnemyGroan;
 }

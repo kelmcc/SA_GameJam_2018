@@ -11,11 +11,11 @@ public class EnemyBehaviour : EnemyBase
         Snake
     }
 
-	private int TotalLife;
-	public int Life;
+    private int TotalLife;
+    public int Life;
 
-	public Material DeathCubeMat;
-	public int DeathCubeCount;
+    public Material DeathCubeMat;
+    public int DeathCubeCount;
 
     public EnemySettings EnemySettings;
 
@@ -28,29 +28,29 @@ public class EnemyBehaviour : EnemyBase
 
     public Rigidbody enemyRigidBody;
     public BoxCollider boxCollider;
-	private BeatMultiplier beatMultiplier;
-	private CubePool cubePool;
+    private BeatMultiplier beatMultiplier;
+    private CubePool cubePool;
 
-	public EnemyType Type;
+    public EnemyType Type;
     public float moveMultiplier = 1f;
 
     void Start()
     {
         enemyRigidBody = GetComponent<Rigidbody>();
         previousPosition = Vector3.zero;
-		TotalLife = Life;
-		beatMultiplier = FindObjectOfType<BeatMultiplier>();
-		cubePool = FindObjectOfType<CubePool>();
+        TotalLife = Life;
+        beatMultiplier = FindObjectOfType<BeatMultiplier>();
+        cubePool = FindObjectOfType<CubePool>();
 
-	}
+    }
 
     Vector3 previousPosition;
     public void Update()
     {
-		if(beatMultiplier.CurrentBeatKeeperLevel != ActiveStage)
-		{
-			Destroy(gameObject);
-		}
+        if (beatMultiplier.CurrentBeatKeeperLevel != ActiveStage)
+        {
+            Destroy(gameObject);
+        }
 
         DecreaseVelocity();
         timer += Time.deltaTime;
@@ -77,37 +77,37 @@ public class EnemyBehaviour : EnemyBase
         }
     }
 
-	public bool OnGround()
-	{
-		if (boxCollider == null)
-			return false;
+    public bool OnGround()
+    {
+        if (boxCollider == null)
+            return false;
 
-		float yOffset = 0.5f;
-		if (Type == EnemyType.Double)
-			yOffset = 1f;
+        float yOffset = 0.5f;
+        if (Type == EnemyType.Double)
+            yOffset = 1f;
 
-		Debug.DrawLine(boxCollider.transform.position, boxCollider.transform.position + Vector3.down * (boxCollider.size.y + 0.2f), Color.green);
+        Debug.DrawLine(boxCollider.transform.position, boxCollider.transform.position + Vector3.down * (boxCollider.size.y + 0.2f), Color.green);
 
-		RaycastHit[] hits1 = Physics.RaycastAll(boxCollider.transform.position + (boxCollider.transform.forward * 1f), Vector3.down, boxCollider.size.y + yOffset, EnemySettings.groundRaycastLayer.value);
-		RaycastHit[] hits2 = Physics.RaycastAll(boxCollider.transform.position + (-boxCollider.transform.forward * 1f), Vector3.down, boxCollider.size.y + yOffset, EnemySettings.groundRaycastLayer.value);
+        RaycastHit[] hits1 = Physics.RaycastAll(boxCollider.transform.position + (boxCollider.transform.forward * 1f), Vector3.down, boxCollider.size.y + yOffset, EnemySettings.groundRaycastLayer.value);
+        RaycastHit[] hits2 = Physics.RaycastAll(boxCollider.transform.position + (-boxCollider.transform.forward * 1f), Vector3.down, boxCollider.size.y + yOffset, EnemySettings.groundRaycastLayer.value);
 
-		bool hitSomething = false;
-		foreach(RaycastHit hit in hits1)
-		{
-			if(hit.collider.gameObject != gameObject && hit.collider.gameObject.transform.parent != gameObject)
-			{
-				hitSomething = true;
-			}
-		}
-		foreach (RaycastHit hit in hits2)
-		{
-			if (hit.collider.gameObject != gameObject && hit.collider.gameObject.transform.parent != gameObject)
-			{
-				hitSomething = true;
-			}
-		}
+        bool hitSomething = false;
+        foreach (RaycastHit hit in hits1)
+        {
+            if (hit.collider.gameObject != gameObject && hit.collider.gameObject.transform.parent != gameObject)
+            {
+                hitSomething = true;
+            }
+        }
+        foreach (RaycastHit hit in hits2)
+        {
+            if (hit.collider.gameObject != gameObject && hit.collider.gameObject.transform.parent != gameObject)
+            {
+                hitSomething = true;
+            }
+        }
 
-		if (hitSomething)
+        if (hitSomething)
         {
             return true;
         }
@@ -132,78 +132,81 @@ public class EnemyBehaviour : EnemyBase
     }
 
 
-	Vector3 collisionDir;
+    Vector3 collisionDir;
 
     float timer = 0f;
     Collider currentCollider;
     private void OnTriggerEnter(Collider collider)
     {
-		if(collider.gameObject.layer == LayerMask.NameToLayer(EnemySettings.killZoneLayer))
-		{
-			Destroy(gameObject);
-			return;
-		}
+        if (collider.gameObject.layer == LayerMask.NameToLayer(EnemySettings.killZoneLayer))
+        {
+            Destroy(gameObject);
+            return;
+        }
 
-		PlayerMovementBehaviour player = collider.GetComponentInParent<PlayerMovementBehaviour>();
-		if (player != null)
-		{
-			//Destroy(gameObject);
-			//return;
-		}
+        PlayerMovementBehaviour player = collider.GetComponentInParent<PlayerMovementBehaviour>();
+        if (player != null)
+        {
+            //Destroy(gameObject);
+            //return;
+        }
 
-		EnemyBehaviour enemy = collider.GetComponent<EnemyBehaviour>();
+        EnemyBehaviour enemy = collider.GetComponent<EnemyBehaviour>();
         if (timer > 5f && enemy != null && Type == EnemyType.Single)
         {
             timer = 0f;
             currentCollider = collider;
         }
-		else
-		{
-			int layermask = EnemySettings.edgeRaycastLayer.value;
-			if (layermask == (layermask | (1 << collider.gameObject.layer)))
-			{
-				velocity.x = 0;
-			}
-		}
-	}
+        else
+        {
+            int layermask = EnemySettings.edgeRaycastLayer.value;
+            if (layermask == (layermask | (1 << collider.gameObject.layer)))
+            {
+                velocity.x = 0;
+            }
+        }
+    }
 
-	Coroutine hitC = null;
-	public override void Hit(Projectile projectile)
-	{
-		if (projectile != null && hitC == null)
-		{
-			hitC = StartCoroutine(TakeHit(projectile.transform.position));
-		}
-	}
+    Coroutine hitC = null;
+    public override void Hit(Projectile projectile)
+    {
+        if (projectile != null && hitC == null)
+        {
+            hitC = StartCoroutine(TakeHit(projectile.transform.position));
+        }
+    }
 
-	private IEnumerator TakeHit(Vector3 position)
-	{
-		Life--;
-		if (Life <= 0)
-		{
+    private IEnumerator TakeHit(Vector3 position)
+    {
+        Life--;
+        if (Life <= 0)
+        {
             boxCollider.enabled = false;
-			for (int i = 0; i < DeathCubeCount; i++)
-			{
-				cubePool.GetCube(DeathCubeMat, transform.position);
-				yield return new WaitForSeconds(0.05f);				
-			}
+            for (int i = 0; i < DeathCubeCount; i++)
+            {
+                cubePool.GetCube(DeathCubeMat, transform.position);
+                yield return new WaitForSeconds(0.05f);
+            }
 
-			while (transform.localScale.x > 0)
-			{
-				transform.localScale = new Vector3(transform.localScale.x - Time.deltaTime * 2, transform.localScale.y - Time.deltaTime * 2, transform.localScale.z - Time.deltaTime * 2);
-				if (transform.localScale.x < 0)
-				{
-					transform.localScale = Vector3.zero;
-					break;
-				}
-				yield return null;
-			}
+            int index = Random.Range(0, EnemySettings.DyingSound.Length);
+            AudioSource.PlayClipAtPoint(EnemySettings.DyingSound[index], Camera.main.transform.position, Random.Range(0.1f, 0.5f));
 
-			Destroy(gameObject);
-		}
+            while (transform.localScale.x > 0)
+            {
+                transform.localScale = new Vector3(transform.localScale.x - Time.deltaTime * 2, transform.localScale.y - Time.deltaTime * 2, transform.localScale.z - Time.deltaTime * 2);
+                if (transform.localScale.x < 0)
+                {
+                    transform.localScale = Vector3.zero;
+                    break;
+                }
+                yield return null;
+            }
 
-		hitC = null;
-	}
+            Destroy(gameObject);
+        }
+
+        hitC = null;
+    }
 
     private void OnTriggerStay(Collider collider)
     {
@@ -268,18 +271,18 @@ public class EnemyBehaviour : EnemyBase
 
     public void HorizontalMove(float sign)
     {
-		//dont move sideways if we have hit an edge above level 1
-		if(boxCollider != null && Physics.CheckBox(boxCollider.center, boxCollider.size, boxCollider.transform.rotation, EnemySettings.edgeRaycastLayer))
-		{
-			if(beatMultiplier.CurrentBeatKeeperLevel == 0)
-			{
-				velocity.x = EnemySettings.horizontalBoost * sign;
-			}			
-		}   
-		else
-		{
-			velocity.x = EnemySettings.horizontalBoost * sign;
-		}
+        //dont move sideways if we have hit an edge above level 1
+        if (boxCollider != null && Physics.CheckBox(boxCollider.center, boxCollider.size, boxCollider.transform.rotation, EnemySettings.edgeRaycastLayer))
+        {
+            if (beatMultiplier.CurrentBeatKeeperLevel == 0)
+            {
+                velocity.x = EnemySettings.horizontalBoost * sign;
+            }
+        }
+        else
+        {
+            velocity.x = EnemySettings.horizontalBoost * sign;
+        }
     }
 
     public void SingleBehaviour(float verticalMove, float horizontalMove)
@@ -306,9 +309,9 @@ public class EnemyBehaviour : EnemyBase
         HorizontalMove(moveMultiplier * 1.2f);
     }
 
-	private void OnDestroy()
-	{
-		beatManager.OnBeat -= OnBeat;
-		EnemyManager.RemoveEnemy(this);
-	}
+    private void OnDestroy()
+    {
+        beatManager.OnBeat -= OnBeat;
+        EnemyManager.RemoveEnemy(this);
+    }
 }

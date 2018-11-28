@@ -25,4 +25,12 @@ MonoBehaviour:
   edgeRaycastLayer:
     serializedVersion: 2
     m_Bits: 1024
-  maxEnemies: 50
+  DyingSound:
+  - {fileID: 8300000, guid: fc0cc8c66f2ebd147a20ba8579b69ba8, type: 3}
+  - {fileID: 8300000, guid: 2ba57ab87f291624c8d4283e8d01752b, type: 3}
+  - {fileID: 8300000, guid: 11c176d0956117647a216a368c28c8e9, type: 3}
+  - {fileID: 8300000, guid: a0c5c262cca8e2e4b8af9aaef2944580, type: 3}
+  - {fileID: 8300000, guid: 265d35c255105ca4a8cc02d3e0f0af54, type: 3}
+  - {fileID: 8300000, guid: 68e76ff23d6d2a640bbb9ac88c767515, type: 3}
+  - {fileID: 8300000, guid: 81866e0d3bd177d4b8201f92eaf1ff4b, type: 3}
+  - {fileID: 8300000, guid: 931dfa4a2c8a52447a2f33d82278a420, type: 3}
