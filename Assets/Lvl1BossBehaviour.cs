@@ -79,8 +79,8 @@ public class Lvl1BossBehaviour : MonoBehaviour
             //leftLerpPoint = leftIdleTrans.position;
         }
 
-        RightHand.transform.position = Vector3.Lerp(leftOldLerpPoint, rightLerpPoint, Mathf.Clamp01(beatTime * beatManager.Bps * 2));
-        LeftHand.transform.position = Vector3.Lerp(rightOldLerpPoint, leftLerpPoint, Mathf.Clamp01(beatTime * beatManager.Bps * 2));
+        RightHand.transform.position = Vector3.Lerp(leftOldLerpPoint, rightLerpPoint, Mathf.Clamp01(beatTime * beatManager.Bps));
+        LeftHand.transform.position = Vector3.Lerp(rightOldLerpPoint, leftLerpPoint, Mathf.Clamp01(beatTime * beatManager.Bps));
 
         RightHand.transform.forward = (RightHand.transform.position - new Vector3(transform.position.x, RightHand.transform.position.y, transform.position.z)).normalized;
         LeftHand.transform.forward = (LeftHand.transform.position - new Vector3(transform.position.x, LeftHand.transform.position.y, transform.position.z)).normalized;

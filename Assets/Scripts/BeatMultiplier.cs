@@ -38,7 +38,9 @@ public class BeatMultiplier : MonoBehaviour
         }
         SkyboxMat = RenderSettings.skybox;
         UpdateSkybox();
-    }
+
+		innerLevelProgress = 0;
+	}
 
     void Update()
     {

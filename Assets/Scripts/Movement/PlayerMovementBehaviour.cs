@@ -51,7 +51,6 @@ public class PlayerMovementBehaviour : MovementBehaviour
 
     public void Update()
     {
-
 		if (BeatMultiplier.CurrentBeatKeeperLevel > 0)
 		{
 			wing1.SetActive(true);
@@ -163,7 +162,6 @@ public class PlayerMovementBehaviour : MovementBehaviour
                     rightTapTimer = 0;
                     dontFallTime = PlayerSettings.moveSidewaysNoFallTime;
                 }
-
             }
         }
 
